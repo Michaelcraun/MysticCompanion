@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43B1A16DCD40CCF439AD3AF6 /* Pods_MysticCompanion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */; };
 		9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFE91FCC6506005741CD /* AppDelegate.swift */; };
 		9BC7BFEC1FCC6506005741CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFEB1FCC6506005741CD /* ViewController.swift */; };
 		9BC7BFEF1FCC6506005741CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFED1FCC6506005741CD /* Main.storyboard */; };
 		9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFF01FCC6506005741CD /* MysticCompanion.xcdatamodeld */; };
 		9BC7BFF41FCC6506005741CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFF31FCC6506005741CD /* Assets.xcassets */; };
 		9BC7BFF71FCC6506005741CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFF51FCC6506005741CD /* LaunchScreen.storyboard */; };
+		9BC7BFFF1FCC67C7005741CD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFFE1FCC67C7005741CD /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MysticCompanion.release.xcconfig"; path = "Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion.release.xcconfig"; sourceTree = "<group>"; };
 		9BC7BFE61FCC6506005741CD /* MysticCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MysticCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC7BFE91FCC6506005741CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BC7BFEB1FCC6506005741CD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +27,9 @@
 		9BC7BFF31FCC6506005741CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9BC7BFF61FCC6506005741CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9BC7BFF81FCC6506005741CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BC7BFFE1FCC67C7005741CD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MysticCompanion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C86938E58E650349541B72EB /* Pods-MysticCompanion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MysticCompanion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +37,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B1A16DCD40CCF439AD3AF6 /* Pods_MysticCompanion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A6B97D8B63CD11662DC4B00 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6DB64FD204CFE58E3BA1485D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C86938E58E650349541B72EB /* Pods-MysticCompanion.debug.xcconfig */,
+				66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9BC7BFDD1FCC6506005741CD = {
 			isa = PBXGroup;
 			children = (
 				9BC7BFE81FCC6506005741CD /* MysticCompanion */,
 				9BC7BFE71FCC6506005741CD /* Products */,
+				6DB64FD204CFE58E3BA1485D /* Pods */,
+				0A6B97D8B63CD11662DC4B00 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -61,6 +87,7 @@
 				9BC7BFED1FCC6506005741CD /* Main.storyboard */,
 				9BC7BFF31FCC6506005741CD /* Assets.xcassets */,
 				9BC7BFF51FCC6506005741CD /* LaunchScreen.storyboard */,
+				9BC7BFFE1FCC67C7005741CD /* GoogleService-Info.plist */,
 				9BC7BFF81FCC6506005741CD /* Info.plist */,
 				9BC7BFF01FCC6506005741CD /* MysticCompanion.xcdatamodeld */,
 			);
@@ -74,9 +101,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9BC7BFFB1FCC6506005741CD /* Build configuration list for PBXNativeTarget "MysticCompanion" */;
 			buildPhases = (
+				2B75ADA1E2561CED2D1F0047 /* [CP] Check Pods Manifest.lock */,
 				9BC7BFE21FCC6506005741CD /* Sources */,
 				9BC7BFE31FCC6506005741CD /* Frameworks */,
 				9BC7BFE41FCC6506005741CD /* Resources */,
+				F6E445D440DF0651E860FB3B /* [CP] Embed Pods Frameworks */,
+				79FE3C6129F8A7D884BDA3F9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -127,12 +157,61 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BC7BFF71FCC6506005741CD /* LaunchScreen.storyboard in Resources */,
+				9BC7BFFF1FCC67C7005741CD /* GoogleService-Info.plist in Resources */,
 				9BC7BFF41FCC6506005741CD /* Assets.xcassets in Resources */,
 				9BC7BFEF1FCC6506005741CD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2B75ADA1E2561CED2D1F0047 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		79FE3C6129F8A7D884BDA3F9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6E445D440DF0651E860FB3B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9BC7BFE21FCC6506005741CD /* Sources */ = {
@@ -276,6 +355,7 @@
 		};
 		9BC7BFFC1FCC6506005741CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C86938E58E650349541B72EB /* Pods-MysticCompanion.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -291,6 +371,7 @@
 		};
 		9BC7BFFD1FCC6506005741CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
