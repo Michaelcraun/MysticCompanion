@@ -10,6 +10,8 @@ target 'MysticCompanion' do
   # Pods for MysticCompanion
   pod 'GMStepper'
   pod 'KCFloatingActionButton'
+  pod 'TextFieldEffects'
   pod 'Firebase'
+  pod 'GoogleMobileAds'
 
 end

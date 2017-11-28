@@ -13,15 +13,19 @@ PODS:
   - FirebaseInstanceID (1.0.10):
     - FirebaseCore (~> 3.6)
   - GMStepper (2.0.0)
+  - GoogleMobileAds (7.8.0)
   - GoogleToolboxForMac/Defines (2.1.1)
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - KCFloatingActionButton (2.2.0)
+  - TextFieldEffects (1.3.2)
 
 DEPENDENCIES:
   - Firebase
   - GMStepper
+  - GoogleMobileAds
   - KCFloatingActionButton
+  - TextFieldEffects
 
 SPEC CHECKSUMS:
   Firebase: 21bf4a89d3f01bfbe11adc3a5d934a4a3d3a5fd6
@@ -29,9 +33,11 @@ SPEC CHECKSUMS:
   FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
   FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
   GMStepper: 6aff0c881afac2f432e5c9b0df71e44e14110a06
+  GoogleMobileAds: c79931d6eef16b1e4c35d331cf23c47e0dd490d2
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   KCFloatingActionButton: 8c71fa25774e422c8d407f82b4b27809d0cd5233
+  TextFieldEffects: 9e5cce561ea39c75b86e9d3637601727a67e8b23
 
-PODFILE CHECKSUM: 58f6b36605a56861ec8875d48e2c66eda5515c90
+PODFILE CHECKSUM: 5a64e076d6a926309c0fac8da9419b618a85ba01
 
 COCOAPODS: 1.2.0
