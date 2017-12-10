@@ -7,9 +7,10 @@
 //
 
 import UIKit
-import TextFieldEffects
 import KCFloatingActionButton
 import GoogleMobileAds
+import Firebase
+import MapKit
 
 class HomeVC: UIViewController {
 
@@ -23,17 +24,40 @@ class HomeVC: UIViewController {
     let waveguardsIcon = CircleView()
     let startButton = KCFloatingActionButton()
     let adBanner = GADBannerView()
+    let gameLobbyTable = UITableView()
+    
+    //MARK: Firebase Variables
+    var currentUserID: String? = nil
+    var username: String? = nil
+    var userIsHostingGame = false
+    var nearbyGames = [Dictionary<String,AnyObject>]() {
+        didSet {
+            gameLobbyTable.reloadData()
+        }
+    }
+    var players = [Dictionary<String,AnyObject>]() {
+        didSet {
+            gameLobbyTable.reloadData()
+        }
+    }
+    
+    //MARK: Data Storage
+    let defaults = UserDefaults.standard
+    
+    //MARK: MapKit Variables
+    var locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        checkUserID()
+        currentUserID = FIRAuth.auth()?.currentUser?.uid
         layoutView()
+        locationManager.requestWhenInUseAuthorization()
+        checkLocationAuthStatus()
+        checkUsername(forKey: currentUserID)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewDidAppear(_ animated: Bool) {
+        checkUsername(forKey: currentUserID)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

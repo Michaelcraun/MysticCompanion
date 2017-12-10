@@ -22,6 +22,8 @@ let greenLessAlpha = UIColor(red: 128 / 255, green: 181 / 255, blue: 67 / 255, a
 let redLessAlpha = UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 0.5)
 let yellowLessAlpha = UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, alpha: 0.5)
 
+let primaryColor = UIColor(red: 204 / 255, green: 221 / 255, blue: 204 / 255, alpha: 1)
+let secondaryColor = UIColor(red: 204 / 255, green: 221 / 255, blue: 204 / 255, alpha: 0.5)
 
 enum DeckType {
     case beastbrothers
@@ -47,3 +49,8 @@ enum DeckType {
         }
     }
 }
+
+let ad = UIApplication.shared.delegate as! AppDelegate
+let context = ad.persistentContainer.viewContext
+
+var PREMIUM_PURCHASED = true

@@ -22,25 +22,67 @@
                     </view>
                     <connections>
                         <segue destination="2D0-a1-Ztc" kind="show" identifier="showFirebaseLogin" id="gg1-iM-772"/>
+                        <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="RzQ-dl-vGq"/>
+                        <segue destination="JfQ-Lb-VfX" kind="show" identifier="startGame" id="BCm-Bf-ou6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="332" y="-31"/>
         </scene>
-        <!--Firebase LoginVC-->
+        <!--GameVC-->
+        <scene sceneID="kWf-d5-MLX">
+            <objects>
+                <viewController id="JfQ-Lb-VfX" customClass="GameVC" customModule="MysticCompanion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="x2U-pA-Qiw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="zby-wL-Zd6"/>
+                    </view>
+                    <connections>
+                        <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="cns-hL-VcS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cjn-Bv-l1Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1265" y="-31"/>
+        </scene>
+        <!--LoginVC-->
         <scene sceneID="v4e-jg-g63">
             <objects>
-                <viewController id="2D0-a1-Ztc" customClass="FirebaseLoginVC" customModule="MysticCompanion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="2D0-a1-Ztc" customClass="LoginVC" customModule="MysticCompanion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hcx-0L-lPG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="8Yx-OM-NWg"/>
                     </view>
+                    <connections>
+                        <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="aZ6-AW-vkg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OgU-Q5-DqQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="33" y="834"/>
+            <point key="canvasLocation" x="33" y="814"/>
+        </scene>
+        <!--SettingsVC-->
+        <scene sceneID="G07-Ia-DeL">
+            <objects>
+                <viewController id="0Tj-Dq-0CA" customClass="SettingsVC" customModule="MysticCompanion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8h5-DU-GgH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="YD7-jg-Jl1"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RpY-uN-paV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1220" y="814"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="RzQ-dl-vGq"/>
+    </inferredMetricsTieBreakers>
 </document>

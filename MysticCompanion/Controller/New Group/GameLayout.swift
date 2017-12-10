@@ -1,0 +1,166 @@
+//
+//  GameLayout.swift
+//  MysticCompanion
+//
+//  Created by Michael Craun on 12/8/17.
+//  Copyright © 2017 Craunic Productions. All rights reserved.
+//
+
+import UIKit
+import GMStepper
+
+extension GameVC {
+    func layoutView() {
+        layoutBackground()
+        layoutCurrentPlayerPanel()
+        layoutTrackers()
+    }
+    
+    func layoutBackground() {
+        let backgroundImage = UIImageView()
+        backgroundImage.image = #imageLiteral(resourceName: "gameBG")
+        backgroundImage.contentMode = .scaleAspectFill
+        backgroundImage.alpha = 0.5
+        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(backgroundImage)
+        
+        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func layoutCurrentPlayerPanel() {
+        playerPanel.layer.cornerRadius = 10
+        playerPanel.layer.borderColor = UIColor.black.cgColor
+        playerPanel.layer.borderWidth = 2
+        playerPanel.backgroundColor = primaryColor
+        playerPanel.clipsToBounds = true
+        playerPanel.translatesAutoresizingMaskIntoConstraints = false
+        
+        currentPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
+        currentPlayerLabel.text = "playerName"
+        currentPlayerLabel.sizeToFit()
+        currentPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        currentPlayerVPLabel.font = UIFont(name: fontFamily, size: 15)
+        currentPlayerVPLabel.textAlignment = .right
+        currentPlayerVPLabel.text = "0"
+        currentPlayerVPLabel.sizeToFit()
+        currentPlayerVPLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        gameVPLabel.font = UIFont(name: fontFamily, size: 10)
+        gameVPLabel.textAlignment = .center
+        gameVPLabel.text = "Victory Point Pool: 0/23"
+        gameVPLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(playerPanel)
+        playerPanel.addSubview(currentPlayerLabel)
+        playerPanel.addSubview(currentPlayerVPLabel)
+        playerPanel.addSubview(gameVPLabel)
+        
+        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        playerPanel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        playerPanel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        currentPlayerLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
+        currentPlayerLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor, constant: 5).isActive = true
+        currentPlayerLabel.widthAnchor.constraint(equalToConstant: currentPlayerLabel.frame.width).isActive = true
+        
+        currentPlayerVPLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
+        currentPlayerVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor, constant: -5).isActive = true
+        currentPlayerVPLabel.widthAnchor.constraint(equalToConstant: currentPlayerVPLabel.frame.width).isActive = true
+        
+        gameVPLabel.bottomAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: -5).isActive = true
+        gameVPLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor, constant: 5).isActive = true
+        gameVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor, constant: -5).isActive = true
+    }
+    
+    func layoutTrackers() {
+        let screenWidth = view.frame.width
+        let trackerWidth = (screenWidth - 40) / 3
+        
+        let manaTracker = TrackerView()
+        manaTracker.initTrackerOfType(.mana)
+        manaTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let decayTracker = TrackerView()
+        decayTracker.initTrackerOfType(.decay)
+        decayTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let growthTracker = TrackerView()
+        growthTracker.initTrackerOfType(.growth)
+        growthTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let animalTracker = TrackerView()
+        animalTracker.initTrackerOfType(.animal)
+        animalTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let forestTracker = TrackerView()
+        forestTracker.initTrackerOfType(.forest)
+        forestTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let skyTracker = TrackerView()
+        skyTracker.initTrackerOfType(.sky)
+        skyTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let victoryTracker = TrackerView()
+        victoryTracker.initTrackerOfType(.victory)
+        victoryTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        let wildTracker = TrackerView()
+        wildTracker.initTrackerOfType(.wild)
+        wildTracker.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(manaTracker)
+        view.addSubview(decayTracker)
+        view.addSubview(growthTracker)
+        view.addSubview(animalTracker)
+        view.addSubview(forestTracker)
+        view.addSubview(skyTracker)
+        view.addSubview(victoryTracker)
+        view.addSubview(wildTracker)
+        
+        decayTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 50).isActive = true
+        decayTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        decayTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        decayTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        manaTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 10).isActive = true
+        manaTracker.leftAnchor.constraint(equalTo: decayTracker.rightAnchor, constant: 10).isActive = true
+        manaTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        manaTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        growthTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 50).isActive = true
+        growthTracker.leftAnchor.constraint(equalTo: manaTracker.rightAnchor, constant: 10).isActive = true
+        growthTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        growthTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        animalTracker.topAnchor.constraint(equalTo: growthTracker.bottomAnchor, constant: 30).isActive = true
+        animalTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        animalTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        animalTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        victoryTracker.topAnchor.constraint(equalTo: manaTracker.bottomAnchor, constant: 30).isActive = true
+        victoryTracker.leftAnchor.constraint(equalTo: animalTracker.rightAnchor, constant: 10).isActive = true
+        victoryTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        victoryTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        forestTracker.topAnchor.constraint(equalTo: decayTracker.bottomAnchor, constant: 30).isActive = true
+        forestTracker.leftAnchor.constraint(equalTo: victoryTracker.rightAnchor, constant: 10).isActive = true
+        forestTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        forestTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        skyTracker.topAnchor.constraint(equalTo: animalTracker.bottomAnchor, constant: 30).isActive = true
+        skyTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50).isActive = true
+        skyTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        skyTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        wildTracker.topAnchor.constraint(equalTo: forestTracker.bottomAnchor, constant: 30).isActive = true
+        wildTracker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
+        wildTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        wildTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+    }
+}

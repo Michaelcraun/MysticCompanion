@@ -6,28 +6,54 @@
 //  Copyright © 2017 Craunic Productions. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import MapKit
+import Firebase
 
 extension HomeVC {
-    func checkUserID() {
-        let defaults = UserDefaults.standard
-        let userID = defaults.string(forKey: "userID")
-        if userID != nil {
-            //TODO: Load user data
-            let userName = defaults.string(forKey: "userName")
-            playerName.text = userName
+    func checkUsername(forKey key: String?) {
+        if key != nil {
+            GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for user in userSnapshot {
+                        if user.key == key {
+                            if let username = user.childSnapshot(forPath: "username").value as? String {
+                                self.username = username
+                                self.playerName.text = username
+                            }
+                        }
+                    }
+                }
+            })
         } else {
-            //TODO: Ask user to sign in to Firebase
             playerName.text = generateID()
         }
     }
     
+    func getUsernameFromFB(forKey key: String?) -> String {
+        var fbUsername = ""
+        if key != nil {
+            GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for user in userSnapshot {
+                        if user.key == key {
+                            if let username = user.childSnapshot(forPath: "username").value as? String {
+                                fbUsername = username
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        return fbUsername
+    }
+    
     func generateID() -> String {
+        var userID = "user"
         let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let allowedCharsCount = UInt32(allowedChars.count)
-        var userID = "user"
         
-        for _ in 0..<10 {
+        for _ in 0..<20 {
             let randomNum = Int(arc4random_uniform(allowedCharsCount))
             let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
             let newCharacter = allowedChars[randomIndex]
@@ -36,70 +62,129 @@ extension HomeVC {
         return userID
     }
     
-//    @objc func register(sender: UIButton!) {
-//        self.view.endEditing(true)
-//        if let email = emailField.text, let password = passwordField.text {
-//            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
-//                if error == nil {
-//                    self.presentFirebaseAlert(withSuccess: true, andMessage: "Successfully logged in user \(email)! Thank you!")
-//                    if let user = user {
-//                        let userData = ["provider" : user.providerID] as [String : Any]
-//                        self.defaults.set(user.uid, forKey: "userID")                         //DISABLED FOR TESTING!
-//                        GameHandler.sharedInstance.createFirebaseDBUser(uid: user.uid, userData: userData)
-//                        GameHandler.sharedInstance.loadGameStats()
-//                    }
-//                } else {
-//                    if let errorCode = FIRAuthErrorCode(rawValue: error!._code) {
-//                        switch errorCode {
-//                        case .errorCodeInvalidEmail: self.presentFirebaseAlert(withSuccess: false, andMessage: "Invalid email. Try again?")
-//                        case .errorCodeWrongPassword: self.presentFirebaseAlert(withSuccess: false, andMessage: "Wrong password. Try again?")
-//                        default: self.presentFirebaseAlert(withSuccess: false, andMessage: "Unexpected error. Try again?")
-//                        }
-//                    }
-//                    FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
-//                        if error != nil {
-//                            if let errorCode = FIRAuthErrorCode(rawValue: error!._code) {
-//                                switch errorCode {
-//                                case .errorCodeInvalidEmail: self.presentFirebaseAlert(withSuccess: false, andMessage: "Invalid email. Try again?")
-//                                case .errorCodeEmailAlreadyInUse: self.presentFirebaseAlert(withSuccess: false, andMessage: "Email alread in use. Try again?")
-//                                default: self.presentFirebaseAlert(withSuccess: false, andMessage: "Unexpected error. Try again?")
-//                                }
-//                            }
-//                        } else {
-//                            self.presentFirebaseAlert(withSuccess: true, andMessage: "Successfully created user \(email)! Thank you!")
-//                            if let user = user {
-//                                let userData = ["provider" : user.providerID] as [String : Any]
-//                                self.defaults.set(user.uid, forKey: "userID")
-//                                GameHandler.sharedInstance.createFirebaseDBUser(uid: user.uid, userData: userData)
-//                                GameHandler.sharedInstance.initializeFireBase()
-//                                GameHandler.sharedInstance.loadGameStats()
-//                            }
-//                        }
-//                    })
-//                }
-//            })
-//        }
-//    }
-//
-//    func presentFirebaseAlert(withSuccess success: Bool, andMessage message: String) {
-//        var _success: String {
-//            switch success {
-//            case true: return "Success"
-//            case false: return "Error"
-//            }
-//        }
-//
-//        let alert = UIAlertController(title: "Firebase \(_success)!", message: message, preferredStyle: .alert)
-//        if success {
-//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-//                self.loadGame(sender: nil)
-//            }))
-//        } else {
-//            alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: nil))
-//            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) in
-//                self.loadGame(sender: nil)
-//            }))
-//        }
-//        present(alert, animated: true, completion: nil)
-//    }
+    func observeGames(withUserLocation location: CLLocation) {
+        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            var localGames = [Dictionary<String,AnyObject>]()
+            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for game in gameSnapshot {
+                    if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
+                        if !gameStarted {
+                            if game.hasChild("coordinate") {
+                                let gameLocationArray = game.childSnapshot(forPath: "coordinate").value as! NSArray
+                                let latitude = gameLocationArray[0] as! CLLocationDegrees
+                                let longitude = gameLocationArray[1] as! CLLocationDegrees
+                                let gameLocation = CLLocation(latitude: latitude, longitude: longitude)
+                                let distance = location.distance(from: gameLocation)
+                                if distance <= 5 {
+                                    if let gameDict = game.value as? Dictionary<String,AnyObject> {
+                                        localGames.append(gameDict)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                self.nearbyGames = localGames
+            }
+        })
+    }
+    
+    func observeGamesForNewUsers() {
+        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for game in gameSnapshot {
+                    if game.key == self.currentUserID {
+                        if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
+                            var newPlayers = [Dictionary<String,AnyObject>]()
+                            for player in playersArray {
+                                newPlayers.append(player)
+                            }
+                            self.players = newPlayers
+                        }
+                    }
+                }
+            }
+        })
+    }
+    
+    func observeGamesForStart(forGame selectedGame: Dictionary<String,AnyObject>) {
+        if let selectedGameKey = selectedGame["game"] as? String {
+            GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+                if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for game in gameSnapshot {
+                        if game.key == selectedGameKey {
+                            if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
+                                if gameStarted {
+                                    self.performSegue(withIdentifier: "startGame", sender: nil)
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    func updateGame(forGame selectedGame: Dictionary<String,AnyObject>, withUserData userData: Dictionary<String,AnyObject>) {
+        var isInGame: Bool = false
+        let gameKey = selectedGame["game"] as! String
+        GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for game in gameSnapshot {
+                    if game.key == gameKey {
+                        if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
+                            self.players = playersArray
+                            if playersArray.count < 4 {
+                                for player in playersArray {
+                                    if player["username"] as! String == userData["username"] as! String {
+                                        isInGame = true
+                                        break
+                                    }
+                                }
+                                if isInGame {
+                                    
+                                } else {
+                                    self.players.append(userData)
+                                }
+                                var gameToUpdate = selectedGame
+                                gameToUpdate["players"] = self.players as AnyObject
+                                GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
+                            } else {
+                                print("game is full")
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    
+    func removeUserFromAllGames() {
+        GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for game in gameSnapshot {
+                    if let playersArray = game.childSnapshot(forPath: "players").value as? NSArray {
+                        var newPlayersArray = [String]()
+                        for player in playersArray {
+                            if let playerUsername = player as? String {
+                                if playerUsername != self.username! {
+                                    newPlayersArray.append(playerUsername)
+                                }
+                            }
+                        }
+                        guard let coordinate = game.childSnapshot(forPath: "coordinate").value as? [CLLocationDegrees] else { return }
+                        guard let gameID = game.childSnapshot(forPath: "game").value as? String else { return }
+                        guard let fbUsername = game.childSnapshot(forPath: "username").value as? String else { return }
+                        guard let winCondition = game.childSnapshot(forPath: "winCondition").value as? String else { return }
+                        let gameData: Dictionary<String,Any> = ["coordinate" : coordinate,
+                                                                "game" : gameID,
+                                                                "username" : fbUsername,
+                                                                "winCondition" : winCondition,
+                                                                "players" : newPlayersArray]
+                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameData)
+                    }
+                }
+            }
+        })
+    }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 extension HomeVC {
     func setPlayerIcon(withDeck deck: DeckType) {

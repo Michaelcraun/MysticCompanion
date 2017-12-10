@@ -9,8 +9,26 @@
 /* Begin PBXBuildFile section */
 		43B1A16DCD40CCF439AD3AF6 /* Pods_MysticCompanion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */; };
 		9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */; };
-		9B0D31F91FCDC12A006F7805 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31F81FCDC12A006F7805 /* Shared.swift */; };
-		9B0D31FC1FCDC581006F7805 /* FirebaseLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31FB1FCDC581006F7805 /* FirebaseLoginVC.swift */; };
+		9B0D31FC1FCDC581006F7805 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31FB1FCDC581006F7805 /* LoginVC.swift */; };
+		9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31FD1FCDEAEE006F7805 /* LoginLayout.swift */; };
+		9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32031FCE0C74006F7805 /* EndGameVC.swift */; };
+		9B0D32071FCE0CA2006F7805 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32061FCE0CA2006F7805 /* SettingsVC.swift */; };
+		9B0D320A1FCE480B006F7805 /* GameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32091FCE480B006F7805 /* GameVC.swift */; };
+		9B0D320E1FCE4EFF006F7805 /* SettingsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D320D1FCE4EFF006F7805 /* SettingsLayout.swift */; };
+		9B0D32101FCE5632006F7805 /* PreviousGameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */; };
+		9B0D32131FD02384006F7805 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32121FD02384006F7805 /* Player.swift */; };
+		9B0D32151FD023A1006F7805 /* GameHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32141FD023A1006F7805 /* GameHandler.swift */; };
+		9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32161FD0240C006F7805 /* SettingsCoreData.swift */; };
+		9B0D32191FD02C76006F7805 /* SettingsSKHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32181FD02C76006F7805 /* SettingsSKHelper.swift */; };
+		9B0D321B1FD04142006F7805 /* GameLobbyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */; };
+		9B73B6491FD8B664007E7ECA /* UIViewKeyboardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */; };
+		9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */; };
+		9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */; };
+		9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */; };
+		9B73B6541FD8E6F5007E7ECA /* HomeMapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */; };
+		9B73B6561FD8EA9E007E7ECA /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6551FD8EA9E007E7ECA /* UpdateService.swift */; };
+		9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6571FDAB368007E7ECA /* GameLayout.swift */; };
+		9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6591FDAB668007E7ECA /* TrackerView.swift */; };
 		9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFE91FCC6506005741CD /* AppDelegate.swift */; };
 		9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFEB1FCC6506005741CD /* HomeVC.swift */; };
 		9BC7BFEF1FCC6506005741CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFED1FCC6506005741CD /* Main.storyboard */; };
@@ -27,8 +45,28 @@
 /* Begin PBXFileReference section */
 		66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MysticCompanion.release.xcconfig"; path = "Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion.release.xcconfig"; sourceTree = "<group>"; };
 		9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFunctions.swift; sourceTree = "<group>"; };
-		9B0D31F81FCDC12A006F7805 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
-		9B0D31FB1FCDC581006F7805 /* FirebaseLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLoginVC.swift; sourceTree = "<group>"; };
+		9B0D31FB1FCDC581006F7805 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		9B0D31FD1FCDEAEE006F7805 /* LoginLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginLayout.swift; sourceTree = "<group>"; };
+		9B0D32031FCE0C74006F7805 /* EndGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameVC.swift; sourceTree = "<group>"; };
+		9B0D32061FCE0CA2006F7805 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		9B0D32091FCE480B006F7805 /* GameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameVC.swift; sourceTree = "<group>"; };
+		9B0D320D1FCE4EFF006F7805 /* SettingsLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLayout.swift; sourceTree = "<group>"; };
+		9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousGameCell.swift; sourceTree = "<group>"; };
+		9B0D32121FD02384006F7805 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		9B0D32141FD023A1006F7805 /* GameHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHandler.swift; sourceTree = "<group>"; };
+		9B0D32161FD0240C006F7805 /* SettingsCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoreData.swift; sourceTree = "<group>"; };
+		9B0D32181FD02C76006F7805 /* SettingsSKHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSKHelper.swift; sourceTree = "<group>"; };
+		9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLobbyCell.swift; sourceTree = "<group>"; };
+		9B0D321C1FD044B7006F7805 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		9B0D321D1FD044B7006F7805 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewKeyboardExt.swift; sourceTree = "<group>"; };
+		9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
+		9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
+		9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMapKit.swift; sourceTree = "<group>"; };
+		9B73B6551FD8EA9E007E7ECA /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
+		9B73B6571FDAB368007E7ECA /* GameLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLayout.swift; sourceTree = "<group>"; };
+		9B73B6591FDAB668007E7ECA /* TrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerView.swift; sourceTree = "<group>"; };
 		9BC7BFE61FCC6506005741CD /* MysticCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MysticCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC7BFE91FCC6506005741CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BC7BFEB1FCC6506005741CD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -61,6 +99,8 @@
 		0A6B97D8B63CD11662DC4B00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B0D321C1FD044B7006F7805 /* FBSDKCoreKit.framework */,
+				9B0D321D1FD044B7006F7805 /* FBSDKLoginKit.framework */,
 				B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */,
 			);
 			name = Frameworks;
@@ -78,9 +118,66 @@
 		9B0D31FA1FCDC546006F7805 /* FirebaseLogin */ = {
 			isa = PBXGroup;
 			children = (
-				9B0D31FB1FCDC581006F7805 /* FirebaseLoginVC.swift */,
+				9B0D31FB1FCDC581006F7805 /* LoginVC.swift */,
+				9B0D31FD1FCDEAEE006F7805 /* LoginLayout.swift */,
+				9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */,
 			);
 			path = FirebaseLogin;
+			sourceTree = "<group>";
+		};
+		9B0D32001FCE0C3C006F7805 /* EndGameVC */ = {
+			isa = PBXGroup;
+			children = (
+				9B0D32031FCE0C74006F7805 /* EndGameVC.swift */,
+			);
+			path = EndGameVC;
+			sourceTree = "<group>";
+		};
+		9B0D32051FCE0C8E006F7805 /* SettingsVC */ = {
+			isa = PBXGroup;
+			children = (
+				9B0D32061FCE0CA2006F7805 /* SettingsVC.swift */,
+				9B0D320D1FCE4EFF006F7805 /* SettingsLayout.swift */,
+				9B0D32161FD0240C006F7805 /* SettingsCoreData.swift */,
+				9B0D32181FD02C76006F7805 /* SettingsSKHelper.swift */,
+			);
+			path = SettingsVC;
+			sourceTree = "<group>";
+		};
+		9B0D32081FCE47E6006F7805 /* GameVC */ = {
+			isa = PBXGroup;
+			children = (
+				9B0D32091FCE480B006F7805 /* GameVC.swift */,
+				9B73B6571FDAB368007E7ECA /* GameLayout.swift */,
+			);
+			name = GameVC;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		9B0D32111FD02282006F7805 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9BC7BFF01FCC6506005741CD /* MysticCompanion.xcdatamodeld */,
+				9B0D32121FD02384006F7805 /* Player.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9B73B6471FD8B654007E7ECA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */,
+				9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9B73B64C1FD8BACD007E7ECA /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		9BC7BFDD1FCC6506005741CD = {
@@ -104,6 +201,9 @@
 		9BC7BFE81FCC6506005741CD /* MysticCompanion */ = {
 			isa = PBXGroup;
 			children = (
+				9B73B64C1FD8BACD007E7ECA /* Protocols */,
+				9B73B6471FD8B654007E7ECA /* Extensions */,
+				9B0D32111FD02282006F7805 /* Model */,
 				9BC7C00A1FCCA28C005741CD /* Uitlities */,
 				9BC7C0021FCC6EF6005741CD /* View */,
 				9BC7C0001FCC6B6B005741CD /* Controller */,
@@ -113,7 +213,6 @@
 				9BC7BFF51FCC6506005741CD /* LaunchScreen.storyboard */,
 				9BC7BFFE1FCC67C7005741CD /* GoogleService-Info.plist */,
 				9BC7BFF81FCC6506005741CD /* Info.plist */,
-				9BC7BFF01FCC6506005741CD /* MysticCompanion.xcdatamodeld */,
 			);
 			path = MysticCompanion;
 			sourceTree = "<group>";
@@ -123,6 +222,9 @@
 			children = (
 				9BC7C0011FCC6B91005741CD /* HomeVC */,
 				9B0D31FA1FCDC546006F7805 /* FirebaseLogin */,
+				9B0D32081FCE47E6006F7805 /* GameVC */,
+				9B0D32001FCE0C3C006F7805 /* EndGameVC */,
+				9B0D32051FCE0C8E006F7805 /* SettingsVC */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -133,6 +235,7 @@
 				9BC7BFEB1FCC6506005741CD /* HomeVC.swift */,
 				9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */,
 				9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */,
+				9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */,
 				9BC7C0081FCC7534005741CD /* HomeFirebase.swift */,
 			);
 			path = HomeVC;
@@ -141,6 +244,8 @@
 		9BC7C0021FCC6EF6005741CD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */,
+				9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */,
 				9BC7C0031FCC6EFC005741CD /* Style */,
 			);
 			path = View;
@@ -150,6 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				9BC7C0041FCC6F1B005741CD /* CircleView.swift */,
+				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -157,8 +263,9 @@
 		9BC7C00A1FCCA28C005741CD /* Uitlities */ = {
 			isa = PBXGroup;
 			children = (
+				9B0D32141FD023A1006F7805 /* GameHandler.swift */,
 				9BC7C00B1FCCA2A4005741CD /* Constants.swift */,
-				9B0D31F81FCDC12A006F7805 /* Shared.swift */,
+				9B73B6551FD8EA9E007E7ECA /* UpdateService.swift */,
 			);
 			path = Uitlities;
 			sourceTree = "<group>";
@@ -287,16 +394,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B0D320E1FCE4EFF006F7805 /* SettingsLayout.swift in Sources */,
+				9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */,
 				9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */,
 				9BC7C0051FCC6F1B005741CD /* CircleView.swift in Sources */,
+				9B73B6491FD8B664007E7ECA /* UIViewKeyboardExt.swift in Sources */,
 				9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */,
+				9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */,
 				9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */,
 				9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */,
-				9B0D31FC1FCDC581006F7805 /* FirebaseLoginVC.swift in Sources */,
+				9B0D31FC1FCDC581006F7805 /* LoginVC.swift in Sources */,
+				9B0D32151FD023A1006F7805 /* GameHandler.swift in Sources */,
+				9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */,
 				9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */,
-				9B0D31F91FCDC12A006F7805 /* Shared.swift in Sources */,
+				9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */,
 				9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */,
+				9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */,
 				9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */,
+				9B0D320A1FCE480B006F7805 /* GameVC.swift in Sources */,
+				9B0D321B1FD04142006F7805 /* GameLobbyCell.swift in Sources */,
+				9B0D32191FD02C76006F7805 /* SettingsSKHelper.swift in Sources */,
+				9B73B6541FD8E6F5007E7ECA /* HomeMapKit.swift in Sources */,
+				9B0D32131FD02384006F7805 /* Player.swift in Sources */,
+				9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */,
+				9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */,
+				9B73B6561FD8EA9E007E7ECA /* UpdateService.swift in Sources */,
+				9B0D32101FCE5632006F7805 /* PreviousGameCell.swift in Sources */,
+				9B0D32071FCE0CA2006F7805 /* SettingsVC.swift in Sources */,
+				9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +561,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 96SB47X67B;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GMStepper\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMSessionFetcher\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GoogleToolboxForMac\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/KCFloatingActionButton\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/TextFieldEffects\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleMobileAds/Frameworks\"",
+					"~/Documents/FacebookSDK",
+				);
 				INFOPLIST_FILE = MysticCompanion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CraunicProductions.MysticCompanion;
@@ -452,6 +592,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 96SB47X67B;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GMStepper\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMSessionFetcher\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GoogleToolboxForMac\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/KCFloatingActionButton\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/TextFieldEffects\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleMobileAds/Frameworks\"",
+					"~/Documents/FacebookSDK",
+				);
 				INFOPLIST_FILE = MysticCompanion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CraunicProductions.MysticCompanion;

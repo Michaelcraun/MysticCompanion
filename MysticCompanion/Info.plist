@@ -41,5 +41,27 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb324946144648176</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>324946144648176</string>
+	<key>FacebookDisplayName</key>
+	<string>MysticCompanion</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please allow MysticCompanion to use your location to match you with games near you!</string>
 </dict>
 </plist>

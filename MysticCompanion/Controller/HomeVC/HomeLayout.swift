@@ -9,8 +9,10 @@
 import UIKit
 import KCFloatingActionButton
 import GoogleMobileAds
+import MapKit
 
-extension HomeVC {
+extension HomeVC: UITableViewDataSource, UITableViewDelegate {
+    
     func layoutView() {
         layoutBackgroundImage()
         layoutPlayerIcon()
@@ -109,7 +111,7 @@ extension HomeVC {
     
     func layoutStartButtons() {
         var yPadding: CGFloat {
-            switch Shared.instance.PREMIUM_PURCHASED {
+            switch PREMIUM_PURCHASED {
             case true: return 20
             case false: return 70
             }
@@ -123,24 +125,155 @@ extension HomeVC {
         startGame.title = "Start Game"
         startGame.buttonColor = .white
         startGame.handler = { item in
-            
+            if self.currentUserID == nil {
+                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            } else {
+                if PREMIUM_PURCHASED {
+                    self.userIsHostingGame = true
+                    self.layoutGameSetupView()
+                } else {
+                    
+                }
+            }
         }
         
         let joinGame = KCFloatingActionButtonItem()
         joinGame.title = "Join Game"
         joinGame.buttonColor = .white
         joinGame.handler = { item in
-            
+            if self.currentUserID == nil {
+                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            } else {
+                self.userIsHostingGame = false
+                let userLoaction = self.locationManager.location
+                self.layoutGameLobby()
+                self.nearbyGames = []
+                self.observeGames(withUserLocation: userLoaction!)
+            }
         }
         
+        let settings = KCFloatingActionButtonItem()
+        settings.title = "Settings"
+        settings.buttonColor = .red
+        settings.handler = { item in
+            if self.currentUserID == nil {
+                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            } else {
+                self.performSegue(withIdentifier: "showSettings", sender: nil)
+            }
+        }
+        
+        startButton.addItem(item: settings)
         startButton.addItem(item: startGame)
         startButton.addItem(item: joinGame)
         
         view.addSubview(startButton)
     }
     
+    func layoutGameSetupView() {
+        var yPadding: CGFloat {
+            switch PREMIUM_PURCHASED {
+            case true: return 20
+            case false: return 70
+            }
+        }
+        
+        let gameSetupView = UIView()
+        gameSetupView.frame = view.bounds
+        gameSetupView.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 20/255, alpha: 0.75)
+        gameSetupView.alpha = 0
+        
+        let vpSelector = KCFloatingActionButton()
+        vpSelector.buttonColor = .black
+        vpSelector.paddingY = yPadding
+        
+        let cancel = KCFloatingActionButtonItem()
+        cancel.title = "Cancel"
+        cancel.buttonColor = .white
+        cancel.handler = { item in
+            gameSetupView.fadeAlphaOut()
+        }
+        
+        let standard = KCFloatingActionButtonItem()
+        standard.title = "Standard VP"
+        standard.buttonColor = .white
+        standard.handler = { item in
+            let userLocation = self.locationManager.location
+            self.players = []
+            self.players.append(["username" : self.username as AnyObject,
+                                 "currentMana" : 0 as AnyObject,
+                                 "constantMana" : 0 as AnyObject,
+                                 "currentGrowth" : 0 as AnyObject,
+                                 "constantGrowth" : 0 as AnyObject,
+                                 "currentDecay" : 0 as AnyObject,
+                                 "constantDecay" : 0 as AnyObject,
+                                 "currentBeast" : 0 as AnyObject,
+                                 "constantBeast" : 0 as AnyObject,
+                                 "currentForest" : 0 as AnyObject,
+                                 "constantForest" : 0 as AnyObject,
+                                 "currentSky" : 0 as AnyObject,
+                                 "constantSky" : 0 as AnyObject,
+                                 "currentWild" : 0 as AnyObject,
+                                 "constantWild" : 0 as AnyObject,
+                                 "victoryPoints" : 0 as AnyObject])
+            GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
+                                                                                           "winCondition" : "standard",
+                                                                                           "coordinate" : [userLocation?.coordinate.latitude,
+                                                                                                           userLocation?.coordinate.longitude],
+                                                                                           "username" : self.username!,
+                                                                                           "players" : self.players,
+                                                                                           "gameStarted" : false])
+            self.layoutGameLobby()
+            self.observeGamesForNewUsers()
+            gameSetupView.fadeAlphaOut()
+        }
+        
+        let custom = KCFloatingActionButtonItem()
+        custom.title = "Custom VP"
+        custom.buttonColor = .white
+        custom.handler = { item in
+            let userLocation = self.locationManager.location
+            self.players = []
+            self.players.append(["username" : self.username as AnyObject,
+                                 "currentMana" : 0 as AnyObject,
+                                 "constantMana" : 0 as AnyObject,
+                                 "currentGrowth" : 0 as AnyObject,
+                                 "constantGrowth" : 0 as AnyObject,
+                                 "currentDecay" : 0 as AnyObject,
+                                 "constantGrowth" : 0 as AnyObject,
+                                 "currentBeast" : 0 as AnyObject,
+                                 "constantBeast" : 0 as AnyObject,
+                                 "currentForest" : 0 as AnyObject,
+                                 "constantForest" : 0 as AnyObject,
+                                 "currentSky" : 0 as AnyObject,
+                                 "constantSky" : 0 as AnyObject,
+                                 "currentWild" : 0 as AnyObject,
+                                 "constantWild" : 0 as AnyObject,
+                                 "victoryPoints" : 0 as AnyObject])
+            GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
+                                                                                           "winCondition" : "custom",
+                                                                                           "coordinate" : [userLocation?.coordinate.latitude,
+                                                                                                           userLocation?.coordinate.longitude],
+                                                                                           "username" : self.username!,
+                                                                                           "players" : self.players,
+                                                                                           "gameStarted" : false])
+            //TODO: Display custom VP input field
+            self.layoutGameLobby()
+            self.observeGamesForNewUsers()
+            gameSetupView.fadeAlphaOut()
+        }
+        
+        vpSelector.addItem(item: cancel)
+        vpSelector.addItem(item: standard)
+        vpSelector.addItem(item: custom)
+        
+        view.addSubview(gameSetupView)
+        gameSetupView.addSubview(vpSelector)
+        gameSetupView.fadeAlphaTo(0.75, withDuration: 0.2)
+    }
+    
     func layoutBannerAds() {
-        if Shared.instance.PREMIUM_PURCHASED {
+        if PREMIUM_PURCHASED {
             adBanner.removeFromSuperview()
         } else {
             //MARK: Initialize banner ads
@@ -157,5 +290,136 @@ extension HomeVC {
             adBanner.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
             adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
+    }
+    
+    func layoutGameLobby() {
+        var bottomConstant: CGFloat {
+            if PREMIUM_PURCHASED {
+                return 85
+            } else {
+                return 135
+            }
+        }
+        
+        gameLobbyTable.dataSource = self
+        gameLobbyTable.delegate = self
+        gameLobbyTable.separatorStyle = .none
+        gameLobbyTable.backgroundColor = .clear
+        gameLobbyTable.clearsContextBeforeDrawing = true
+        gameLobbyTable.rowHeight = 35
+        gameLobbyTable.register(GameLobbyCell.self, forCellReuseIdentifier: "gameLobbyCell")
+        gameLobbyTable.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(gameLobbyTable)
+        
+        gameLobbyTable.topAnchor.constraint(equalTo: deckChoicesStackView.bottomAnchor, constant: 10).isActive = true
+        gameLobbyTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        gameLobbyTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        gameLobbyTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant).isActive = true
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if userIsHostingGame {
+            switch players.count {
+            case 1: return players.count + 1
+            case 2...3: return players.count + 2
+            case 4: return players.count + 1
+            default: return 0
+            }
+        } else {
+            return nearbyGames.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
+        if userIsHostingGame {
+            if players.count == 1 {
+                if indexPath.row == 0 {
+                    cell.layoutWaitingForPlayersCell()
+                } else if indexPath.row == 1 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                }
+            } else if players.count == 2 {
+                if indexPath.row == 0 {
+                    cell.layoutWaitingForPlayersCell()
+                } else if indexPath.row == 1 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 2 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 3 {
+                    cell.layoutStartGameCell()
+                }
+            } else if players.count == 3 {
+                if indexPath.row == 0 {
+                    cell.layoutWaitingForPlayersCell()
+                } else if indexPath.row == 1 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 2 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 3 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 4 {
+                    cell.layoutStartGameCell()
+                }
+            } else if players.count == 4 {
+                if indexPath.row == 0 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 1 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 2 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 3 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row == 4 {
+                    cell.layoutStartGameCell()
+                }
+            }
+        } else {
+            cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if userIsHostingGame {
+            var index: Int {
+                switch players.count {
+                case 2: return 3
+                case 3: return 4
+                case 4: return 5
+                default: return 0
+                }
+            }
+            if indexPath.row == index {
+                GameHandler.instance.updateFirebaseDBGame(key: currentUserID!, gameData: ["gameStarted" : true])
+                performSegue(withIdentifier: "startGame", sender: nil)
+            }
+        } else {
+            //TODO: Add user to game
+            removeUserFromAllGames()
+            let userData: Dictionary<String,AnyObject> = ["username" : self.username as AnyObject,
+                                                          "currentMana" : 0 as AnyObject,
+                                                          "constantMana" : 0 as AnyObject,
+                                                          "currentGrowth" : 0 as AnyObject,
+                                                          "constantGrowth" : 0 as AnyObject,
+                                                          "currentDecay" : 0 as AnyObject,
+                                                          "constantDecay" : 0 as AnyObject,
+                                                          "currentBeast" : 0 as AnyObject,
+                                                          "constantBeast" : 0 as AnyObject,
+                                                          "currentForest" : 0 as AnyObject,
+                                                          "constantForest" : 0 as AnyObject,
+                                                          "currentSky" : 0 as AnyObject,
+                                                          "constantSky" : 0 as AnyObject,
+                                                          "currentWild" : 0 as AnyObject,
+                                                          "constantWild" : 0 as AnyObject,
+                                                          "victoryPoints" : 0 as AnyObject]
+            updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)
+            observeGamesForStart(forGame: nearbyGames[indexPath.row])
+            let userLoaction = self.locationManager.location
+            observeGames(withUserLocation: userLoaction!)
+            //TODO: Display waiting message
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
