@@ -22,4 +22,10 @@ extension UIView {
             self.removeFromSuperview()
         })
     }
+    
+    func fadeAlphaWithDelayTo(_ alpha: CGFloat, withDuration duration: TimeInterval, andDelay delay: TimeInterval) {
+        UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
+            self.alpha = alpha
+        }, completion: nil)
+    }
 }

@@ -10,6 +10,11 @@ import UIKit
 
 class GameLobbyCell: UITableViewCell {
     
+    override func awakeFromNib() {
+        self.backgroundColor = .clear
+        super.awakeFromNib()
+    }
+    
     func clearCell() {
         for subview in self.subviews {
             subview.removeFromSuperview()
@@ -17,7 +22,6 @@ class GameLobbyCell: UITableViewCell {
     }
     
     func layoutWaitingForPlayersCell() {
-        self.backgroundColor = .clear
         clearCell()
         
         let waitingForPlayersLabel = UILabel()
@@ -42,13 +46,14 @@ class GameLobbyCell: UITableViewCell {
         spinner.startAnimating()
     }
 
-    func layoutCellForHost(withUser user: String) {
-        self.backgroundColor = .clear
+    func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
+        //TODO: Add DeckType and color
+        let username = user["username"] as! String
         clearCell()
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
-        usernameLabel.text = user
+        usernameLabel.text = username
         usernameLabel.textAlignment = .center
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -61,7 +66,6 @@ class GameLobbyCell: UITableViewCell {
     }
     
     func layoutStartGameCell() {
-        self.backgroundColor = .clear
         clearCell()
         
         let startLabel = UILabel()
@@ -79,7 +83,6 @@ class GameLobbyCell: UITableViewCell {
     }
     
     func layoutCellForGuest(withGame game: Dictionary<String,Any>) {
-        self.backgroundColor = .clear
         clearCell()
         
         let hostName = game["username"] as? String

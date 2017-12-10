@@ -21,4 +21,12 @@ extension HomeVC {
             }, completion: nil)
         }
     }
+    
+    func joinGamePressed() {
+        self.userIsHostingGame = false
+        let userLoaction = self.locationManager.location
+        self.layoutGameLobby()
+        self.nearbyGames = []
+        self.observeGames(withUserLocation: userLoaction!)
+    }
 }

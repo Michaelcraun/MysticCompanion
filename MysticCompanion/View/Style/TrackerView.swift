@@ -85,8 +85,6 @@ class TrackerView: UIView {
         let iconWidth = trackerWidth / 4
         var stepperSpace: CGFloat {
             switch type {
-//            case .victory: return self.frame.height - (iconWidth + 2)
-//            default: return (self.frame.height - (iconWidth + 2)) / 2
             case .victory: return self.frame.height - iconWidth * 2
             default: return (self.frame.height - iconWidth * 2) / 2
             }
@@ -106,14 +104,12 @@ class TrackerView: UIView {
         currentStepper.labelBackgroundColor = type.primaryColor
         currentStepper.labelFont = UIFont(name: fontFamily, size: 15)!
         currentStepper.maximumValue = 500
-        currentStepper.minimumValue = -500
         currentStepper.translatesAutoresizingMaskIntoConstraints = false
         
         constantStepper.buttonsBackgroundColor = type.secondaryColor
         constantStepper.labelBackgroundColor = type.primaryColor
         constantStepper.labelFont = UIFont(name: fontFamily, size: 15)!
         constantStepper.maximumValue = 500
-        constantStepper.minimumValue = -500
         constantStepper.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(iconView)
@@ -145,25 +141,13 @@ class TrackerView: UIView {
             rightBuffer.translatesAutoresizingMaskIntoConstraints = false
             
             self.addSubview(constantStepper)
-//            self.addSubview(leftBuffer)
-//            self.addSubview(rightBuffer)
             
             constantStepper.topAnchor.constraint(equalTo: currentStepper.bottomAnchor).isActive = true
-//            constantStepper.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 15).isActive = true
-//            constantStepper.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -15).isActive = true
             constantStepper.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
             constantStepper.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
             constantStepper.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
-            
-//            leftBuffer.topAnchor.constraint(equalTo: currentStepper.bottomAnchor).isActive = true
-//            leftBuffer.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-//            leftBuffer.rightAnchor.constraint(equalTo: constantStepper.leftAnchor).isActive = true
-//            leftBuffer.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
-//
-//            rightBuffer.topAnchor.constraint(equalTo: currentStepper.bottomAnchor).isActive = true
-//            rightBuffer.leftAnchor.constraint(equalTo: constantStepper.rightAnchor).isActive = true
-//            rightBuffer.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-//            rightBuffer.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
         }
     }
+    
+    func returnTracker() -> TrackerView { return self }
 }

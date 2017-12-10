@@ -9,11 +9,13 @@
 import UIKit
 import GMStepper
 
-extension GameVC {
+extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
         layoutBackground()
-        layoutCurrentPlayerPanel()
+        layoutPlayersTable()
+//        layoutCurrentPlayerPanel()
         layoutTrackers()
+        layoutEndTurnButton()
     }
     
     func layoutBackground() {
@@ -60,11 +62,6 @@ extension GameVC {
         playerPanel.addSubview(currentPlayerVPLabel)
         playerPanel.addSubview(gameVPLabel)
         
-        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
-        playerPanel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        playerPanel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
         currentPlayerLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
         currentPlayerLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor, constant: 5).isActive = true
         currentPlayerLabel.widthAnchor.constraint(equalToConstant: currentPlayerLabel.frame.width).isActive = true
@@ -78,40 +75,80 @@ extension GameVC {
         gameVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor, constant: -5).isActive = true
     }
     
+    func layoutPlayersTable() {
+        let panelHeight = CGFloat(players.count) * 20 + 10
+        playerPanel.layer.cornerRadius = 10
+        playerPanel.layer.borderColor = UIColor.black.cgColor
+        playerPanel.layer.borderWidth = 2
+        playerPanel.backgroundColor = primaryColor
+        playerPanel.clipsToBounds = true
+        playerPanel.translatesAutoresizingMaskIntoConstraints = false
+        
+        gameVPLabel.font = UIFont(name: fontFamily, size: 10)
+        gameVPLabel.textAlignment = .center
+        gameVPLabel.text = "Victory Point Pool: 0/23"
+        gameVPLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        playersTable.allowsSelection = false
+        playersTable.dataSource = self
+        playersTable.delegate = self
+        playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "playersTableCell")
+        playersTable.rowHeight = 20     //MARK: TEMPORARY VARIABLE
+        playersTable.separatorStyle = .none
+        
+        view.addSubview(playerPanel)
+        playerPanel.addSubview(gameVPLabel)
+        playerPanel.addSubview(playersTable)
+        
+        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        playerPanel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        playerPanel.heightAnchor.constraint(equalToConstant: panelHeight).isActive = true
+        
+        gameVPLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor).isActive = true
+        gameVPLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor).isActive = true
+        gameVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor).isActive = true
+        
+        playersTable.topAnchor.constraint(equalTo: gameVPLabel.bottomAnchor).isActive = true
+        playersTable.leftAnchor.constraint(equalTo: playerPanel.leftAnchor).isActive = true
+        playersTable.rightAnchor.constraint(equalTo: playerPanel.rightAnchor).isActive = true
+        playersTable.bottomAnchor.constraint(equalTo: playerPanel.bottomAnchor).isActive = true
+    }
+    
     func layoutTrackers() {
         let screenWidth = view.frame.width
         let trackerWidth = (screenWidth - 40) / 3
         
-        let manaTracker = TrackerView()
         manaTracker.initTrackerOfType(.mana)
+        manaTracker.alpha = 0
         manaTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let decayTracker = TrackerView()
         decayTracker.initTrackerOfType(.decay)
+        decayTracker.alpha = 0
         decayTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let growthTracker = TrackerView()
         growthTracker.initTrackerOfType(.growth)
+        growthTracker.alpha = 0
         growthTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let animalTracker = TrackerView()
         animalTracker.initTrackerOfType(.animal)
+        animalTracker.alpha = 0
         animalTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let forestTracker = TrackerView()
         forestTracker.initTrackerOfType(.forest)
+        forestTracker.alpha = 0
         forestTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let skyTracker = TrackerView()
         skyTracker.initTrackerOfType(.sky)
+        skyTracker.alpha = 0
         skyTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let victoryTracker = TrackerView()
         victoryTracker.initTrackerOfType(.victory)
+        victoryTracker.alpha = 0
         victoryTracker.translatesAutoresizingMaskIntoConstraints = false
         
-        let wildTracker = TrackerView()
         wildTracker.initTrackerOfType(.wild)
+        wildTracker.alpha = 0
         wildTracker.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(manaTracker)
@@ -153,14 +190,40 @@ extension GameVC {
         forestTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         forestTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        skyTracker.topAnchor.constraint(equalTo: animalTracker.bottomAnchor, constant: 30).isActive = true
+        skyTracker.topAnchor.constraint(equalTo: animalTracker.bottomAnchor, constant: 20).isActive = true
         skyTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50).isActive = true
         skyTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         skyTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        wildTracker.topAnchor.constraint(equalTo: forestTracker.bottomAnchor, constant: 30).isActive = true
+        wildTracker.topAnchor.constraint(equalTo: forestTracker.bottomAnchor, constant: 20).isActive = true
         wildTracker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
         wildTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         wildTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
+        
+        trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
+        constantArray = [player.manaConstant, player.decayConstant, player.growthConstant, player.animalConstant, player.forestConstant, player.skyConstant, player.currentVP, player.wildConstant]
+    }
+    
+    func layoutEndTurnButton() {
+        endTurnButton.setTitle("End Turn", for: .normal)
+        endTurnButton.addTarget(self, action: #selector(endPlayerTurn(sender:)), for: .touchUpInside)
+        endTurnButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(endTurnButton)
+        
+        endTurnButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        endTurnButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        endTurnButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        endTurnButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "playersTableCell") as! PlayersTableCell
+        cell.layoutCell(forPlayer: players[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return players.count
     }
 }

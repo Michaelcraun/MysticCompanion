@@ -129,10 +129,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
             } else {
                 if PREMIUM_PURCHASED {
-                    self.userIsHostingGame = true
                     self.layoutGameSetupView()
                 } else {
-                    
+                    //TODO: Actions for non-premium
                 }
             }
         }
@@ -144,11 +143,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             if self.currentUserID == nil {
                 self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
             } else {
-                self.userIsHostingGame = false
-                let userLoaction = self.locationManager.location
-                self.layoutGameLobby()
-                self.nearbyGames = []
-                self.observeGames(withUserLocation: userLoaction!)
+                self.joinGamePressed()
             }
         }
         
@@ -171,6 +166,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutGameSetupView() {
+        self.userIsHostingGame = true
+        
         var yPadding: CGFloat {
             switch PREMIUM_PURCHASED {
             case true: return 20
@@ -198,33 +195,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         standard.title = "Standard VP"
         standard.buttonColor = .white
         standard.handler = { item in
-            let userLocation = self.locationManager.location
-            self.players = []
-            self.players.append(["username" : self.username as AnyObject,
-                                 "currentMana" : 0 as AnyObject,
-                                 "constantMana" : 0 as AnyObject,
-                                 "currentGrowth" : 0 as AnyObject,
-                                 "constantGrowth" : 0 as AnyObject,
-                                 "currentDecay" : 0 as AnyObject,
-                                 "constantDecay" : 0 as AnyObject,
-                                 "currentBeast" : 0 as AnyObject,
-                                 "constantBeast" : 0 as AnyObject,
-                                 "currentForest" : 0 as AnyObject,
-                                 "constantForest" : 0 as AnyObject,
-                                 "currentSky" : 0 as AnyObject,
-                                 "constantSky" : 0 as AnyObject,
-                                 "currentWild" : 0 as AnyObject,
-                                 "constantWild" : 0 as AnyObject,
-                                 "victoryPoints" : 0 as AnyObject])
-            GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
-                                                                                           "winCondition" : "standard",
-                                                                                           "coordinate" : [userLocation?.coordinate.latitude,
-                                                                                                           userLocation?.coordinate.longitude],
-                                                                                           "username" : self.username!,
-                                                                                           "players" : self.players,
-                                                                                           "gameStarted" : false])
-            self.layoutGameLobby()
-            self.observeGamesForNewUsers()
+            self.hostGame(withWinCondition: "standard", andVPGoal: 0)
             gameSetupView.fadeAlphaOut()
         }
         
@@ -232,34 +203,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         custom.title = "Custom VP"
         custom.buttonColor = .white
         custom.handler = { item in
-            let userLocation = self.locationManager.location
-            self.players = []
-            self.players.append(["username" : self.username as AnyObject,
-                                 "currentMana" : 0 as AnyObject,
-                                 "constantMana" : 0 as AnyObject,
-                                 "currentGrowth" : 0 as AnyObject,
-                                 "constantGrowth" : 0 as AnyObject,
-                                 "currentDecay" : 0 as AnyObject,
-                                 "constantGrowth" : 0 as AnyObject,
-                                 "currentBeast" : 0 as AnyObject,
-                                 "constantBeast" : 0 as AnyObject,
-                                 "currentForest" : 0 as AnyObject,
-                                 "constantForest" : 0 as AnyObject,
-                                 "currentSky" : 0 as AnyObject,
-                                 "constantSky" : 0 as AnyObject,
-                                 "currentWild" : 0 as AnyObject,
-                                 "constantWild" : 0 as AnyObject,
-                                 "victoryPoints" : 0 as AnyObject])
-            GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
-                                                                                           "winCondition" : "custom",
-                                                                                           "coordinate" : [userLocation?.coordinate.latitude,
-                                                                                                           userLocation?.coordinate.longitude],
-                                                                                           "username" : self.username!,
-                                                                                           "players" : self.players,
-                                                                                           "gameStarted" : false])
-            //TODO: Display custom VP input field
-            self.layoutGameLobby()
-            self.observeGamesForNewUsers()
+            //TODO: Handle setting custom VP Goal
+            self.hostGame(withWinCondition: "custom", andVPGoal: 0)
             gameSetupView.fadeAlphaOut()
         }
         
@@ -337,40 +282,30 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             if players.count == 1 {
                 if indexPath.row == 0 {
                     cell.layoutWaitingForPlayersCell()
-                } else if indexPath.row == 1 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 }
             } else if players.count == 2 {
                 if indexPath.row == 0 {
                     cell.layoutWaitingForPlayersCell()
-                } else if indexPath.row == 1 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 2 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row > 0 && indexPath.row < 3 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 } else if indexPath.row == 3 {
                     cell.layoutStartGameCell()
                 }
             } else if players.count == 3 {
                 if indexPath.row == 0 {
                     cell.layoutWaitingForPlayersCell()
-                } else if indexPath.row == 1 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 2 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 3 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                } else if indexPath.row > 0 && indexPath.row < 4 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 } else if indexPath.row == 4 {
                     cell.layoutStartGameCell()
                 }
             } else if players.count == 4 {
                 if indexPath.row == 0 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 1 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 2 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
-                } else if indexPath.row == 3 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1]["username"] as! String)
+                    cell.layoutCellForHost(withUser: players[indexPath.row])
+                } else if indexPath.row > 0 && indexPath.row < 4 {
+                    cell.layoutCellForHost(withUser: players[indexPath.row])
                 } else if indexPath.row == 4 {
                     cell.layoutStartGameCell()
                 }
@@ -396,23 +331,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 performSegue(withIdentifier: "startGame", sender: nil)
             }
         } else {
-            //TODO: Add user to game
             removeUserFromAllGames()
             let userData: Dictionary<String,AnyObject> = ["username" : self.username as AnyObject,
-                                                          "currentMana" : 0 as AnyObject,
-                                                          "constantMana" : 0 as AnyObject,
-                                                          "currentGrowth" : 0 as AnyObject,
-                                                          "constantGrowth" : 0 as AnyObject,
-                                                          "currentDecay" : 0 as AnyObject,
-                                                          "constantDecay" : 0 as AnyObject,
-                                                          "currentBeast" : 0 as AnyObject,
-                                                          "constantBeast" : 0 as AnyObject,
-                                                          "currentForest" : 0 as AnyObject,
-                                                          "constantForest" : 0 as AnyObject,
-                                                          "currentSky" : 0 as AnyObject,
-                                                          "constantSky" : 0 as AnyObject,
-                                                          "currentWild" : 0 as AnyObject,
-                                                          "constantWild" : 0 as AnyObject,
                                                           "victoryPoints" : 0 as AnyObject]
             updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)
             observeGamesForStart(forGame: nearbyGames[indexPath.row])

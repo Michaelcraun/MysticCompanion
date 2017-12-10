@@ -187,4 +187,21 @@ extension HomeVC {
             }
         })
     }
+    
+    func hostGame(withWinCondition condition: String, andVPGoal goal: Int) {
+        let userLocation = self.locationManager.location
+        self.players = []
+        self.players.append(["username" : self.username as AnyObject,
+                             "victoryPoints" : 0 as AnyObject])
+        GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
+                                                                                       "winCondition" : condition,
+                                                                                       "vpGoal" : goal,
+                                                                                       "coordinate" : [userLocation?.coordinate.latitude,
+                                                                                                       userLocation?.coordinate.longitude],
+                                                                                       "username" : self.username!,
+                                                                                       "players" : self.players,
+                                                                                       "gameStarted" : false])
+        self.layoutGameLobby()
+        self.observeGamesForNewUsers()
+    }
 }
