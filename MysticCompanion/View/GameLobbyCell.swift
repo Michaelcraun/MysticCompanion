@@ -15,6 +15,11 @@ class GameLobbyCell: UITableViewCell {
         super.awakeFromNib()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.backgroundColor = .clear
+    }
+    
     func clearCell() {
         for subview in self.subviews {
             subview.removeFromSuperview()

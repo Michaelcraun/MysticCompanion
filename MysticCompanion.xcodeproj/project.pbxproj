@@ -32,6 +32,7 @@
 		9B966D3B1FDD8C630083192B /* GameFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D3A1FDD8C630083192B /* GameFunctions.swift */; };
 		9B966D3D1FDD8ECA0083192B /* PlayersTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */; };
 		9B966D3F1FDD90D40083192B /* GameFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D3E1FDD90D40083192B /* GameFirebase.swift */; };
+		9B966D411FDEAA0D0083192B /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */; };
 		9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFE91FCC6506005741CD /* AppDelegate.swift */; };
 		9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFEB1FCC6506005741CD /* HomeVC.swift */; };
 		9BC7BFEF1FCC6506005741CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFED1FCC6506005741CD /* Main.storyboard */; };
@@ -73,6 +74,7 @@
 		9B966D3A1FDD8C630083192B /* GameFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFunctions.swift; sourceTree = "<group>"; };
 		9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTableCell.swift; sourceTree = "<group>"; };
 		9B966D3E1FDD90D40083192B /* GameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFirebase.swift; sourceTree = "<group>"; };
+		9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		9BC7BFE61FCC6506005741CD /* MysticCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MysticCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC7BFE91FCC6506005741CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BC7BFEB1FCC6506005741CD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			children = (
 				9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */,
 				9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */,
+				9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				9B73B6561FD8EA9E007E7ECA /* UpdateService.swift in Sources */,
 				9B0D32101FCE5632006F7805 /* PreviousGameCell.swift in Sources */,
 				9B0D32071FCE0CA2006F7805 /* SettingsVC.swift in Sources */,
+				9B966D411FDEAA0D0083192B /* UIDeviceExtension.swift in Sources */,
 				9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */,
 				9B966D3B1FDD8C630083192B /* GameFunctions.swift in Sources */,
 			);

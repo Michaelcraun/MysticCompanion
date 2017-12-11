@@ -98,6 +98,7 @@ class TrackerView: UIView {
         iconView2.addBorder()
         iconView2.addImage(type.icon)
         iconView2.backgroundColor = type.secondaryColor
+        //TODO: Flip image?
         iconView2.translatesAutoresizingMaskIntoConstraints = false
         
         currentStepper.buttonsBackgroundColor = type.secondaryColor
@@ -132,14 +133,6 @@ class TrackerView: UIView {
         currentStepper.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
         
         if type != .victory {
-            let leftBuffer = UIView()
-            leftBuffer.backgroundColor = type.secondaryColor
-            leftBuffer.translatesAutoresizingMaskIntoConstraints = false
-            
-            let rightBuffer = UIView()
-            rightBuffer.backgroundColor = type.secondaryColor
-            rightBuffer.translatesAutoresizingMaskIntoConstraints = false
-            
             self.addSubview(constantStepper)
             
             constantStepper.topAnchor.constraint(equalTo: currentStepper.bottomAnchor).isActive = true
@@ -148,6 +141,4 @@ class TrackerView: UIView {
             constantStepper.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
         }
     }
-    
-    func returnTracker() -> TrackerView { return self }
 }

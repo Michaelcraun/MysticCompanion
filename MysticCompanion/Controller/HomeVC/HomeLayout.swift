@@ -328,6 +328,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
             if indexPath.row == index {
                 GameHandler.instance.updateFirebaseDBGame(key: currentUserID!, gameData: ["gameStarted" : true])
+                //TODO: set selectedGame
                 performSegue(withIdentifier: "startGame", sender: nil)
             }
         } else {

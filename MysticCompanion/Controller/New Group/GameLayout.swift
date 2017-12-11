@@ -76,7 +76,8 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutPlayersTable() {
-        let panelHeight = CGFloat(players.count) * 20 + 10
+        let panelHeight = CGFloat(players.count) * 27.5 + 11.5
+        
         playerPanel.layer.cornerRadius = 10
         playerPanel.layer.borderColor = UIColor.black.cgColor
         playerPanel.layer.borderWidth = 2
@@ -93,14 +94,15 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.dataSource = self
         playersTable.delegate = self
         playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "playersTableCell")
-        playersTable.rowHeight = 20     //MARK: TEMPORARY VARIABLE
+        playersTable.rowHeight = 27.5
         playersTable.separatorStyle = .none
+        playersTable.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(playerPanel)
         playerPanel.addSubview(gameVPLabel)
         playerPanel.addSubview(playersTable)
         
-        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
         playerPanel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         playerPanel.heightAnchor.constraint(equalToConstant: panelHeight).isActive = true
@@ -204,7 +206,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         constantArray = [player.manaConstant, player.decayConstant, player.growthConstant, player.animalConstant, player.forestConstant, player.skyConstant, player.currentVP, player.wildConstant]
     }
     
-    func layoutEndTurnButton() {
+    func layoutEndTurnButton() {            //MARK: TEMPORARY FUNCTION -- NEEDS REPLACED WITH KCFLOATINGACTIONBUTTON
         endTurnButton.setTitle("End Turn", for: .normal)
         endTurnButton.addTarget(self, action: #selector(endPlayerTurn(sender:)), for: .touchUpInside)
         endTurnButton.translatesAutoresizingMaskIntoConstraints = false

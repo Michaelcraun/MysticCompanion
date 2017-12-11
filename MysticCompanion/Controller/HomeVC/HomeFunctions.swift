@@ -29,4 +29,13 @@ extension HomeVC {
         self.nearbyGames = []
         self.observeGames(withUserLocation: userLoaction!)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "startGame" {
+            if let destination = segue.destination as? GameVC {
+                destination.game = selectedGame!
+                destination.username = username!
+            }
+        }
+    }
 }

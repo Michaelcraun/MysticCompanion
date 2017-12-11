@@ -40,6 +40,7 @@ class HomeVC: UIViewController {
             gameLobbyTable.reloadData()
         }
     }
+    var selectedGame: Dictionary<String,AnyObject>? = nil
     
     //MARK: Data Storage
     let defaults = UserDefaults.standard

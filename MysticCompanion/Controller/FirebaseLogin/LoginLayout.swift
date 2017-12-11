@@ -62,7 +62,7 @@ extension LoginVC {
         view.addSubview(passwordField)
         
         usernameField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        usernameField.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        usernameField.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
         usernameField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         usernameField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         

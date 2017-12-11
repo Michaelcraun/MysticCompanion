@@ -115,6 +115,9 @@ extension HomeVC {
                         if game.key == selectedGameKey {
                             if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
                                 if gameStarted {
+                                    if let gameDict = game.value as? Dictionary<String,AnyObject> {
+                                        self.selectedGame = gameDict
+                                    }
                                     self.performSegue(withIdentifier: "startGame", sender: nil)
                                 }
                             }
@@ -142,7 +145,7 @@ extension HomeVC {
                                     }
                                 }
                                 if isInGame {
-                                    
+                                    //TODO: Handle userIsInGame error
                                 } else {
                                     self.players.append(userData)
                                 }
@@ -151,6 +154,7 @@ extension HomeVC {
                                 GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
                             } else {
                                 print("game is full")
+                                //TODO: Handle gameIsFull error
                             }
                         }
                     }
@@ -193,14 +197,16 @@ extension HomeVC {
         self.players = []
         self.players.append(["username" : self.username as AnyObject,
                              "victoryPoints" : 0 as AnyObject])
-        GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: ["game" : self.currentUserID!,
-                                                                                       "winCondition" : condition,
-                                                                                       "vpGoal" : goal,
-                                                                                       "coordinate" : [userLocation?.coordinate.latitude,
-                                                                                                       userLocation?.coordinate.longitude],
-                                                                                       "username" : self.username!,
-                                                                                       "players" : self.players,
-                                                                                       "gameStarted" : false])
+        let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
+                                                "winCondition" : condition,
+                                                "vpGoal" : goal,
+                                                "coordinate" : [userLocation?.coordinate.latitude,
+                                                                userLocation?.coordinate.longitude],
+                                                "username" : self.username!,
+                                                "players" : self.players,
+                                                "gameStarted" : false]
+        GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
+        selectedGame = gameData as Dictionary<String, AnyObject>
         self.layoutGameLobby()
         self.observeGamesForNewUsers()
     }

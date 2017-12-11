@@ -13,6 +13,7 @@ class GameVC: UIViewController {
     
     //MARK: Game Variables
     let player = Player()
+    var username = ""
     var game = Dictionary<String,AnyObject>()
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
@@ -45,6 +46,7 @@ class GameVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupGameAndObserve()
         layoutView()
         setupPlayerTurn()
     }
@@ -82,4 +84,5 @@ class GameVC: UIViewController {
         }
         print(player)
     }
+    //TODO: Disable buttons until animations are complete
 }
