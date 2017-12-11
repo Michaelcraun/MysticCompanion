@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PlayerProtocol {
+protocol PlayerDelegate {
     var username: String { get set }
     var deck: DeckType? { get set }
     var manaConstant: Int { get set }
@@ -22,7 +22,7 @@ protocol PlayerProtocol {
     var boxVP: Int { get set }
 }
 
-class Player: PlayerProtocol {
+class Player: PlayerDelegate {
     var username: String = ""
     var deck: DeckType? = nil
     var manaConstant: Int = 0

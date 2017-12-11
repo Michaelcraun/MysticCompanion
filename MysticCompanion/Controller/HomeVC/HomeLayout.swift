@@ -10,6 +10,7 @@ import UIKit
 import KCFloatingActionButton
 import GoogleMobileAds
 import MapKit
+import GMStepper
 
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
@@ -110,16 +111,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutStartButtons() {
-        var yPadding: CGFloat {
-            switch PREMIUM_PURCHASED {
-            case true: return 20
-            case false: return 70
-            }
-        }
-        
         startButton.buttonColor = .black
         startButton.paddingX = view.frame.width / 2 - startButton.frame.width / 2
-        startButton.paddingY = yPadding
+        startButton.setPaddingY()
         
         let startGame = KCFloatingActionButtonItem()
         startGame.title = "Start Game"
@@ -168,21 +162,15 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func layoutGameSetupView() {
         self.userIsHostingGame = true
         
-        var yPadding: CGFloat {
-            switch PREMIUM_PURCHASED {
-            case true: return 20
-            case false: return 70
-            }
-        }
-        
         let gameSetupView = UIView()
         gameSetupView.frame = view.bounds
         gameSetupView.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 20/255, alpha: 0.75)
         gameSetupView.alpha = 0
+        gameSetupView.tag = 1000
         
         let vpSelector = KCFloatingActionButton()
         vpSelector.buttonColor = .black
-        vpSelector.paddingY = yPadding
+        vpSelector.setPaddingY()
         
         let cancel = KCFloatingActionButtonItem()
         cancel.title = "Cancel"
@@ -195,7 +183,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         standard.title = "Standard VP"
         standard.buttonColor = .white
         standard.handler = { item in
-            self.hostGame(withWinCondition: "standard", andVPGoal: 0)
+            self.hostGameAndObserve(sender: nil, withWinCondition: "standard", andVPGoal: 0)
             gameSetupView.fadeAlphaOut()
         }
         
@@ -203,9 +191,10 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         custom.title = "Custom VP"
         custom.buttonColor = .white
         custom.handler = { item in
-            //TODO: Handle setting custom VP Goal
-            self.hostGame(withWinCondition: "custom", andVPGoal: 0)
-            gameSetupView.fadeAlphaOut()
+            self.layoutCustomVPSelector()
+            vpSelector.fadeAlphaOut()
+//            self.hostGameAndObserve(sender: nil, withWinCondition: "custom", andVPGoal: 0)
+//            gameSetupView.fadeAlphaOut()
         }
         
         vpSelector.addItem(item: cancel)
@@ -215,6 +204,14 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         view.addSubview(gameSetupView)
         gameSetupView.addSubview(vpSelector)
         gameSetupView.fadeAlphaTo(0.75, withDuration: 0.2)
+    }
+    
+    func layoutCustomVPSelector() {
+        let vpStepper = GMStepper()
+        vpStepper.translatesAutoresizingMaskIntoConstraints = false
+        
+        let menuButton = KCFloatingActionButton()
+        menuButton.setPaddingY()
     }
     
     func layoutBannerAds() {
@@ -334,7 +331,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         } else {
             removeUserFromAllGames()
             let userData: Dictionary<String,AnyObject> = ["username" : self.username as AnyObject,
-                                                          "victoryPoints" : 0 as AnyObject]
+                                                          "deck" : player.deck?.rawValue as AnyObject,
+                                                          "victoryPoints" : 0 as AnyObject,
+                                                          "boxVictory" : 0 as AnyObject]
             updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)
             observeGamesForStart(forGame: nearbyGames[indexPath.row])
             let userLoaction = self.locationManager.location

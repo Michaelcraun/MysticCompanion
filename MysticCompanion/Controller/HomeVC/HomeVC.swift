@@ -43,7 +43,7 @@ class HomeVC: UIViewController {
     var selectedGame: Dictionary<String,AnyObject>? = nil
     
     //MARK: Data Storage
-    let defaults = UserDefaults.standard
+    let player = Player()
     
     //MARK: MapKit Variables
     var locationManager = CLLocationManager()
@@ -51,6 +51,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         currentUserID = FIRAuth.auth()?.currentUser?.uid
+        player.deck = .beastbrothers
         layoutView()
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthStatus()

@@ -12,8 +12,7 @@ import GMStepper
 extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
         layoutBackground()
-        layoutPlayersTable()
-//        layoutCurrentPlayerPanel()
+        layoutPlayersPanel()
         layoutTrackers()
         layoutEndTurnButton()
     }
@@ -33,50 +32,8 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func layoutCurrentPlayerPanel() {
-        playerPanel.layer.cornerRadius = 10
-        playerPanel.layer.borderColor = UIColor.black.cgColor
-        playerPanel.layer.borderWidth = 2
-        playerPanel.backgroundColor = primaryColor
-        playerPanel.clipsToBounds = true
-        playerPanel.translatesAutoresizingMaskIntoConstraints = false
-        
-        currentPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
-        currentPlayerLabel.text = "playerName"
-        currentPlayerLabel.sizeToFit()
-        currentPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        currentPlayerVPLabel.font = UIFont(name: fontFamily, size: 15)
-        currentPlayerVPLabel.textAlignment = .right
-        currentPlayerVPLabel.text = "0"
-        currentPlayerVPLabel.sizeToFit()
-        currentPlayerVPLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        gameVPLabel.font = UIFont(name: fontFamily, size: 10)
-        gameVPLabel.textAlignment = .center
-        gameVPLabel.text = "Victory Point Pool: 0/23"
-        gameVPLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(playerPanel)
-        playerPanel.addSubview(currentPlayerLabel)
-        playerPanel.addSubview(currentPlayerVPLabel)
-        playerPanel.addSubview(gameVPLabel)
-        
-        currentPlayerLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
-        currentPlayerLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor, constant: 5).isActive = true
-        currentPlayerLabel.widthAnchor.constraint(equalToConstant: currentPlayerLabel.frame.width).isActive = true
-        
-        currentPlayerVPLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
-        currentPlayerVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor, constant: -5).isActive = true
-        currentPlayerVPLabel.widthAnchor.constraint(equalToConstant: currentPlayerVPLabel.frame.width).isActive = true
-        
-        gameVPLabel.bottomAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: -5).isActive = true
-        gameVPLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor, constant: 5).isActive = true
-        gameVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor, constant: -5).isActive = true
-    }
-    
-    func layoutPlayersTable() {
-        let panelHeight = CGFloat(players.count) * 27.5 + 11.5
+    func layoutPlayersPanel() {
+        let panelHeight = CGFloat(players.count) * 27.5 + 16.5
         
         playerPanel.layer.cornerRadius = 10
         playerPanel.layer.borderColor = UIColor.black.cgColor
@@ -107,7 +64,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         playerPanel.heightAnchor.constraint(equalToConstant: panelHeight).isActive = true
         
-        gameVPLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor).isActive = true
+        gameVPLabel.topAnchor.constraint(equalTo: playerPanel.topAnchor, constant: 5).isActive = true
         gameVPLabel.leftAnchor.constraint(equalTo: playerPanel.leftAnchor).isActive = true
         gameVPLabel.rightAnchor.constraint(equalTo: playerPanel.rightAnchor).isActive = true
         

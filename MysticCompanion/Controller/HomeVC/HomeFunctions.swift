@@ -11,6 +11,7 @@ import Firebase
 
 extension HomeVC {
     func setPlayerIcon(withDeck deck: DeckType) {
+        player.deck = deck
         UIView.animate(withDuration: 0.5, animations: {
             self.playerIcon.alpha = 0
         }) { (success) in

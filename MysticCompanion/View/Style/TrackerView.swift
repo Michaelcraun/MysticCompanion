@@ -98,7 +98,7 @@ class TrackerView: UIView {
         iconView2.addBorder()
         iconView2.addImage(type.icon)
         iconView2.backgroundColor = type.secondaryColor
-        //TODO: Flip image?
+        iconView2.transform = iconView2.transform.rotated(by: .pi/1)
         iconView2.translatesAutoresizingMaskIntoConstraints = false
         
         currentStepper.buttonsBackgroundColor = type.secondaryColor

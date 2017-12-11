@@ -25,7 +25,7 @@ let yellowLessAlpha = UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, 
 let primaryColor = UIColor(red: 204 / 255, green: 221 / 255, blue: 204 / 255, alpha: 1)
 let secondaryColor = UIColor(red: 204 / 255, green: 221 / 255, blue: 204 / 255, alpha: 0.5)
 
-enum DeckType {
+enum DeckType: String {
     case beastbrothers
     case dawnseekers
     case lifewardens

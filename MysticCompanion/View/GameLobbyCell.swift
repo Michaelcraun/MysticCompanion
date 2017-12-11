@@ -9,7 +9,6 @@
 import UIKit
 
 class GameLobbyCell: UITableViewCell {
-    
     override func awakeFromNib() {
         self.backgroundColor = .clear
         super.awakeFromNib()
@@ -52,9 +51,20 @@ class GameLobbyCell: UITableViewCell {
     }
 
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
-        //TODO: Add DeckType and color
+        let deck = user["deck"] as! String
         let username = user["username"] as! String
+        var deckColor: UIColor? {
+            switch deck {
+            case "beasebrothers": return red
+            case "dawnseekers": return yellow
+            case "lifewardens": return green
+            case "waveguards": return blue
+            default: return nil
+            }
+        }
+        
         clearCell()
+        self.backgroundColor = deckColor
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)

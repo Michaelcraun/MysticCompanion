@@ -192,11 +192,13 @@ extension HomeVC {
         })
     }
     
-    func hostGame(withWinCondition condition: String, andVPGoal goal: Int) {
+    @objc func hostGameAndObserve(sender: UIButton?, withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
         self.players = []
         self.players.append(["username" : self.username as AnyObject,
-                             "victoryPoints" : 0 as AnyObject])
+                             "deck" : player.deck?.rawValue as AnyObject,
+                             "victoryPoints" : 0 as AnyObject,
+                             "boxVictory" : 0 as AnyObject])
         let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
                                                 "winCondition" : condition,
                                                 "vpGoal" : goal,
@@ -206,7 +208,17 @@ extension HomeVC {
                                                 "players" : self.players,
                                                 "gameStarted" : false]
         GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
-        selectedGame = gameData as Dictionary<String, AnyObject>
+        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for game in gameSnapshot {
+                    if game.key == self.currentUserID! {
+                        if let gameDict = game.value as? Dictionary<String,AnyObject> {
+                            self.selectedGame = gameDict
+                        }
+                    }
+                }
+            }
+        })
         self.layoutGameLobby()
         self.observeGamesForNewUsers()
     }
