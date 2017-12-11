@@ -192,7 +192,7 @@ extension HomeVC {
         })
     }
     
-    @objc func hostGameAndObserve(sender: UIButton?, withWinCondition condition: String, andVPGoal goal: Int) {
+    func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
         self.players = []
         self.players.append(["username" : self.username as AnyObject,

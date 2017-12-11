@@ -183,7 +183,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         standard.title = "Standard VP"
         standard.buttonColor = .white
         standard.handler = { item in
-            self.hostGameAndObserve(sender: nil, withWinCondition: "standard", andVPGoal: 0)
+            self.hostGameAndObserve(withWinCondition: "standard", andVPGoal: 0)
             gameSetupView.fadeAlphaOut()
         }
         
@@ -191,15 +191,13 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         custom.title = "Custom VP"
         custom.buttonColor = .white
         custom.handler = { item in
-            self.layoutCustomVPSelector()
             vpSelector.fadeAlphaOut()
-//            self.hostGameAndObserve(sender: nil, withWinCondition: "custom", andVPGoal: 0)
-//            gameSetupView.fadeAlphaOut()
+            self.layoutCustomVPSelector()
         }
         
         vpSelector.addItem(item: cancel)
         vpSelector.addItem(item: standard)
-        vpSelector.addItem(item: custom)
+        if PREMIUM_PURCHASED { vpSelector.addItem(item: custom) }
         
         view.addSubview(gameSetupView)
         gameSetupView.addSubview(vpSelector)
@@ -208,10 +206,53 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func layoutCustomVPSelector() {
         let vpStepper = GMStepper()
+        vpStepper.buttonsBackgroundColor = primaryColor
+        vpStepper.labelBackgroundColor = secondaryColor
+        vpStepper.labelFont = UIFont(name: fontFamily, size: 25)!
+        vpStepper.value = 23
+        vpStepper.maximumValue = 500
         vpStepper.translatesAutoresizingMaskIntoConstraints = false
         
         let menuButton = KCFloatingActionButton()
         menuButton.setPaddingY()
+        menuButton.buttonColor = .black
+        
+        let cancel = KCFloatingActionButtonItem()
+        cancel.title = "Cancel"
+        cancel.buttonColor = .white
+        cancel.handler = {item in
+            vpStepper.fadeAlphaOut()
+            menuButton.fadeAlphaOut()
+            for subview in self.view.subviews {
+                if subview.tag == 1000 {
+                    subview.fadeAlphaOut()
+                }
+            }
+        }
+        
+        let done = KCFloatingActionButtonItem()
+        done.title = "Done"
+        done.buttonColor = .white
+        done.handler = { item in
+            let vpGoal = vpStepper.value
+            self.hostGameAndObserve(withWinCondition: "custom", andVPGoal: Int(vpGoal))
+            for subview in self.view.subviews {
+                if subview.tag == 1000 {
+                    subview.fadeAlphaOut()
+                }
+            }
+        }
+        
+        menuButton.addItem(item: cancel)
+        menuButton.addItem(item: done)
+        
+        view.addSubview(vpStepper)
+        view.addSubview(menuButton)
+        
+        vpStepper.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        vpStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        vpStepper.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        vpStepper.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
     func layoutBannerAds() {
