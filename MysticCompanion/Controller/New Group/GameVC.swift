@@ -9,7 +9,7 @@
 import UIKit
 import GMStepper
 
-class GameVC: UIViewController {
+class GameVC: UIViewController, Alertable {
     
     //MARK: Game Variables
     let player = Player()
@@ -32,6 +32,8 @@ class GameVC: UIViewController {
             playersTable.reloadData()
         }
     }
+    var playerIndex = 0
+    var currentPlayer = ""
     
     //MARK: UI Variables
     let playerPanel = UIView()
@@ -85,12 +87,11 @@ class GameVC: UIViewController {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(trackersArray.count) * 0.15) {
-            self.endTurnButton.isUserInteractionEnabled = true
+//            self.endTurnButton.isUserInteractionEnabled = true
         }
     }
     
-    @objc func endPlayerTurn(sender: UIButton!) {
-        endTurnButton.isUserInteractionEnabled = false
+    func endPlayerTurn() {
         player.manaConstant = Int(manaTracker.constantStepper.value)
         player.decayConstant = Int(decayTracker.constantStepper.value)
         player.growthConstant = Int(growthTracker.constantStepper.value)

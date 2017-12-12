@@ -11,10 +11,23 @@ import UIKit
 protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
-    func showAlert(_ message: String) {
-        let alertController = UIAlertController(title: "Error:", message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+    func showAlert(withTitle title: String, andMessage message: String) {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        view.addSubview(blurEffectView)
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { action in
+            blurEffectView.fadeAlphaOut()
+        })
         alertController.addAction(action)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    func addBlurEffect() {
+        
     }
 }

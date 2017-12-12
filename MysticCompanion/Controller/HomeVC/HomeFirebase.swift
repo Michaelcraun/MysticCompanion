@@ -145,16 +145,18 @@ extension HomeVC {
                                     }
                                 }
                                 if isInGame {
-                                    //TODO: Handle userIsInGame error
+                                    self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!")
                                 } else {
                                     self.players.append(userData)
                                 }
+                                
                                 var gameToUpdate = selectedGame
                                 gameToUpdate["players"] = self.players as AnyObject
                                 GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
                             } else {
                                 print("game is full")
                                 //TODO: Handle gameIsFull error
+                                self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.")
                             }
                         }
                     }
@@ -206,7 +208,8 @@ extension HomeVC {
                                                                 userLocation?.coordinate.longitude],
                                                 "username" : self.username!,
                                                 "players" : self.players,
-                                                "gameStarted" : false]
+                                                "gameStarted" : false,
+                                                "currentPlayer" : self.username!]
         GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {

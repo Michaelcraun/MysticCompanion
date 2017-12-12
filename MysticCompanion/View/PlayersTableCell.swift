@@ -26,10 +26,10 @@ class PlayersTableCell: UITableViewCell {
     }
     
     func layoutCell(forPlayer player: Dictionary<String,AnyObject>) {
-        clearCell()
-        
         let username = player["username"] as! String
         let playerVP = player["victoryPoints"] as! Int
+        
+        clearCell()
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)

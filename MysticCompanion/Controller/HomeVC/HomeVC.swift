@@ -12,7 +12,7 @@ import GoogleMobileAds
 import Firebase
 import MapKit
 
-class HomeVC: UIViewController {
+class HomeVC: UIViewController, Alertable {
 
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()

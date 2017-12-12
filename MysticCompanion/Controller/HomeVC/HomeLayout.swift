@@ -205,6 +205,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutCustomVPSelector() {
+        //TODO: Beautify
         let vpStepper = GMStepper()
         vpStepper.buttonsBackgroundColor = primaryColor
         vpStepper.labelBackgroundColor = secondaryColor
@@ -366,7 +367,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
             if indexPath.row == index {
                 GameHandler.instance.updateFirebaseDBGame(key: currentUserID!, gameData: ["gameStarted" : true])
-                //TODO: set selectedGame
                 performSegue(withIdentifier: "startGame", sender: nil)
             }
         } else {

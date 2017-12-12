@@ -40,7 +40,9 @@ extension GameVC {
                                         } else {
                                             newPlayersArray.append(userData)
                                         }
-                                        GameHandler.instance.REF_GAME.child(game.key).updateChildValues(["players" : newPlayersArray])
+                                        self.players = newPlayersArray
+                                        GameHandler.instance.REF_GAME.child(game.key).updateChildValues(["players" : self.players])
+                                        self.passTurn()
                                     }
                                 }
                             }
@@ -80,14 +82,47 @@ extension GameVC {
                                 self.victoryTaken = victoryTaken
                             }
 
-                            //TODO: if current player, enable endTurnButton; else, disable endTurnButton
-//                            if let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String {
-//                                if currentPlayer == self.player.username {
-//                                    self.endTurnButton.isUserInteractionEnabled = true
-//                                } else {
-//                                    self.endTurnButton.isUserInteractionEnabled = false
-//                                }
-//                            }
+                            if let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String {
+                                self.currentPlayer = currentPlayer
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    func passTurn() {
+        let currentPlayerDict: Dictionary<String,AnyObject> = self.players[0]
+        var playerToAppend: Dictionary<String,AnyObject>? = nil
+        var newCurrentPlayer: Dictionary<String,AnyObject>? = nil
+        
+        if let gameKey = game["game"] as? String {
+            GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    if let currentPlayerUsername = currentPlayerDict["username"] as? String {
+                        for game in gameSnapshot {
+                            if game.key == gameKey {
+                                if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
+                                    var newPlayersArray = [Dictionary<String,AnyObject>]()
+                                    for player in playersArray {
+                                        if let playerUsername = player["username"] as? String {
+                                            if playerUsername == currentPlayerUsername {
+                                                playerToAppend = player
+                                            } else {
+                                                newPlayersArray.append(player)
+                                            }
+                                        }
+                                    }
+                                    newPlayersArray.append(playerToAppend!)
+                                    self.players = newPlayersArray
+                                    newCurrentPlayer = self.players[0]
+                                    if let newCurrentPlayerUsername = newCurrentPlayer!["username"] as? String {
+                                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: ["currentPlayer" : newCurrentPlayerUsername,
+                                                                                                            "players" : newPlayersArray])
+                                    }
+                                }
+                            }
                         }
                     }
                 }

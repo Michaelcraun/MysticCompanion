@@ -8,6 +8,7 @@
 
 import UIKit
 import GMStepper
+import KCFloatingActionButton
 
 extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
@@ -160,20 +161,58 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         wildTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
         trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
-        constantArray = [player.manaConstant, player.decayConstant, player.growthConstant, player.animalConstant, player.forestConstant, player.skyConstant, player.currentVP, player.wildConstant]
     }
     
-    func layoutEndTurnButton() {            //MARK: TEMPORARY FUNCTION -- NEEDS REPLACED WITH KCFLOATINGACTIONBUTTON
-        endTurnButton.setTitle("End Turn", for: .normal)
-        endTurnButton.addTarget(self, action: #selector(endPlayerTurn(sender:)), for: .touchUpInside)
-        endTurnButton.translatesAutoresizingMaskIntoConstraints = false
+    func layoutEndTurnButton() {
+        let menuButton = KCFloatingActionButton()
+        menuButton.buttonColor = .black
+        menuButton.setPaddingY()
+        menuButton.paddingX = view.frame.width / 2 - menuButton.frame.width / 2
         
-        view.addSubview(endTurnButton)
+        let settings = KCFloatingActionButtonItem()
+        settings.buttonColor = .red
+        settings.title = "Settings"
+        settings.handler = { item in
+            self.performSegue(withIdentifier: "showSettings", sender: nil)
+        }
         
-        endTurnButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        endTurnButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        endTurnButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        endTurnButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        let endTurn = KCFloatingActionButtonItem()
+        endTurn.buttonColor = .white
+        endTurn.title = "End Turn"
+        endTurn.handler = { item in
+            if self.currentPlayer == self.player.username {
+                self.endPlayerTurn()
+//                self.passTurn()
+            } else {
+                self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.")
+            }
+        }
+        
+        let quitGame = KCFloatingActionButtonItem()
+        quitGame.buttonColor = .white
+        quitGame.title = "Quit Game"
+        quitGame.handler = { item in
+            
+        }
+        
+        let endGame = KCFloatingActionButtonItem()
+        endGame.buttonColor = .white
+        endGame.title = "End Game"
+        endGame.handler = { item in
+            
+        }
+        
+        menuButton.addItem(item: settings)
+        menuButton.addItem(item: endTurn)
+        if let host = game["username"] as? String {
+            if host == player.username {
+                menuButton.addItem(item: endGame)
+            } else {
+                menuButton.addItem(item: quitGame)
+            }
+        }
+        
+        view.addSubview(menuButton)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
