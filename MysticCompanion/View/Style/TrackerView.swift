@@ -91,12 +91,12 @@ class TrackerView: UIView {
         }
         
         iconView.addBorder()
-        iconView.addImage(type.icon)
+        iconView.addImage(type.icon, withWidthModifier: 10)
         iconView.backgroundColor = type.secondaryColor
         iconView.translatesAutoresizingMaskIntoConstraints = false
         
         iconView2.addBorder()
-        iconView2.addImage(type.icon)
+        iconView2.addImage(type.icon, withWidthModifier: 10)
         iconView2.backgroundColor = type.secondaryColor
         iconView2.transform = iconView2.transform.rotated(by: .pi/1)
         iconView2.translatesAutoresizingMaskIntoConstraints = false

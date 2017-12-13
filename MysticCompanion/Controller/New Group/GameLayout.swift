@@ -182,7 +182,6 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         endTurn.handler = { item in
             if self.currentPlayer == self.player.username {
                 self.endPlayerTurn()
-//                self.passTurn()
             } else {
                 self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.")
             }

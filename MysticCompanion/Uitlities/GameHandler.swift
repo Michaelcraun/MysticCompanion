@@ -14,6 +14,7 @@ let DB_BASE = FIRDatabase.database().reference()
 class GameHandler {
     static let instance = GameHandler()
     
+    //MARK: Firebase Variables
     private var _REF_BASE = DB_BASE
     private var _REF_USER = DB_BASE.child("user")
     private var _REF_GAME = DB_BASE.child("game")

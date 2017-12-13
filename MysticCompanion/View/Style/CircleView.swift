@@ -25,15 +25,15 @@ class CircleView: UIView {
         self.layer.borderWidth = 2
     }
     
-    func addImage(_ image: UIImage) {
+    func addImage(_ image: UIImage, withWidthModifier widthMod: CGFloat) {
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(imageView)
         
-        imageView.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -20).isActive = true
-        imageView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -20).isActive = true
+        imageView.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -widthMod).isActive = true
+        imageView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -widthMod).isActive = true
         imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }

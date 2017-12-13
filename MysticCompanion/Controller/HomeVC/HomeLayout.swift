@@ -40,7 +40,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func layoutPlayerIcon() {
         playerIcon.addBorder()
         playerIcon.backgroundColor = DeckType.beastbrothers.color
-        playerIcon.addImage(DeckType.beastbrothers.image)
+        playerIcon.addImage(DeckType.beastbrothers.image, withWidthModifier: 20)
         playerIcon.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(playerIcon)
@@ -66,28 +66,28 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func layoutDeckChoices() {
         beastbrothersIcon.addBorder()
         beastbrothersIcon.backgroundColor = DeckType.beastbrothers.color
-        beastbrothersIcon.addImage(DeckType.beastbrothers.image)
+        beastbrothersIcon.addImage(DeckType.beastbrothers.image, withWidthModifier: 20)
         beastbrothersIcon.translatesAutoresizingMaskIntoConstraints = false
         beastbrothersIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         beastbrothersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         dawnseekersIcon.addBorder()
         dawnseekersIcon.backgroundColor = DeckType.dawnseekers.color
-        dawnseekersIcon.addImage(DeckType.dawnseekers.image)
+        dawnseekersIcon.addImage(DeckType.dawnseekers.image, withWidthModifier: 20)
         dawnseekersIcon.translatesAutoresizingMaskIntoConstraints = false
         dawnseekersIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         dawnseekersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         lifewardensIcon.addBorder()
         lifewardensIcon.backgroundColor = DeckType.lifewardens.color
-        lifewardensIcon.addImage(DeckType.lifewardens.image)
+        lifewardensIcon.addImage(DeckType.lifewardens.image, withWidthModifier: 20)
         lifewardensIcon.translatesAutoresizingMaskIntoConstraints = false
         lifewardensIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         lifewardensIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         waveguardsIcon.addBorder()
         waveguardsIcon.backgroundColor = DeckType.waveguards.color
-        waveguardsIcon.addImage(DeckType.waveguards.image)
+        waveguardsIcon.addImage(DeckType.waveguards.image, withWidthModifier: 20)
         waveguardsIcon.translatesAutoresizingMaskIntoConstraints = false
         waveguardsIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         waveguardsIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true

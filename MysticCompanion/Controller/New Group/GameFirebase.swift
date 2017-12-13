@@ -57,7 +57,7 @@ extension GameVC {
         if let players = game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
         if let winCondtion = game["winCondition"] as? String {
             switch winCondtion {
-            case "standard": vpGoal += self.players.count * 5
+            case "standard": vpGoal = 13 + (self.players.count * 5)
             default:
                 if let vpGoal = game["vpGoal"] as? Int {
                     self.vpGoal = vpGoal
@@ -72,16 +72,17 @@ extension GameVC {
                     for game in gameSnapshot {
                         if game.key == gameKey {
                             if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
-                                self.players = playersArray
                                 var victoryTaken = 0
+                                //TODO: I think this is the cause of the double call of victoryTaken...
                                 for player in playersArray {
                                     if let playerVictory = player["victoryPoints"] as? Int {
                                         victoryTaken += playerVictory
                                     }
                                 }
                                 self.victoryTaken = victoryTaken
+                                self.players = playersArray
                             }
-
+                            
                             if let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String {
                                 self.currentPlayer = currentPlayer
                             }

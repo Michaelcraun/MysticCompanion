@@ -42,8 +42,9 @@ class HomeVC: UIViewController, Alertable {
     }
     var selectedGame: Dictionary<String,AnyObject>? = nil
     
-    //MARK: Data Storage
+    //MARK: Game Variables
     let player = Player()
+    var winCondition = ""
     
     //MARK: MapKit Variables
     var locationManager = CLLocationManager()

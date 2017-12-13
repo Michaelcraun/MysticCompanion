@@ -16,7 +16,7 @@ extension HomeVC {
             self.playerIcon.alpha = 0
         }) { (success) in
             self.playerIcon.backgroundColor = deck.color
-            self.playerIcon.addImage(deck.image)
+            self.playerIcon.addImage(deck.image, withWidthModifier: 20)
             UIView.animate(withDuration: 0.5, animations: {
                 self.playerIcon.alpha = 1
             }, completion: nil)
@@ -34,8 +34,14 @@ extension HomeVC {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "startGame" {
             if let destination = segue.destination as? GameVC {
+                //TODO: Set VP Goal?
                 destination.game = selectedGame!
                 destination.username = username!
+                switch winCondition {
+                case "standard": destination.vpGoal += players.count * 5
+                case "custom": destination.vpGoal = 13
+                default: break
+                }
             }
         }
     }

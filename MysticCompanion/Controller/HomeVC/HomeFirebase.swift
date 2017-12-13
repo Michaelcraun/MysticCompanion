@@ -14,38 +14,18 @@ extension HomeVC {
     func checkUsername(forKey key: String?) {
         if key != nil {
             GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
-                if let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                    for user in userSnapshot {
-                        if user.key == key {
-                            if let username = user.childSnapshot(forPath: "username").value as? String {
-                                self.username = username
-                                self.playerName.text = username
-                            }
-                        }
+                guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+                for user in userSnapshot {
+                    if user.key == key {
+                        guard let username = user.childSnapshot(forPath: "username").value as? String else { return }
+                        self.username = username
+                        self.playerName.text = username
                     }
                 }
             })
         } else {
             playerName.text = generateID()
         }
-    }
-    
-    func getUsernameFromFB(forKey key: String?) -> String {
-        var fbUsername = ""
-        if key != nil {
-            GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
-                if let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                    for user in userSnapshot {
-                        if user.key == key {
-                            if let username = user.childSnapshot(forPath: "username").value as? String {
-                                fbUsername = username
-                            }
-                        }
-                    }
-                }
-            })
-        }
-        return fbUsername
     }
     
     func generateID() -> String {
@@ -65,27 +45,24 @@ extension HomeVC {
     func observeGames(withUserLocation location: CLLocation) {
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             var localGames = [Dictionary<String,AnyObject>]()
-            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for game in gameSnapshot {
-                    if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
-                        if !gameStarted {
-                            if game.hasChild("coordinate") {
-                                let gameLocationArray = game.childSnapshot(forPath: "coordinate").value as! NSArray
-                                let latitude = gameLocationArray[0] as! CLLocationDegrees
-                                let longitude = gameLocationArray[1] as! CLLocationDegrees
-                                let gameLocation = CLLocation(latitude: latitude, longitude: longitude)
-                                let distance = location.distance(from: gameLocation)
-                                if distance <= 5 {
-                                    if let gameDict = game.value as? Dictionary<String,AnyObject> {
-                                        localGames.append(gameDict)
-                                    }
-                                }
-                            }
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                guard let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool else { return }
+                if !gameStarted {
+                    if game.hasChild("coordinate") {
+                        let gameLocationArray = game.childSnapshot(forPath: "coordinate").value as! NSArray
+                        let latitude = gameLocationArray[0] as! CLLocationDegrees
+                        let longitude = gameLocationArray[1] as! CLLocationDegrees
+                        let gameLocation = CLLocation(latitude: latitude, longitude: longitude)
+                        let distance = location.distance(from: gameLocation)
+                        if distance <= 5 {
+                            guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
+                            localGames.append(gameDict)
                         }
                     }
                 }
-                self.nearbyGames = localGames
             }
+            self.nearbyGames = localGames
         })
     }
     
@@ -155,7 +132,7 @@ extension HomeVC {
                                 GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
                             } else {
                                 print("game is full")
-                                //TODO: Handle gameIsFull error
+                                //TODO: Test gameIsFull error
                                 self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.")
                             }
                         }
@@ -196,6 +173,7 @@ extension HomeVC {
     
     func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
+        winCondition = condition
         self.players = []
         self.players.append(["username" : self.username as AnyObject,
                              "deck" : player.deck?.rawValue as AnyObject,
