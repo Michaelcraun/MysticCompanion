@@ -25,7 +25,8 @@ class SettingsVC: UIViewController {
     let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
     
     //MARK: StoreKit Variables
-    
+    var productPurchasing = SKProduct()
+    var productList = [SKProduct]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

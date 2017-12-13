@@ -31,8 +31,6 @@ extension Alertable where Self: UIViewController {
             if alertController.message == "You ended the game. Please wait for the other players to complete their turns." {
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             }
-            
-            
         })
         alertController.addAction(action)
         present(alertController, animated: true, completion: nil)

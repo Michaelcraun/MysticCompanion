@@ -24,6 +24,7 @@
 		9B167B481FE170B900183733 /* EndGameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B471FE170B900183733 /* EndGameLayout.swift */; };
 		9B167B4A1FE173B700183733 /* EndGamePlayersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B491FE173B700183733 /* EndGamePlayersCell.swift */; };
 		9B167B4C1FE173C900183733 /* EndGameFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B4B1FE173C900183733 /* EndGameFirebase.swift */; };
+		9B167B501FE1C5CD00183733 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B4F1FE1C5CD00183733 /* NetworkIndicator.swift */; };
 		9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */; };
 		9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */; };
 		9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */; };
@@ -34,7 +35,6 @@
 		9B966D3F1FDD90D40083192B /* GameFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D3E1FDD90D40083192B /* GameFirebase.swift */; };
 		9B966D411FDEAA0D0083192B /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */; };
 		9B966D431FDEE2360083192B /* KCFloatingActionButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */; };
-		9B966D451FE01CDC0083192B /* SKHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D441FE01CDC0083192B /* SKHelper.swift */; };
 		9B966D471FE022C50083192B /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D461FE022C50083192B /* Products.swift */; };
 		9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFE91FCC6506005741CD /* AppDelegate.swift */; };
 		9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFEB1FCC6506005741CD /* HomeVC.swift */; };
@@ -69,6 +69,7 @@
 		9B167B471FE170B900183733 /* EndGameLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameLayout.swift; sourceTree = "<group>"; };
 		9B167B491FE173B700183733 /* EndGamePlayersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePlayersCell.swift; sourceTree = "<group>"; };
 		9B167B4B1FE173C900183733 /* EndGameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameFirebase.swift; sourceTree = "<group>"; };
+		9B167B4F1FE1C5CD00183733 /* NetworkIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkIndicator.swift; sourceTree = "<group>"; };
 		9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
 		9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -79,7 +80,6 @@
 		9B966D3E1FDD90D40083192B /* GameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFirebase.swift; sourceTree = "<group>"; };
 		9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KCFloatingActionButtonExtension.swift; sourceTree = "<group>"; };
-		9B966D441FE01CDC0083192B /* SKHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKHelper.swift; sourceTree = "<group>"; };
 		9B966D461FE022C50083192B /* Products.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
 		9BC7BFE61FCC6506005741CD /* MysticCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MysticCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC7BFE91FCC6506005741CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -195,7 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */,
-				9B966D441FE01CDC0083192B /* SKHelper.swift */,
+				9B167B4F1FE1C5CD00183733 /* NetworkIndicator.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -419,7 +419,6 @@
 				9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */,
 				9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */,
 				9BC7C0051FCC6F1B005741CD /* CircleView.swift in Sources */,
-				9B966D451FE01CDC0083192B /* SKHelper.swift in Sources */,
 				9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */,
 				9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */,
 				9B966D3D1FDD8ECA0083192B /* PlayersTableCell.swift in Sources */,
@@ -433,6 +432,7 @@
 				9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */,
 				9B966D471FE022C50083192B /* Products.swift in Sources */,
 				9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */,
+				9B167B501FE1C5CD00183733 /* NetworkIndicator.swift in Sources */,
 				9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */,
 				9B167B4A1FE173B700183733 /* EndGamePlayersCell.swift in Sources */,
 				9B0D320A1FCE480B006F7805 /* GameVC.swift in Sources */,
