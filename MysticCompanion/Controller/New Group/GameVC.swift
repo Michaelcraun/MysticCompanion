@@ -12,7 +12,7 @@ import GMStepper
 class GameVC: UIViewController, Alertable {
     
     //MARK: Game Variables
-    let player = Player()
+//    let player = Player()
     var victoryTaken = 0 {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
@@ -21,7 +21,7 @@ class GameVC: UIViewController, Alertable {
                 let endingPlayer = players[0]
                 if let endingPlayerUsername = endingPlayer["username"] as? String {
                     self.endingPlayerUsername = endingPlayerUsername
-                    if endingPlayerUsername == player.username {
+                    if endingPlayerUsername == Player.instance.username {
                         self.showAlert(withTitle: "End of Game", andMessage: "You ended the game. Please wait for the other players to complete their turns.")
                     } else {
                         if !isEndOfGameTurn {
@@ -81,21 +81,21 @@ class GameVC: UIViewController, Alertable {
         if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
         } else {
-            manaTracker.currentStepper.value = Double(player.manaConstant)
-            manaTracker.constantStepper.value = Double(player.manaConstant)
-            decayTracker.currentStepper.value = Double(player.decayConstant)
-            decayTracker.constantStepper.value = Double(player.decayConstant)
-            growthTracker.currentStepper.value = Double(player.growthConstant)
-            growthTracker.constantStepper.value = Double(player.growthConstant)
-            animalTracker.currentStepper.value = Double(player.animalConstant)
-            animalTracker.constantStepper.value = Double(player.animalConstant)
-            forestTracker.currentStepper.value = Double(player.forestConstant)
-            forestTracker.constantStepper.value = Double(player.forestConstant)
-            skyTracker.currentStepper.value = Double(player.skyConstant)
-            skyTracker.constantStepper.value = Double(player.skyConstant)
-            wildTracker.currentStepper.value = Double(player.wildConstant)
-            wildTracker.constantStepper.value = Double(player.wildConstant)
-            victoryTracker.currentStepper.value = Double(player.currentVP + player.boxVP)
+            manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
+            manaTracker.constantStepper.value = Double(Player.instance.manaConstant)
+            decayTracker.currentStepper.value = Double(Player.instance.decayConstant)
+            decayTracker.constantStepper.value = Double(Player.instance.decayConstant)
+            growthTracker.currentStepper.value = Double(Player.instance.growthConstant)
+            growthTracker.constantStepper.value = Double(Player.instance.growthConstant)
+            animalTracker.currentStepper.value = Double(Player.instance.animalConstant)
+            animalTracker.constantStepper.value = Double(Player.instance.animalConstant)
+            forestTracker.currentStepper.value = Double(Player.instance.forestConstant)
+            forestTracker.constantStepper.value = Double(Player.instance.forestConstant)
+            skyTracker.currentStepper.value = Double(Player.instance.skyConstant)
+            skyTracker.constantStepper.value = Double(Player.instance.skyConstant)
+            wildTracker.currentStepper.value = Double(Player.instance.wildConstant)
+            wildTracker.constantStepper.value = Double(Player.instance.wildConstant)
+            victoryTracker.currentStepper.value = Double(Player.instance.currentVP + Player.instance.boxVP)
             
             var delay: TimeInterval = 0.0
             for i in 0..<trackersArray.count {
@@ -107,19 +107,19 @@ class GameVC: UIViewController, Alertable {
     
     func endPlayerTurn() {
         if isEndOfGameTurn { performSegue(withIdentifier: "showEndGame", sender: nil) }
-        player.manaConstant = Int(manaTracker.constantStepper.value)
-        player.decayConstant = Int(decayTracker.constantStepper.value)
-        player.growthConstant = Int(growthTracker.constantStepper.value)
-        player.animalConstant = Int(animalTracker.constantStepper.value)
-        player.forestConstant = Int(forestTracker.constantStepper.value)
-        player.skyConstant = Int(skyTracker.constantStepper.value)
-        player.wildConstant = Int(wildTracker.constantStepper.value)
-        player.currentVP = Int(victoryTracker.currentStepper.value) - player.boxVP
+        Player.instance.manaConstant = Int(manaTracker.constantStepper.value)
+        Player.instance.decayConstant = Int(decayTracker.constantStepper.value)
+        Player.instance.growthConstant = Int(growthTracker.constantStepper.value)
+        Player.instance.animalConstant = Int(animalTracker.constantStepper.value)
+        Player.instance.forestConstant = Int(forestTracker.constantStepper.value)
+        Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
+        Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
+        Player.instance.currentVP = Int(victoryTracker.currentStepper.value) - Player.instance.boxVP
         
-        let userData: Dictionary<String,AnyObject> = ["username" : player.username as AnyObject,
-                                                      "deck" : player.deck?.rawValue as AnyObject,
-                                                      "victoryPoints" : player.currentVP as AnyObject,
-                                                      "boxVictory" : player.boxVP as AnyObject]
+        let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
+                                                      "deck" : Player.instance.deck?.rawValue as AnyObject,
+                                                      "victoryPoints" : Player.instance.currentVP as AnyObject,
+                                                      "boxVictory" : Player.instance.boxVP as AnyObject]
         updateFirebaseDBGame(withUserData: userData)
         
         var delay: TimeInterval = 0.0
@@ -133,7 +133,11 @@ class GameVC: UIViewController, Alertable {
         }
     }
     
-    func showEndOfGameAlert(withTitle title: String, andMessage message: String) {
-        showAlert(withTitle: title, andMessage: message)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showEndGame" {
+            if let destination = segue.destination as? EndGameVC {
+                destination.game = game
+            }
+        }
     }
 }

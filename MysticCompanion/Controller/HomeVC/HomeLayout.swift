@@ -372,7 +372,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         } else {
             removeUserFromAllGames()
             let userData: Dictionary<String,AnyObject> = ["username" : self.username as AnyObject,
-                                                          "deck" : player.deck?.rawValue as AnyObject,
+                                                          "deck" : Player.instance.deck?.rawValue as AnyObject,
                                                           "victoryPoints" : 0 as AnyObject,
                                                           "boxVictory" : 0 as AnyObject]
             updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)

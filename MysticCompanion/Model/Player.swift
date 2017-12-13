@@ -23,6 +23,8 @@ protocol PlayerDelegate {
 }
 
 class Player: PlayerDelegate {
+    static let instance = Player()
+    
     var username: String = ""
     var deck: DeckType? = nil
     var manaConstant: Int = 0

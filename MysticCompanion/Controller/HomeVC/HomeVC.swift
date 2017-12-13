@@ -43,7 +43,7 @@ class HomeVC: UIViewController, Alertable {
     var selectedGame: Dictionary<String,AnyObject>? = nil
     
     //MARK: Game Variables
-    let player = Player()
+//    let player = Player()
     var winCondition = ""
     
     //MARK: MapKit Variables
@@ -52,7 +52,7 @@ class HomeVC: UIViewController, Alertable {
     override func viewDidLoad() {
         super.viewDidLoad()
         currentUserID = FIRAuth.auth()?.currentUser?.uid
-        player.deck = .beastbrothers
+        Player.instance.deck = .beastbrothers
         layoutView()
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthStatus()

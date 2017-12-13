@@ -34,4 +34,6 @@ class GameHandler {
     func clearCurrentGamesFromFirebaseDB(forKey key: String) {
         REF_GAME.child(key).removeValue()
     }
+    
+    var gameKey = ""
 }

@@ -16,6 +16,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         layoutPlayersPanel()
         layoutTrackers()
         layoutEndTurnButton()
+        layoutBannerAds()
     }
     
     func layoutBackground() {
@@ -180,7 +181,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         endTurn.buttonColor = .white
         endTurn.title = "End Turn"
         endTurn.handler = { item in
-            if self.currentPlayer == self.player.username {
+            if self.currentPlayer == Player.instance.username {
                 self.endPlayerTurn()
             } else {
                 self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.")
@@ -204,7 +205,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         menuButton.addItem(item: settings)
         menuButton.addItem(item: endTurn)
         if let host = game["username"] as? String {
-            if host == player.username {
+            if host == Player.instance.username {
                 menuButton.addItem(item: endGame)
             } else {
                 menuButton.addItem(item: quitGame)
@@ -212,6 +213,10 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         view.addSubview(menuButton)
+    }
+    
+    func layoutBannerAds() {
+        //TODO: Layout for Banner Ads
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -35,7 +35,7 @@ extension GameVC {
                             if let playerArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
                                 for player in playerArray {
                                     if let playerUsername = player["username"] as? String {
-                                        if playerUsername != self.player.username {
+                                        if playerUsername != Player.instance.username {
                                             newPlayersArray.append(player)
                                         } else {
                                             newPlayersArray.append(userData)
@@ -65,12 +65,16 @@ extension GameVC {
             }
         }
         
-        player.username = username
+        Player.instance.username = username
         if let gameKey = game["game"] as? String {
             GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
                 if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
                     for game in gameSnapshot {
                         if game.key == gameKey {
+                            if let gameDict = game.value as? Dictionary<String,AnyObject> {
+                                self.game = gameDict
+                            }
+                            
                             if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
                                 var victoryTaken = 0
                                 //TODO: I think this is the cause of the double call of victoryTaken...

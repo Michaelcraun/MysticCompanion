@@ -21,7 +21,9 @@
 		9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32161FD0240C006F7805 /* SettingsCoreData.swift */; };
 		9B0D32191FD02C76006F7805 /* SettingsSKHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32181FD02C76006F7805 /* SettingsSKHelper.swift */; };
 		9B0D321B1FD04142006F7805 /* GameLobbyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */; };
-		9B73B6491FD8B664007E7ECA /* UIViewKeyboardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */; };
+		9B167B481FE170B900183733 /* EndGameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B471FE170B900183733 /* EndGameLayout.swift */; };
+		9B167B4A1FE173B700183733 /* EndGamePlayersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B491FE173B700183733 /* EndGamePlayersCell.swift */; };
+		9B167B4C1FE173C900183733 /* EndGameFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B4B1FE173C900183733 /* EndGameFirebase.swift */; };
 		9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */; };
 		9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */; };
 		9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */; };
@@ -64,7 +66,9 @@
 		9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLobbyCell.swift; sourceTree = "<group>"; };
 		9B0D321C1FD044B7006F7805 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		9B0D321D1FD044B7006F7805 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewKeyboardExt.swift; sourceTree = "<group>"; };
+		9B167B471FE170B900183733 /* EndGameLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameLayout.swift; sourceTree = "<group>"; };
+		9B167B491FE173B700183733 /* EndGamePlayersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePlayersCell.swift; sourceTree = "<group>"; };
+		9B167B4B1FE173C900183733 /* EndGameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameFirebase.swift; sourceTree = "<group>"; };
 		9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
 		9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				9B0D32031FCE0C74006F7805 /* EndGameVC.swift */,
+				9B167B471FE170B900183733 /* EndGameLayout.swift */,
+				9B167B4B1FE173C900183733 /* EndGameFirebase.swift */,
 			);
 			path = EndGameVC;
 			sourceTree = "<group>";
@@ -178,7 +184,6 @@
 		9B73B6471FD8B654007E7ECA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				9B73B6481FD8B664007E7ECA /* UIViewKeyboardExt.swift */,
 				9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */,
 				9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */,
 				9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */,
@@ -262,6 +267,7 @@
 				9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */,
 				9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */,
 				9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */,
+				9B167B491FE173B700183733 /* EndGamePlayersCell.swift */,
 				9BC7C0031FCC6EFC005741CD /* Style */,
 			);
 			path = View;
@@ -413,7 +419,6 @@
 				9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */,
 				9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */,
 				9BC7C0051FCC6F1B005741CD /* CircleView.swift in Sources */,
-				9B73B6491FD8B664007E7ECA /* UIViewKeyboardExt.swift in Sources */,
 				9B966D451FE01CDC0083192B /* SKHelper.swift in Sources */,
 				9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */,
 				9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */,
@@ -429,10 +434,13 @@
 				9B966D471FE022C50083192B /* Products.swift in Sources */,
 				9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */,
 				9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */,
+				9B167B4A1FE173B700183733 /* EndGamePlayersCell.swift in Sources */,
 				9B0D320A1FCE480B006F7805 /* GameVC.swift in Sources */,
 				9B0D321B1FD04142006F7805 /* GameLobbyCell.swift in Sources */,
 				9B0D32191FD02C76006F7805 /* SettingsSKHelper.swift in Sources */,
+				9B167B481FE170B900183733 /* EndGameLayout.swift in Sources */,
 				9B966D3F1FDD90D40083192B /* GameFirebase.swift in Sources */,
+				9B167B4C1FE173C900183733 /* EndGameFirebase.swift in Sources */,
 				9B73B6541FD8E6F5007E7ECA /* HomeMapKit.swift in Sources */,
 				9B0D32131FD02384006F7805 /* Player.swift in Sources */,
 				9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */,
