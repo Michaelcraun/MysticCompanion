@@ -12,6 +12,7 @@ import KCFloatingActionButton
 
 class LoginVC: UIViewController {
     let backgroundImage = UIImageView()
+    let logoStack = UIStackView()
     let usernameField = KaedeTextField()
     let emailField = KaedeTextField()
     let passwordField = KaedeTextField()

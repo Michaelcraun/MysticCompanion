@@ -12,6 +12,7 @@ import KCFloatingActionButton
 extension LoginVC {
     func layoutView() {
         layoutBackgroundImage()
+        layoutLogo()
         layoutUserForm()
         layoutSettingsButton()
     }
@@ -28,6 +29,34 @@ extension LoginVC {
         backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func layoutLogo() {
+        logoStack.alignment = .fill
+        logoStack.axis = .horizontal
+        logoStack.distribution = .fillProportionally
+        logoStack.spacing = 10
+        logoStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        let mysticView = UIImageView()
+        mysticView.image = #imageLiteral(resourceName: "mystic")
+        mysticView.contentMode = .scaleAspectFit
+        mysticView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let companionView = UIImageView()
+        companionView.image = #imageLiteral(resourceName: "companion")
+        companionView.contentMode = .scaleAspectFit
+        companionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        logoStack.addArrangedSubview(mysticView)
+        logoStack.addArrangedSubview(companionView)
+        
+        view.addSubview(logoStack)
+        
+        logoStack.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
+        logoStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        logoStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        logoStack.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func layoutUserForm() {
@@ -62,7 +91,7 @@ extension LoginVC {
         view.addSubview(passwordField)
         
         usernameField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        usernameField.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
+        usernameField.topAnchor.constraint(equalTo: logoStack.bottomAnchor, constant: 10).isActive = true
         usernameField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         usernameField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         

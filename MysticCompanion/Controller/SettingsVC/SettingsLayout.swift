@@ -95,6 +95,7 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
         logout.handler = { item in
             do {
                 try FIRAuth.auth()?.signOut()
+                self.dismiss(animated: true, completion: nil)
             } catch (let error) {
                 print(error)
             }
