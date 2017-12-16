@@ -13,8 +13,11 @@ import MapKit
 import GMStepper
 
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
-    
     func layoutView() {
+        for subview in view.subviews {
+            subview.removeFromSuperview()
+        }
+        
         layoutBackgroundImage()
         layoutPlayerIcon()
         layoutPlayerName()
@@ -111,28 +114,22 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutStartButtons() {
-        startButton.buttonColor = .black
-        startButton.paddingX = view.frame.width / 2 - startButton.frame.width / 2
-        startButton.setPaddingY()
+        menuButton.setMenuButtonColor()
+        menuButton.setPaddingY()
+        menuButton.items = []
         
         let startGame = KCFloatingActionButtonItem()
-        startGame.title = "Start Game"
-        startGame.buttonColor = .white
+        startGame.setButtonOfType(.startGame)
         startGame.handler = { item in
             if self.currentUserID == nil {
                 self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
             } else {
-                if PREMIUM_PURCHASED {
-                    self.layoutGameSetupView()
-                } else {
-                    //TODO: Actions for non-premium
-                }
+                self.layoutGameSetupView()
             }
         }
         
         let joinGame = KCFloatingActionButtonItem()
-        joinGame.title = "Join Game"
-        joinGame.buttonColor = .white
+        joinGame.setButtonOfType(.joinGame)
         joinGame.handler = { item in
             if self.currentUserID == nil {
                 self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
@@ -142,8 +139,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let settings = KCFloatingActionButtonItem()
-        settings.title = "Settings"
-        settings.buttonColor = .red
+        settings.setButtonOfType(.settings)
         settings.handler = { item in
             if self.currentUserID == nil {
                 self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
@@ -152,44 +148,42 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        startButton.addItem(item: settings)
-        startButton.addItem(item: startGame)
-        startButton.addItem(item: joinGame)
+        menuButton.addItem(item: settings)
+        menuButton.addItem(item: startGame)
+        menuButton.addItem(item: joinGame)
         
-        view.addSubview(startButton)
+        view.addSubview(menuButton)
     }
     
     func layoutGameSetupView() {
         self.userIsHostingGame = true
         
-        let gameSetupView = UIView()
-        gameSetupView.frame = view.bounds
-        gameSetupView.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 20/255, alpha: 0.75)
-        gameSetupView.alpha = 0
-        gameSetupView.tag = 1000
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.tag = 1000
+        blurEffectView.alpha = 0
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let vpSelector = KCFloatingActionButton()
         vpSelector.buttonColor = .black
         vpSelector.setPaddingY()
         
         let cancel = KCFloatingActionButtonItem()
-        cancel.title = "Cancel"
-        cancel.buttonColor = .white
+        cancel.setButtonOfType(.cancel)
         cancel.handler = { item in
-            gameSetupView.fadeAlphaOut()
+            blurEffectView.fadeAlphaOut()
         }
         
         let standard = KCFloatingActionButtonItem()
-        standard.title = "Standard VP"
-        standard.buttonColor = .white
+        standard.setButtonOfType(.standardVP)
         standard.handler = { item in
             self.hostGameAndObserve(withWinCondition: "standard", andVPGoal: 0)
-            gameSetupView.fadeAlphaOut()
+            blurEffectView.fadeAlphaOut()
         }
         
         let custom = KCFloatingActionButtonItem()
-        custom.title = "Custom VP"
-        custom.buttonColor = .white
+        custom.setButtonOfType(.customVP)
         custom.handler = { item in
             vpSelector.fadeAlphaOut()
             self.layoutCustomVPSelector()
@@ -199,16 +193,17 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         vpSelector.addItem(item: standard)
         if PREMIUM_PURCHASED { vpSelector.addItem(item: custom) }
         
-        view.addSubview(gameSetupView)
-        gameSetupView.addSubview(vpSelector)
-        gameSetupView.fadeAlphaTo(0.75, withDuration: 0.2)
+        view.addSubview(blurEffectView)
+        blurEffectView.contentView.addSubview(vpSelector)
+        blurEffectView.fadeAlphaTo(1, withDuration: 0.2)
     }
     
     func layoutCustomVPSelector() {
-        //TODO: Beautify
         let vpStepper = GMStepper()
-        vpStepper.buttonsBackgroundColor = primaryColor
-        vpStepper.labelBackgroundColor = secondaryColor
+        vpStepper.buttonsBackgroundColor = theme.color
+        vpStepper.labelBackgroundColor = theme.color1
+        vpStepper.borderColor = theme.color
+        vpStepper.borderWidth = 1
         vpStepper.labelFont = UIFont(name: fontFamily, size: 25)!
         vpStepper.value = 23
         vpStepper.maximumValue = 500
@@ -216,11 +211,10 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         
         let menuButton = KCFloatingActionButton()
         menuButton.setPaddingY()
-        menuButton.buttonColor = .black
+        menuButton.setMenuButtonColor()
         
         let cancel = KCFloatingActionButtonItem()
-        cancel.title = "Cancel"
-        cancel.buttonColor = .white
+        cancel.setButtonOfType(.cancel)
         cancel.handler = {item in
             vpStepper.fadeAlphaOut()
             menuButton.fadeAlphaOut()
@@ -232,11 +226,12 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let done = KCFloatingActionButtonItem()
-        done.title = "Done"
-        done.buttonColor = .white
+        done.setButtonOfType(.done)
         done.handler = { item in
             let vpGoal = vpStepper.value
             self.hostGameAndObserve(withWinCondition: "custom", andVPGoal: Int(vpGoal))
+            vpStepper.fadeAlphaOut()
+            menuButton.fadeAlphaOut()
             for subview in self.view.subviews {
                 if subview.tag == 1000 {
                     subview.fadeAlphaOut()
@@ -257,9 +252,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutBannerAds() {
-        if PREMIUM_PURCHASED {
-            adBanner.removeFromSuperview()
-        } else {
+        if !PREMIUM_PURCHASED {
             //MARK: Initialize banner ads
 //            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
             adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads

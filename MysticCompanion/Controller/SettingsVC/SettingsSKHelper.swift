@@ -24,6 +24,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                 SKPaymentQueue.default().add(pay)
                 
                 NetworkIndicator.networkOperationFinished()
+//                shouldPresentLoadingView(false)
             }
         }
     }
@@ -63,10 +64,9 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             default: break
             }
         }
+//        shouldPresentLoadingView(false)
         showAlert(withTitle: "Purchases Restored", andMessage: "Your purchases have been restored. Thank you.")
-        
         NetworkIndicator.networkOperationFinished()
-        
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -94,6 +94,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             }
         }
         
+//        shouldPresentLoadingView(false)
         NetworkIndicator.networkOperationFinished()
     }
 }

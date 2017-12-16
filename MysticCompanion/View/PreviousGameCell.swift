@@ -28,7 +28,7 @@ class PreviousGameCell: UITableViewCell {
         noGamesLabel.text = "No Games Found"
         noGamesLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.backgroundColor = primaryColor
+        self.backgroundColor = theme.color
         self.addSubview(noGamesLabel)
         
         noGamesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true

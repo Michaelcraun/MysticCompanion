@@ -14,6 +14,7 @@ class EndGameVC: UIViewController {
     
     //MARK: Firebase Variables
     var game = Dictionary<String,AnyObject>()
+    //TODO: Players is nil when VC is initialized... This is causing the NaN error
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
             playersTable.reloadData()
@@ -23,7 +24,6 @@ class EndGameVC: UIViewController {
     //MARK: UI Variables
     let playersTable = UITableView()
     let adBanner = GADBannerView()
-    let menuButton = KCFloatingActionButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

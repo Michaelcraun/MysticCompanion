@@ -60,16 +60,16 @@ extension LoginVC {
     }
     
     func layoutUserForm() {
-        usernameField.backgroundColor = secondaryColor
-        usernameField.foregroundColor = primaryColor
+        usernameField.backgroundColor = theme.color1
+        usernameField.foregroundColor = theme.color
         usernameField.font = UIFont(name: fontFamily, size: 15)
         usernameField.placeholder = "username"
         usernameField.autocapitalizationType = .none
         usernameField.clipsToBounds = true
         usernameField.translatesAutoresizingMaskIntoConstraints = false
         
-        emailField.backgroundColor = secondaryColor
-        emailField.foregroundColor = primaryColor
+        emailField.backgroundColor = theme.color1
+        emailField.foregroundColor = theme.color
         emailField.font = UIFont(name: fontFamily, size: 15)
         emailField.placeholder = "email address"
         emailField.autocapitalizationType = .none
@@ -77,8 +77,8 @@ extension LoginVC {
         emailField.clipsToBounds = true
         emailField.translatesAutoresizingMaskIntoConstraints = false
         
-        passwordField.backgroundColor = secondaryColor
-        passwordField.foregroundColor = primaryColor
+        passwordField.backgroundColor = theme.color1
+        passwordField.foregroundColor = theme.color
         passwordField.font = UIFont(name: fontFamily, size: 15)
         passwordField.placeholder = "password"
         passwordField.autocapitalizationType = .none
@@ -107,27 +107,23 @@ extension LoginVC {
     }
     
     func layoutSettingsButton() {
-        settingsButton.buttonColor = .black
-        settingsButton.paddingX = view.frame.width / 2 - settingsButton.frame.width / 2
-        settingsButton.paddingY = 20
+        settingsButton.setMenuButtonColor()
+        settingsButton.setPaddingY()
         
         let settings = KCFloatingActionButtonItem()
-        settings.title = "Settings"
-        settings.buttonColor = .red
+        settings.setButtonOfType(.settings)
         settings.handler = { item in
             self.performSegue(withIdentifier: "showSettings", sender: nil)
         }
         
         let cancel = KCFloatingActionButtonItem()
-        cancel.title = "Cancel"
-        cancel.buttonColor = .white
+        cancel.setButtonOfType(.cancel)
         cancel.handler = { item in
             self.dismiss(animated: true, completion: nil)
         }
         
         let register = KCFloatingActionButtonItem()
-        register.title = "Register / Login"
-        register.buttonColor = .white
+        register.setButtonOfType(.registerLogin)
         register.handler = { item in
             self.loginWithFirebase()
         }

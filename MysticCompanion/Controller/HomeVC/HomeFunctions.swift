@@ -34,7 +34,6 @@ extension HomeVC {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "startGame" {
             if let destination = segue.destination as? GameVC {
-                //TODO: Set VP Goal?
                 destination.game = selectedGame!
                 destination.username = username!
                 switch winCondition {

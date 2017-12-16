@@ -29,20 +29,19 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         adBanner.load(GADRequest())
         adBanner.translatesAutoresizingMaskIntoConstraints = false
         
-        menuButton.buttonColor = .black
-        menuButton.paddingX = view.frame.width / 2 - menuButton.frame.width / 2
+        let menuButton = KCFloatingActionButton()
+        menuButton.setMenuButtonColor()
+//        menuButton.paddingX = view.frame.width / 2 - menuButton.frame.width / 2
         menuButton.setPaddingY()
         
         let settings = KCFloatingActionButtonItem()
-        settings.buttonColor = .red
-        settings.title = "Settings"
+        settings.setButtonOfType(.settings)
         settings.handler = { item in
             self.performSegue(withIdentifier: "showSettings", sender: nil)
         }
         
         let quit = KCFloatingActionButtonItem()
-        quit.buttonColor = .white
-        quit.title = "Quit"
+        quit.setButtonOfType(.quitGame)
         quit.handler = { item in
             //TODO: Handle exiting game
         }

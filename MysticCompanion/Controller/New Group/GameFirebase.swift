@@ -77,7 +77,6 @@ extension GameVC {
                             
                             if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
                                 var victoryTaken = 0
-                                //TODO: I think this is the cause of the double call of victoryTaken...
                                 for player in playersArray {
                                     if let playerVictory = player["victoryPoints"] as? Int {
                                         victoryTaken += playerVictory

@@ -9,6 +9,7 @@
 import UIKit
 import GMStepper
 import KCFloatingActionButton
+import GoogleMobileAds
 
 extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
@@ -40,7 +41,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playerPanel.layer.cornerRadius = 10
         playerPanel.layer.borderColor = UIColor.black.cgColor
         playerPanel.layer.borderWidth = 2
-        playerPanel.backgroundColor = primaryColor
+        playerPanel.backgroundColor = theme.color
         playerPanel.clipsToBounds = true
         playerPanel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -166,20 +167,17 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     
     func layoutEndTurnButton() {
         let menuButton = KCFloatingActionButton()
-        menuButton.buttonColor = .black
+        menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
-        menuButton.paddingX = view.frame.width / 2 - menuButton.frame.width / 2
         
         let settings = KCFloatingActionButtonItem()
-        settings.buttonColor = .red
-        settings.title = "Settings"
+        settings.setButtonOfType(.settings)
         settings.handler = { item in
             self.performSegue(withIdentifier: "showSettings", sender: nil)
         }
         
         let endTurn = KCFloatingActionButtonItem()
-        endTurn.buttonColor = .white
-        endTurn.title = "End Turn"
+        endTurn.setButtonOfType(.endTurn)
         endTurn.handler = { item in
             if self.currentPlayer == Player.instance.username {
                 self.endPlayerTurn()
@@ -189,17 +187,20 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let quitGame = KCFloatingActionButtonItem()
-        quitGame.buttonColor = .white
-        quitGame.title = "Quit Game"
+        quitGame.setButtonOfType(.quitGame)
         quitGame.handler = { item in
-            
+            //TODO: Functionality for user quitting current game
+            //Reinitialize game and remove user from all games
+            //removeUserFromAllGames(forUser user: String)
         }
         
         let endGame = KCFloatingActionButtonItem()
-        endGame.buttonColor = .white
-        endGame.title = "End Game"
+        endGame.setButtonOfType(.endGame)
         endGame.handler = { item in
-            
+            //TODO: Functionality for host ending game
+//            guard let gameKey = self.game["game"] as? String else { return }
+//            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
+            //Segue to EndGameVC
         }
         
         menuButton.addItem(item: settings)
@@ -216,7 +217,21 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutBannerAds() {
-        //TODO: Layout for Banner Ads
+        if !PREMIUM_PURCHASED {
+            //MARK: Initialize banner ads
+//            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
+            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
+            adBanner.backgroundColor = .white
+            adBanner.rootViewController = self
+            adBanner.load(GADRequest())
+            adBanner.translatesAutoresizingMaskIntoConstraints = false
+            
+            view.addSubview(adBanner)
+            
+            adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            adBanner.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

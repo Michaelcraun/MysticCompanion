@@ -8,11 +8,11 @@
 
 import UIKit
 import GMStepper
+import GoogleMobileAds
 
 class GameVC: UIViewController, Alertable {
     
     //MARK: Game Variables
-//    let player = Player()
     var victoryTaken = 0 {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
@@ -54,6 +54,7 @@ class GameVC: UIViewController, Alertable {
     let playerPanel = UIView()
     let gameVPLabel = UILabel()
     let playersTable = UITableView()
+    let adBanner = GADBannerView()
     
     let manaTracker = TrackerView()
     let decayTracker = TrackerView()
@@ -63,11 +64,7 @@ class GameVC: UIViewController, Alertable {
     let skyTracker = TrackerView()
     let victoryTracker = TrackerView()
     let wildTracker = TrackerView()
-    
-    var endTurnButton = UIButton()
-    
     var trackersArray = [TrackerView]()
-    var constantArray = [Int]()
 
     override func viewDidLoad() {
         super.viewDidLoad()

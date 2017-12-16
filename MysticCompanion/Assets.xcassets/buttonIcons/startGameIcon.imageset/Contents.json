@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "minus_bottom.png",
+      "filename" : "startGameIcon.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "startGameIcon@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "startGameIcon@3x.png",
       "scale" : "3x"
     }
   ],

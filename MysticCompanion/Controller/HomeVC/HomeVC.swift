@@ -22,7 +22,7 @@ class HomeVC: UIViewController, Alertable {
     let dawnseekersIcon = CircleView()
     let lifewardensIcon = CircleView()
     let waveguardsIcon = CircleView()
-    let startButton = KCFloatingActionButton()
+    let menuButton = KCFloatingActionButton()
     let adBanner = GADBannerView()
     let gameLobbyTable = UITableView()
     
@@ -53,14 +53,17 @@ class HomeVC: UIViewController, Alertable {
         super.viewDidLoad()
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
+        checkTheme()
         layoutView()
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthStatus()
         checkUsername(forKey: currentUserID)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         currentUserID = FIRAuth.auth()?.currentUser?.uid
+        checkTheme()
+        layoutView()
         checkUsername(forKey: currentUserID)
     }
 

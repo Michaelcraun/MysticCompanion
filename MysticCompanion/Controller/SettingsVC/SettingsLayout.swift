@@ -9,16 +9,24 @@
 import UIKit
 import KCFloatingActionButton
 import Firebase
+import StoreKit
+import MessageUI
 
-extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
+extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate, UITableViewDelegate {
     func layoutView() {
+        for subview in view.subviews {
+            subview.removeFromSuperview()
+        }
+        
+        layoutBackgroundImage()
+        layoutTopBanner()
+        
         if PREMIUM_PURCHASED {
             layoutPreviousGamesTable()
         } else {
             layoutUpgradeLabels()
         }
         
-        layoutBackgroundImage()
         layoutSettingsButton()
     }
     
@@ -34,6 +42,29 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
         backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func layoutTopBanner() {
+        bannerView.backgroundColor = UIColor(red: 255 / 255, green: 81 / 255, blue: 72 / 255, alpha: 1)
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let pageTitleLabel = UILabel()
+        pageTitleLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 10)
+        pageTitleLabel.text = "SETTINGS"
+        pageTitleLabel.textAlignment = .center
+        pageTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(bannerView)
+        bannerView.addSubview(pageTitleLabel)
+        
+        bannerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        bannerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        bannerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        bannerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        pageTitleLabel.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: -5).isActive = true
+        pageTitleLabel.leftAnchor.constraint(equalTo: bannerView.leftAnchor).isActive = true
+        pageTitleLabel.rightAnchor.constraint(equalTo: bannerView.rightAnchor).isActive = true
     }
     
     func layoutUpgradeLabels() {
@@ -52,7 +83,7 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
         view.addSubview(currentVersion)
         view.addSubview(upgradeDetails)
         
-        currentVersion.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        currentVersion.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 10).isActive = true
         currentVersion.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         currentVersion.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         
@@ -71,27 +102,25 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
         
         view.addSubview(previousGamesTable)
         
-        previousGamesTable.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        previousGamesTable.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 10).isActive = true
         previousGamesTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         previousGamesTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         previousGamesTable.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     func layoutSettingsButton() {
-        settingsButton.buttonColor = .black
-        settingsButton.paddingX = view.frame.width / 2 - settingsButton.frame.width / 2
-        settingsButton.paddingY = 20
+        menuButton.setMenuButtonColor()
+        menuButton.paddingY = 20
+        menuButton.items = []
         
         let cancel = KCFloatingActionButtonItem()
-        cancel.title = "Cancel"
-        cancel.buttonColor = .white
+        cancel.setButtonOfType(.cancel)
         cancel.handler = { item in
             self.dismiss(animated: true, completion: nil)
         }
         
         let logout = KCFloatingActionButtonItem()
-        logout.title = "Logout"
-        logout.buttonColor = .white
+        logout.setButtonOfType(.logout)
         logout.handler = { item in
             do {
                 try FIRAuth.auth()?.signOut()
@@ -101,25 +130,109 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
+        let contactSupport = KCFloatingActionButtonItem()
+        contactSupport.setButtonOfType(.contactSupport)
+        contactSupport.handler = { item in
+            if MFMailComposeViewController.canSendMail() {
+                let composeVC = MFMailComposeViewController()
+                composeVC.mailComposeDelegate = self
+                composeVC.setToRecipients(["vapemeistersupport@craunicproductions.com"])
+                composeVC.setSubject("MysticCompanion Support")
+                
+                self.present(composeVC, animated: true, completion: nil)
+            } else {
+                self.showAlert(withTitle: "Error:", andMessage: "Your device is not able to send email.")
+            }
+        }
+        
+        let changeTheme = KCFloatingActionButtonItem()
+        changeTheme.setButtonOfType(.changeTheme)
+        changeTheme.handler = { item in
+            self.layoutThemeSelection()
+        }
+        
         let purchase = KCFloatingActionButtonItem()
-        purchase.title = "Purchase Premium"
-        purchase.buttonColor = .white
+        purchase.setButtonOfType(.purchase)
         purchase.handler = { item in
             //TODO: Purchase premium version
+//            self.shouldPresentLoadingView(true)
+            self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
         }
         
         let restore = KCFloatingActionButtonItem()
-        restore.title = "Restore Premium"
-        restore.buttonColor = .white
+        restore.setButtonOfType(.restore)
         restore.handler = { item in
             //TODO: Restore premium version
+            NetworkIndicator.networkOperationStarted()
+//            self.shouldPresentLoadingView(true)
+            
+            SKPaymentQueue.default().add(self)
+            SKPaymentQueue.default().restoreCompletedTransactions()
         }
         
-        settingsButton.addItem(item: cancel)
-        settingsButton.addItem(item: logout)
-        settingsButton.addItem(item: purchase)
-        settingsButton.addItem(item: restore)
-        view.addSubview(settingsButton)
+        menuButton.addItem(item: cancel)
+        menuButton.addItem(item: logout)
+        menuButton.addItem(item: contactSupport)
+        menuButton.addItem(item: changeTheme)
+        menuButton.addItem(item: purchase)
+        menuButton.addItem(item: restore)
+        view.addSubview(menuButton)
+    }
+    
+    func layoutThemeSelection() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let themeSelector = KCFloatingActionButton()
+//        themeSelector.paddingX = view.frame.width / 2 - themeSelector.frame.width / 2
+        themeSelector.setPaddingY()
+        themeSelector.setMenuButtonColor()
+        
+        let drabGray = KCFloatingActionButtonItem()
+        drabGray.setButtonOfType(.drabGray)
+        drabGray.handler = { item in
+            self.setTheme(.drabGray)
+            blurEffectView.fadeAlphaOut()
+        }
+        
+        let pastelBlue = KCFloatingActionButtonItem()
+        pastelBlue.setButtonOfType(.pastelBlue)
+        pastelBlue.handler = { item in
+            self.setTheme(.pastelBlue)
+            blurEffectView.fadeAlphaOut()
+        }
+        
+        let pastelGreen = KCFloatingActionButtonItem()
+        pastelGreen.setButtonOfType(.pastelGreen)
+        pastelGreen.handler = { item in
+            self.setTheme(.pastelGreen)
+            blurEffectView.fadeAlphaOut()
+        }
+        
+        let pastelPurple = KCFloatingActionButtonItem()
+        pastelPurple.setButtonOfType(.pastelPurple)
+        pastelPurple.handler = { item in
+            self.setTheme(.pastelPurple)
+            blurEffectView.fadeAlphaOut()
+        }
+        
+        let pastelYellow = KCFloatingActionButtonItem()
+        pastelYellow.setButtonOfType(.pastelYellow)
+        pastelYellow.handler = { item in
+            self.setTheme(.pastelYellow)
+            blurEffectView.fadeAlphaOut()
+        }
+        
+        themeSelector.addItem(item: drabGray)
+        themeSelector.addItem(item: pastelBlue)
+        themeSelector.addItem(item: pastelGreen)
+        themeSelector.addItem(item: pastelPurple)
+        themeSelector.addItem(item: pastelYellow)
+        
+        view.addSubview(blurEffectView)
+        blurEffectView.contentView.addSubview(themeSelector)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,6 +267,15 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
         let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
             //TODO: Add Share Functionality
         }
-        return [share, delete]
+        return [delete, share]
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //TODO: Segue to GameDetailsVC
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }

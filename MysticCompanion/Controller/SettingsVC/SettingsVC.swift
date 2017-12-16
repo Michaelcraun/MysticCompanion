@@ -13,16 +13,18 @@ import KCFloatingActionButton
 
 class SettingsVC: UIViewController {
 
-    //MARK: Layout Variables
+    //MARK: UI Variables
     let backgroundImage = UIImageView()
     let currentVersion = UILabel()
     let upgradeDetails = UILabel()
+    let bannerView = UIView()
     let previousGamesTable = UITableView()
-    let settingsButton = KCFloatingActionButton()
+    let menuButton = KCFloatingActionButton()
     
     //MARK: CoreData Variables
     var controller: NSFetchedResultsController<Game>!
     let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
+    let defaults = UserDefaults.standard
     
     //MARK: StoreKit Variables
     var productPurchasing = SKProduct()
@@ -32,6 +34,13 @@ class SettingsVC: UIViewController {
         super.viewDidLoad()
 
         attemptGameFetch()
+        previousGamesTable.reloadData()
+        checkTheme()
         layoutView()
+    }
+    
+    func setTheme(_ theme: SystemColor) {
+        defaults.set(theme.rawValue, forKey: "theme")
+        self.viewDidLoad()
     }
 }
