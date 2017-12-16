@@ -18,7 +18,8 @@ extension HomeVC {
                 for user in userSnapshot {
                     if user.key == key {
                         guard let username = user.childSnapshot(forPath: "username").value as? String else { return }
-                        self.username = username
+//                        self.username = username
+                        Player.instance.username = username
                         self.playerName.text = username
                     }
                 }
@@ -93,7 +94,8 @@ extension HomeVC {
                             if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
                                 if gameStarted {
                                     if let gameDict = game.value as? Dictionary<String,AnyObject> {
-                                        self.selectedGame = gameDict
+//                                        self.selectedGame = gameDict
+                                        GameHandler.instance.game = gameDict
                                     }
                                     self.performSegue(withIdentifier: "startGame", sender: nil)
                                 }
@@ -150,7 +152,7 @@ extension HomeVC {
                         var newPlayersArray = [String]()
                         for player in playersArray {
                             if let playerUsername = player as? String {
-                                if playerUsername != self.username! {
+                                if playerUsername != Player.instance.username {
                                     newPlayersArray.append(playerUsername)
                                 }
                             }
@@ -175,7 +177,7 @@ extension HomeVC {
         let userLocation = self.locationManager.location
         winCondition = condition
         self.players = []
-        self.players.append(["username" : self.username as AnyObject,
+        self.players.append(["username" : Player.instance.username as AnyObject,
                              "deck" : Player.instance.deck?.rawValue as AnyObject,
                              "victoryPoints" : 0 as AnyObject,
                              "boxVictory" : 0 as AnyObject])
@@ -184,17 +186,20 @@ extension HomeVC {
                                                 "vpGoal" : goal,
                                                 "coordinate" : [userLocation?.coordinate.latitude,
                                                                 userLocation?.coordinate.longitude],
-                                                "username" : self.username!,
+                                                "username" : Player.instance.username,
                                                 "players" : self.players,
                                                 "gameStarted" : false,
-                                                "currentPlayer" : self.username!]
+                                                "currentPlayer" : Player.instance.username]
         GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
                 for game in gameSnapshot {
                     if game.key == self.currentUserID! {
                         if let gameDict = game.value as? Dictionary<String,AnyObject> {
-                            self.selectedGame = gameDict
+//                            self.selectedGame = gameDict
+                            GameHandler.instance.game = gameDict
+                            guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+                            self.players = playersArray
                         }
                     }
                 }

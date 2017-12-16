@@ -35,5 +35,5 @@ class GameHandler {
         REF_GAME.child(key).removeValue()
     }
     
-    var gameKey = ""
+    var game = [String : AnyObject]()
 }

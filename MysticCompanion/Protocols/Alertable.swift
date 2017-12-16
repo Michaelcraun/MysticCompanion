@@ -24,11 +24,12 @@ extension Alertable where Self: UIViewController {
         let action = UIAlertAction(title: "OK", style: .default, handler: { action in
             for subview in self.view.subviews {
                 if subview.tag == 1001 {
-                    subview.removeFromSuperview()
+                    subview.fadeAlphaOut()
                 }
             }
             
             if alertController.message == "You ended the game. Please wait for the other players to complete their turns." {
+                print("performing segue from showAlert()...")
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             }
         })

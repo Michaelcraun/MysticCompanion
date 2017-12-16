@@ -28,7 +28,7 @@ class HomeVC: UIViewController, Alertable {
     
     //MARK: Firebase Variables
     var currentUserID: String? = nil
-    var username: String? = nil
+//    var username: String? = nil
     var userIsHostingGame = false
     var nearbyGames = [Dictionary<String,AnyObject>]() {
         didSet {
@@ -40,7 +40,7 @@ class HomeVC: UIViewController, Alertable {
             gameLobbyTable.reloadData()
         }
     }
-    var selectedGame: Dictionary<String,AnyObject>? = nil
+//    var selectedGame: Dictionary<String,AnyObject>? = nil
     
     //MARK: Game Variables
 //    let player = Player()

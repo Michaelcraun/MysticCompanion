@@ -11,7 +11,10 @@ import Firebase
 
 extension EndGameVC {
     func setupGameAndObserve() {
-        guard let gameKey = game["game"] as? String else { return }
+        guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
+//        guard let gameKey = game["game"] as? String else { return }
+        guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+        players = playersArray
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {

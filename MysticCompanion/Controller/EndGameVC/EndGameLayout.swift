@@ -31,7 +31,6 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
-//        menuButton.paddingX = view.frame.width / 2 - menuButton.frame.width / 2
         menuButton.setPaddingY()
         
         let settings = KCFloatingActionButtonItem()

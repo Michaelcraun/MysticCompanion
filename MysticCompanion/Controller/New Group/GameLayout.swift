@@ -205,13 +205,14 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         
         menuButton.addItem(item: settings)
         menuButton.addItem(item: endTurn)
-        if let host = game["username"] as? String {
+        guard let host = GameHandler.instance.game["username"] as? String else { return }
+//        if let host = game["username"] as? String {
             if host == Player.instance.username {
                 menuButton.addItem(item: endGame)
             } else {
                 menuButton.addItem(item: quitGame)
             }
-        }
+//        }
         
         view.addSubview(menuButton)
     }
