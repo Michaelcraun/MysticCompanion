@@ -24,6 +24,7 @@ class EndGameVC: UIViewController {
     //MARK: UI Variables
     let playersTable = UITableView()
     let adBanner = GADBannerView()
+    let menuButton = KCFloatingActionButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

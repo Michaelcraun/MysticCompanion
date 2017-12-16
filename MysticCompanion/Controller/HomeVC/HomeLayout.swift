@@ -162,7 +162,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let vpSelector = KCFloatingActionButton()
-        vpSelector.buttonColor = .black
+        vpSelector.setMenuButtonColor()
         vpSelector.setPaddingY()
         
         let cancel = KCFloatingActionButtonItem()

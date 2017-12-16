@@ -35,8 +35,6 @@ class GameVC: UIViewController, Alertable {
     }
     var vpGoal = 13
     var isEndOfGameTurn = false
-//    var username = ""
-//    var game = Dictionary<String,AnyObject>()
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
             playersTable.reloadData()
@@ -76,8 +74,7 @@ class GameVC: UIViewController, Alertable {
     }
     
     func setupPlayerTurn() {
-        if isEndOfGameTurn && endingPlayerUsername != Player.instance.username {
-            print("performing segue from setupPlayerTurn()...")
+        if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
         } else {
             manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
@@ -127,18 +124,10 @@ class GameVC: UIViewController, Alertable {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(trackersArray.count) * 0.15) {
-            if self.isEndOfGameTurn {
+            if self.isEndOfGameTurn && self.endingPlayerUsername != Player.instance.username {
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             } else {
                 self.setupPlayerTurn()
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showEndGame" {
-            if let destination = segue.destination as? EndGameVC {
-//                destination.game = game
             }
         }
     }

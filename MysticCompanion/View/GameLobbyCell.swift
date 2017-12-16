@@ -51,20 +51,23 @@ class GameLobbyCell: UITableViewCell {
     }
 
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
-        let deck = user["deck"] as! String
-        let username = user["username"] as! String
-        var deckColor: UIColor? {
+        guard let username = user["username"] as? String else { return }
+        guard let deck = user["deck"] as? String else { return }
+//        let deck = user["deck"] as! String
+//        let username = user["username"] as! String
+        var deckType: DeckType? {
             switch deck {
-            case "beasebrothers": return red
-            case "dawnseekers": return yellow
-            case "lifewardens": return green
-            case "waveguards": return blue
+            case "beasebrothers": return .beastbrothers
+            case "dawnseekers": return .dawnseekers
+            case "lifewardens": return .lifewardens
+            case "waveguards": return .waveguards
             default: return nil
             }
         }
         
         clearCell()
-        self.backgroundColor = deckColor
+        
+        self.backgroundColor = deckType?.color
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)

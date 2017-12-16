@@ -71,32 +71,28 @@ enum SystemColor: String {
     }
 }
 
-let blue = UIColor(red: 33 / 255, green: 94 / 255, blue: 135 / 255, alpha: 1)
-let green = UIColor(red: 128 / 255, green: 181 / 255, blue: 67 / 255, alpha: 1)
-let red = UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 1)
-let yellow = UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, alpha: 1)
-
-let blueLessAlpha = UIColor(red: 33 / 255, green: 94 / 255, blue: 135 / 255, alpha: 0.5)
-let greenLessAlpha = UIColor(red: 128 / 255, green: 181 / 255, blue: 67 / 255, alpha: 0.5)
-let redLessAlpha = UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 0.5)
-let yellowLessAlpha = UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, alpha: 0.5)
-
-//let primaryColor = UIColor(red: 58 / 255, green: 206 / 255, blue: 58 / 255, alpha: 1)
-//let secondaryColor = UIColor(red: 180 / 255, green: 236 / 255, blue: 180 / 255, alpha: 1)
-//let settingsColor = UIColor(red: 255 / 255, green: 81 / 255, blue: 72 / 255, alpha: 1)
-
 enum DeckType: String {
     case beastbrothers
     case dawnseekers
     case lifewardens
     case waveguards
     
+    //TODO: add primary and secondary (less alpha) colors
     var color: UIColor {
         switch self {
-        case .beastbrothers: return red
-        case .dawnseekers: return yellow
-        case .lifewardens: return green
-        case .waveguards: return blue
+        case .beastbrothers: return UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 1)
+        case .dawnseekers: return UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, alpha: 1)
+        case .lifewardens: return UIColor(red: 128 / 255, green: 181 / 255, blue: 67 / 255, alpha: 1)
+        case .waveguards: return UIColor(red: 33 / 255, green: 94 / 255, blue: 135 / 255, alpha: 1)
+        }
+    }
+    
+    var secondaryColor: UIColor {
+        switch self {
+        case .beastbrothers: return UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 0.5)
+        case .dawnseekers: return UIColor(red: 246 / 255, green: 207 / 255, blue: 83 / 255, alpha: 0.5)
+        case .lifewardens: return UIColor(red: 128 / 255, green: 181 / 255, blue: 67 / 255, alpha: 0.5)
+        case .waveguards: return UIColor(red: 33 / 255, green: 94 / 255, blue: 135 / 255, alpha: 0.5)
         }
     }
     
