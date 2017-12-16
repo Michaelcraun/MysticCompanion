@@ -24,7 +24,13 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        checkTheme()
         layoutView()
-//        view.addTapToDismissKeyboard()
+        //TODO: Add tapToDismissKeyboard
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        checkTheme()
+        layoutMenuButton()
     }
 }

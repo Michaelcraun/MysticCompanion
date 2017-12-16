@@ -169,6 +169,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
+        menuButton.items = []
         
         let settings = KCFloatingActionButtonItem()
         settings.setButtonOfType(.settings)

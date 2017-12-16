@@ -21,13 +21,13 @@ class GameVC: UIViewController, Alertable {
                 let endingPlayer = players[0]
                 if let endingPlayerUsername = endingPlayer["username"] as? String {
                     self.endingPlayerUsername = endingPlayerUsername
-                    if endingPlayerUsername == Player.instance.username {
-                        self.showAlert(withTitle: "End of Game", andMessage: "You ended the game. Please wait for the other players to complete their turns.")
-                    } else {
-                        if !isEndOfGameTurn {
+                    if !isEndOfGameTurn {
+                        if endingPlayerUsername == Player.instance.username {
+                            self.showAlert(withTitle: "End of Game", andMessage: "You ended the game. Please wait for the other players to complete their turns.")
+                        } else {
                             self.showAlert(withTitle: "End of Game", andMessage: "\(endingPlayerUsername) ended the game. This will be your final turn.")
-                            isEndOfGameTurn = true
                         }
+                        isEndOfGameTurn = true
                     }
                 }
             }
@@ -68,6 +68,11 @@ class GameVC: UIViewController, Alertable {
         setupGameAndObserve()
         layoutView()
         setupPlayerTurn()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        checkTheme()
+        layoutEndTurnButton()
     }
     
     func setupPlayerTurn() {
@@ -122,7 +127,11 @@ class GameVC: UIViewController, Alertable {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(trackersArray.count) * 0.15) {
-            self.setupPlayerTurn()
+            if self.isEndOfGameTurn {
+                self.performSegue(withIdentifier: "showEndGame", sender: nil)
+            } else {
+                self.setupPlayerTurn()
+            }
         }
     }
     

@@ -63,7 +63,7 @@ class HomeVC: UIViewController, Alertable {
     override func viewWillAppear(_ animated: Bool) {
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         checkTheme()
-        layoutView()
+        layoutMenuButton()
         checkUsername(forKey: currentUserID)
     }
 

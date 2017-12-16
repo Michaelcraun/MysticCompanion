@@ -14,7 +14,7 @@ extension LoginVC {
         layoutBackgroundImage()
         layoutLogo()
         layoutUserForm()
-        layoutSettingsButton()
+        layoutMenuButton()
     }
     
     func layoutBackgroundImage() {
@@ -106,9 +106,10 @@ extension LoginVC {
         passwordField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
     }
     
-    func layoutSettingsButton() {
+    func layoutMenuButton() {
         settingsButton.setMenuButtonColor()
         settingsButton.setPaddingY()
+        settingsButton.items = []
         
         let settings = KCFloatingActionButtonItem()
         settings.setButtonOfType(.settings)

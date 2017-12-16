@@ -14,15 +14,11 @@ import GMStepper
 
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
-        for subview in view.subviews {
-            subview.removeFromSuperview()
-        }
-        
         layoutBackgroundImage()
         layoutPlayerIcon()
         layoutPlayerName()
         layoutDeckChoices()
-        layoutStartButtons()
+        layoutMenuButton()
         layoutBannerAds()
     }
     
@@ -113,7 +109,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         deckChoicesStackView.widthAnchor.constraint(equalToConstant: 230).isActive = true
     }
     
-    func layoutStartButtons() {
+    func layoutMenuButton() {
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
         menuButton.items = []
