@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMobileAds
 import KCFloatingActionButton
+import GMStepper
 
 class EndGameVC: UIViewController {
     
@@ -25,11 +26,23 @@ class EndGameVC: UIViewController {
     let playersTable = UITableView()
     let adBanner = GADBannerView()
     let menuButton = KCFloatingActionButton()
+    var shouldDisplayStepper = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupGameAndObserve()
         layoutView()
+    }
+    
+    func donePressed() {
+        self.shouldDisplayStepper = false
+        let stepper = self.view.viewWithTag(4040) as! GMStepper
+        let deckVP = Int(stepper.value)
+        self.updateUsersVictoryPoints(forUser: Player.instance.username, withDeckVP: deckVP)
+        //TODO: update victory label
+        //TODO: remove stepper from cell
+        //TODO: update firebase
+        self.playersTable.reloadData()
     }
 }

@@ -35,5 +35,24 @@ class GameHandler {
         REF_GAME.child(key).removeValue()
     }
     
+    func removeFromGame(_ key: String, withUser username: String) {
+        var newPlayersArray = [Dictionary<String,AnyObject>]()
+        GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == key {
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    for player in playersArray {
+                        guard let fbPlayerUsername = player["username"] as? String else { return }
+                        if fbPlayerUsername != username {
+                            newPlayersArray.append(player)
+                        }
+                    }
+                    self.updateFirebaseDBGame(key: game.key, gameData: ["players" : newPlayersArray])
+                }
+            }
+        })
+    }
+    
     var game = [String : AnyObject]()
 }

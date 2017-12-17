@@ -36,4 +36,18 @@ class Player: PlayerDelegate {
     var wildConstant: Int = 0
     var currentVP: Int = 0
     var boxVP: Int = 0
+    
+    func reinitialize() {
+        username = ""
+        deck = nil
+        manaConstant = 0
+        decayConstant = 0
+        growthConstant = 0
+        animalConstant = 0
+        forestConstant = 0
+        skyConstant = 0
+        wildConstant = 0
+        currentVP = 0
+        boxVP = 0
+    }
 }

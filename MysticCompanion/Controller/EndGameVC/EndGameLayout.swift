@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import GoogleMobileAds
 import KCFloatingActionButton
+import GMStepper
+import GoogleMobileAds
 
 extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
@@ -69,19 +70,22 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         
         let done = KCFloatingActionButtonItem()
         done.setButtonOfType(.done)
-        settings.handler = { item in
-            //TODO: update victory label
-            //TODO: remove stepper from cell
-            //TODO: update firebase
+        done.handler = { item in
+            self.donePressed()
         }
         
         let quit = KCFloatingActionButtonItem()
         quit.setButtonOfType(.quitGame)
         quit.handler = { item in
             //TODO: Handle exiting game
+            guard let game = GameHandler.instance.game["game"] as? String else { return }
+            GameHandler.instance.removeFromGame(game, withUser: Player.instance.username)
+            Player.instance.reinitialize()
+            //TODO: "Segue" to rootViewController
         }
         
         menuButton.addItem(item: settings)
+        menuButton.addItem(item: done)
         menuButton.addItem(item: quit)
         
         view.addSubview(menuButton)
@@ -112,7 +116,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "endGamePlayersCell") as! EndGamePlayersCell
         //TODO: Configure cell
-        cell.configureCell(forPlayer: players[indexPath.row])
+        cell.configureCell(forPlayer: players[indexPath.row], shouldDisplayStepper: shouldDisplayStepper)
         return cell
     }
     
