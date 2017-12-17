@@ -77,7 +77,6 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         let quit = KCFloatingActionButtonItem()
         quit.setButtonOfType(.quitGame)
         quit.handler = { item in
-            //TODO: Handle exiting game
             guard let game = GameHandler.instance.game["game"] as? String else { return }
             GameHandler.instance.removeFromGame(game, withUser: Player.instance.username)
             Player.instance.reinitialize()

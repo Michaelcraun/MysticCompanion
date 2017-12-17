@@ -141,7 +141,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 
                 self.present(composeVC, animated: true, completion: nil)
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "Your device is not able to send email.")
+                self.showAlert(withTitle: "Error:", andMessage: "Your device is not able to send email.", andNotificationType: .error)
             }
         }
         

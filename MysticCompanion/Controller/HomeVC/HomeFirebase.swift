@@ -124,7 +124,7 @@ extension HomeVC {
                                     }
                                 }
                                 if isInGame {
-                                    self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!")
+                                    self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!", andNotificationType: .error)
                                 } else {
                                     self.players.append(userData)
                                 }
@@ -135,7 +135,7 @@ extension HomeVC {
                             } else {
                                 print("game is full")
                                 //TODO: Test gameIsFull error
-                                self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.")
+                                self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.", andNotificationType: .error)
                             }
                         }
                     }

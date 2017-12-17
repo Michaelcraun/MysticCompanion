@@ -7,16 +7,43 @@
 //
 
 import UIKit
+import AudioToolbox.AudioServices
+
+enum NotificationType {
+    case endOfGame
+    case error
+    case success
+    case turnChange
+}
 
 protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
-    func showAlert(withTitle title: String, andMessage message: String) {
+    func showAlert(withTitle title: String, andMessage message: String, andNotificationType type: NotificationType) {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         blurEffectView.tag = 1001
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        //TODO: Test
+        switch UIDevice.current.notificationDevice {
+        case .haptic:
+            let notification = UINotificationFeedbackGenerator()
+            switch type {
+            case .endOfGame: notification.notificationOccurred(.warning)
+            case .error: notification.notificationOccurred(.error)
+            case .success: notification.notificationOccurred(.success)
+            case .turnChange: notification.notificationOccurred(.warning)
+            }
+        case .vibrate:
+            let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
+            switch type {
+            case .turnChange: AudioServicesPlaySystemSound(vibrate)
+            default: break
+            }
+        default: break
+        }
         
         view.addSubview(blurEffectView)
         
@@ -29,7 +56,6 @@ extension Alertable where Self: UIViewController {
             }
             
             if alertController.message == "You ended the game. Please wait for the other players to complete their turns." {
-                print("performing segue from showAlert()...")
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             }
         })

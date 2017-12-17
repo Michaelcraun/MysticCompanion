@@ -39,10 +39,7 @@ class EndGameVC: UIViewController {
         self.shouldDisplayStepper = false
         let stepper = self.view.viewWithTag(4040) as! GMStepper
         let deckVP = Int(stepper.value)
-        self.updateUsersVictoryPoints(forUser: Player.instance.username, withDeckVP: deckVP)
-        //TODO: update victory label
-        //TODO: remove stepper from cell
-        //TODO: update firebase
+        self.updateUser(Player.instance.username, withDeckVP: deckVP)
         self.playersTable.reloadData()
     }
 }

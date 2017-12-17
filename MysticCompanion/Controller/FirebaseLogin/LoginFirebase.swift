@@ -18,49 +18,43 @@ extension LoginVC: Alertable {
                     if error == nil {
                         if let user = user {
                             let userData = ["provider" : user.providerID,
-                                            "username" : username,
-                                            "isLookingForGame" : false,
-                                            "isHostingGame" : false] as [String : Any]
+                                            "username" : username]
                             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                         }
-                        print("email user successfully authenticated with firebase.")
                         self.dismiss(animated: true, completion: nil)
                     } else {
                         let alertTitle = "Firebase Error:"
                         if let errorCode = FIRAuthErrorCode(rawValue: error!._code) {
                             switch errorCode {
-                            case .errorCodeEmailAlreadyInUse: self.showAlert(withTitle: alertTitle, andMessage: "That email is already in use. Pleas try again.")
-                            case .errorCodeWrongPassword: self.showAlert(withTitle: alertTitle, andMessage: "That email is already in use. Pleas try again.")
-                            case .errorCodeInvalidEmail: self.showAlert(withTitle: alertTitle, andMessage: "That is an invalid email. Please try again.")
+                            case .errorCodeEmailAlreadyInUse: self.showAlert(withTitle: alertTitle, andMessage: "That email is already in use. Pleas try again.", andNotificationType: .error)
+                            case .errorCodeWrongPassword: self.showAlert(withTitle: alertTitle, andMessage: "That email is already in use. Please try again.", andNotificationType: .error)
+                            case .errorCodeInvalidEmail: self.showAlert(withTitle: alertTitle, andMessage: "That is an invalid email. Please try again.", andNotificationType: .error)
                             case .errorCodeUserNotFound:
                                 FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
                                     if error != nil {
                                         if let errorCode = FIRAuthErrorCode(rawValue: error!._code) {
                                             switch errorCode {
-                                            case .errorCodeInvalidEmail: self.showAlert(withTitle: alertTitle, andMessage: "That is an invalid email. Please try again.")
-                                            default: self.showAlert(withTitle: alertTitle, andMessage: "There was an unexpected error. Please try again.")
+                                            case .errorCodeInvalidEmail: self.showAlert(withTitle: alertTitle, andMessage: "That is an invalid email. Please try again.", andNotificationType: .error)
+                                            default: self.showAlert(withTitle: alertTitle, andMessage: "There was an unexpected error. Please try again.", andNotificationType: .error)
                                             }
                                         }
                                     } else {
                                         if let user = user {
                                             let userData = ["provider" : user.providerID,
-                                                            "username" : username,
-                                                            "isLookingForGame" : false,
-                                                            "isHostingGame" : false] as [String : Any]
+                                                            "username" : username]
                                             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                                         }
-                                        print("successfully created a new firebase user.")
                                         self.dismiss(animated: true, completion: nil)
                                     }
                                 })
-                            default: self.showAlert(withTitle: alertTitle, andMessage: "There was an unexpected error. Please try again.")
+                            default: self.showAlert(withTitle: alertTitle, andMessage: "There was an unexpected error. Please try again.", andNotificationType: .error)
                             }
                         }
                     }
                 })
             }
         } else {
-            showAlert(withTitle: "Error:", andMessage: "Please provide a username, valid email, and password!")
+            showAlert(withTitle: "Error:", andMessage: "Please provide a username, valid email, and password!", andNotificationType: .error)
         }
     }
 }

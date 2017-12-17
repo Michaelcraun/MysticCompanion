@@ -8,7 +8,12 @@
 
 import UIKit
 
-public extension UIDevice {
+public extension UIDevice {enum NotificationDevice {
+    case haptic
+    case vibrate
+    case none
+    }
+    
     var modelName: String {
         var systemInfo = utsname()
         uname(&systemInfo)
@@ -56,6 +61,14 @@ public extension UIDevice {
         switch UIDevice.current.modelName {
         case "iPhoneX" : return 80
         default: return 20
+        }
+    }
+    
+    var notificationDevice: NotificationDevice {
+        switch UIDevice.current.modelName {
+        case "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X": return .haptic
+        case "iPod Touch 5", "iPod Touch 6", "iPhone 4", "iPhone 5", "iPhone 5c", "iPhone 5s", "iPhone SE": return .vibrate
+        default: return .none
         }
     }
 }

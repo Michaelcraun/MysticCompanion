@@ -36,7 +36,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             request.delegate = self
             request.start()
         } else {
-            showAlert(withTitle: "In-App Purchases Diabled.", andMessage: "Please enable in-app purchases to access the full features of this app.")
+            showAlert(withTitle: "In-App Purchases Diabled.", andMessage: "Please enable in-app purchases to access the full features of this app.", andNotificationType: .error)
         }
     }
     
@@ -65,7 +65,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             }
         }
 //        shouldPresentLoadingView(false)
-        showAlert(withTitle: "Purchases Restored", andMessage: "Your purchases have been restored. Thank you.")
+        showAlert(withTitle: "Purchases Restored", andMessage: "Your purchases have been restored. Thank you.", andNotificationType: .success)
         NetworkIndicator.networkOperationFinished()
     }
     
@@ -85,10 +85,10 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                     layoutView()
                 default: break
                 }
-                showAlert(withTitle: "Purchase Complete", andMessage: "Thank you for purchasing!")
+                showAlert(withTitle: "Purchase Complete", andMessage: "Thank you for purchasing!", andNotificationType: .success)
                 queue.finishTransaction(trans)
             case .failed:
-                showAlert(withTitle: "Transaction Failed", andMessage: "Please try again later or contact support.")
+                showAlert(withTitle: "Transaction Failed", andMessage: "Please try again later or contact support.", andNotificationType: .success)
                 queue.finishTransaction(trans)
             default: break
             }

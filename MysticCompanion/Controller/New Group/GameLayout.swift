@@ -183,22 +183,20 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
             if self.currentPlayer == Player.instance.username {
                 self.endPlayerTurn()
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.")
+                self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.", andNotificationType: .error)
             }
         }
         
         let quitGame = KCFloatingActionButtonItem()
         quitGame.setButtonOfType(.quitGame)
         quitGame.handler = { item in
-            //TODO: Functionality for user quitting current game
-            //Reinitialize game and remove user from all games
-            //removeUserFromAllGames(forUser user: String)
+            //TODO: Handle when user exits the game
         }
         
         let endGame = KCFloatingActionButtonItem()
         endGame.setButtonOfType(.endGame)
         endGame.handler = { item in
-            //TODO: Functionality for host ending game
+            //TODO: Functionality for when host exits the game
 //            guard let gameKey = self.game["game"] as? String else { return }
 //            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
             //Segue to EndGameVC
@@ -207,13 +205,11 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         menuButton.addItem(item: settings)
         menuButton.addItem(item: endTurn)
         guard let host = GameHandler.instance.game["username"] as? String else { return }
-//        if let host = game["username"] as? String {
-            if host == Player.instance.username {
-                menuButton.addItem(item: endGame)
-            } else {
-                menuButton.addItem(item: quitGame)
-            }
-//        }
+        if host == Player.instance.username {
+            menuButton.addItem(item: endGame)
+        } else {
+            menuButton.addItem(item: quitGame)
+        }
         
         view.addSubview(menuButton)
     }
