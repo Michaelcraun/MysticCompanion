@@ -35,6 +35,11 @@ class EndGameVC: UIViewController {
         layoutView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        checkTheme()
+        layoutMenuButton()
+    }
+    
     func donePressed() {
         self.shouldDisplayStepper = false
         let stepper = self.view.viewWithTag(4040) as! GMStepper

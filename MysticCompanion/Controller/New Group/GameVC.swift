@@ -65,6 +65,7 @@ class GameVC: UIViewController, Alertable {
     let victoryTracker = TrackerView()
     let wildTracker = TrackerView()
     var trackersArray = [TrackerView]()
+    var userQuitGame = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +78,10 @@ class GameVC: UIViewController, Alertable {
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
         layoutEndTurnButton()
+        
+        if userQuitGame {
+            dismiss(animated: false, completion: nil)
+        }
     }
     
     func setupPlayerTurn() {

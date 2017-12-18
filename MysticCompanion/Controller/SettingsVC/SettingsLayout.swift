@@ -14,10 +14,6 @@ import MessageUI
 
 extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate, UITableViewDelegate {
     func layoutView() {
-        for subview in view.subviews {
-            subview.removeFromSuperview()
-        }
-        
         layoutBackgroundImage()
         layoutTopBanner()
         

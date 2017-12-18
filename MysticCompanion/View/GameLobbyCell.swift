@@ -53,8 +53,6 @@ class GameLobbyCell: UITableViewCell {
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
         guard let username = user["username"] as? String else { return }
         guard let deck = user["deck"] as? String else { return }
-//        let deck = user["deck"] as! String
-//        let username = user["username"] as! String
         var deckType: DeckType? {
             switch deck {
             case "beasebrothers": return .beastbrothers
@@ -103,18 +101,88 @@ class GameLobbyCell: UITableViewCell {
     func layoutCellForGuest(withGame game: Dictionary<String,Any>) {
         clearCell()
         
-        let hostName = game["username"] as? String
-        let winCondition = game["winCondition"] as! String
-        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else {
-            print("no players...?")
-            return
+        var decksTaken = ["beastbrothers" : false,
+                          "dawnseekers" : false,
+                          "lifewardens" : false,
+                          "waveguards" : false]
+        guard let hostName = game["username"] as? String else { return }
+        guard let winCondition = game["winCondition"] as? String else { return }
+        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
+        for player in playersArray {
+            guard let deck = player["deck"] as? String else { return }
+            decksTaken[deck] = true
         }
+        
+        let deckStack = UIStackView()
+        deckStack.alignment = .center
+        deckStack.axis = .horizontal
+        deckStack.spacing = 5
+        deckStack.distribution = .fillEqually
+        deckStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        var beastbrothersColor: UIColor? {
+            switch decksTaken["beastborthers"] {
+            case true?: return DeckType.beastbrothers.secondaryColor
+            case false?: return DeckType.beastbrothers.color
+            default: return nil
+            }
+        }
+        
+        var dawnseekersColor: UIColor? {
+            switch decksTaken["dawnseekers"] {
+            case true?: return DeckType.dawnseekers.secondaryColor
+            case false?: return DeckType.dawnseekers.color
+            default: return nil
+            }
+        }
+        
+        var lifewardensColor: UIColor? {
+            switch decksTaken["lifewardens"] {
+            case true?: return DeckType.lifewardens.secondaryColor
+            case false?: return DeckType.lifewardens.color
+            default: return nil
+            }
+        }
+        
+        var waveguardsColor: UIColor? {
+            switch decksTaken["waveguards"] {
+            case true?: return DeckType.waveguards.secondaryColor
+            case false?: return DeckType.waveguards.color
+            default: return nil
+            }
+        }
+        
+        let beastbrothers = CircleView()
+        beastbrothers.addBorder()
+        beastbrothers.backgroundColor = beastbrothersColor
+        beastbrothers.translatesAutoresizingMaskIntoConstraints = false
+        
+        let dawnseekers = CircleView()
+        dawnseekers.addBorder()
+        dawnseekers.backgroundColor = dawnseekersColor
+        dawnseekers.translatesAutoresizingMaskIntoConstraints = false
+        
+        let lifewardens = CircleView()
+        lifewardens.addBorder()
+        lifewardens.backgroundColor = lifewardensColor
+        lifewardens.translatesAutoresizingMaskIntoConstraints = false
+        
+        let waveguards = CircleView()
+        waveguards.addBorder()
+        waveguards.backgroundColor = waveguardsColor
+        waveguards.translatesAutoresizingMaskIntoConstraints = false
+        
+        deckStack.addArrangedSubview(beastbrothers)
+        deckStack.addArrangedSubview(dawnseekers)
+        deckStack.addArrangedSubview(lifewardens)
+        deckStack.addArrangedSubview(waveguards)
         
         let gameHostLabel = UILabel()
         gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
-        gameHostLabel.text = hostName!
+        gameHostLabel.text = hostName
         gameHostLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        //TODO: Switch on winCondition to display VP Goal if custom?
         let winConditionLabel = UILabel()
         winConditionLabel.font = UIFont(name: fontFamily, size: 12)
         winConditionLabel.textAlignment = .right
@@ -141,15 +209,22 @@ class GameLobbyCell: UITableViewCell {
         self.addSubview(gameHostLabel)
         self.addSubview(winConditionLabel)
         self.addSubview(playersLabel)
+        self.addSubview(deckStack)
         
         gameHostLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         gameHostLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         
-        winConditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        winConditionLabel.bottomAnchor.constraint(equalTo: playersLabel.topAnchor, constant: -5)
         winConditionLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         
         playersLabel.topAnchor.constraint(equalTo: gameHostLabel.bottomAnchor, constant: 5).isActive = true
         playersLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         playersLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        
+        deckStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        deckStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//        deckStack.leftAnchor.constraint(equalTo: gameHostLabel.rightAnchor, constant: 5).isActive = true
+        deckStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        deckStack.widthAnchor.constraint(equalToConstant: 135).isActive = true
     }
 }

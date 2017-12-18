@@ -54,7 +54,6 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.dataSource = self
         playersTable.delegate = self
         playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "playersTableCell")
-        playersTable.rowHeight = 27.5
         playersTable.separatorStyle = .none
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
@@ -190,7 +189,9 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let quitGame = KCFloatingActionButtonItem()
         quitGame.setButtonOfType(.quitGame)
         quitGame.handler = { item in
-            //TODO: Handle when user exits the game
+            GameHandler.instance.quitGameForUser(Player.instance.username)
+            self.userQuitGame = true
+            self.dismiss(animated: true, completion: nil)
         }
         
         let endGame = KCFloatingActionButtonItem()
@@ -240,5 +241,9 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return players.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 27.5
     }
 }

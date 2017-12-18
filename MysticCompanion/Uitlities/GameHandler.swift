@@ -35,6 +35,12 @@ class GameHandler {
         REF_GAME.child(key).removeValue()
     }
     
+    func quitGameForUser(_ username: String) {
+        guard let game = game["game"] as? String else { return }
+        removeFromGame(game, withUser: username)
+        Player.instance.reinitialize()
+    }
+    
     func removeFromGame(_ key: String, withUser username: String) {
         var newPlayersArray = [Dictionary<String,AnyObject>]()
         GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in

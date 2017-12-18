@@ -40,7 +40,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.allowsSelection = false
         playersTable.register(EndGamePlayersCell.self, forCellReuseIdentifier: "endGamePlayersCell")
         playersTable.separatorStyle = .none
-        playersTable.backgroundColor = .orange
+        playersTable.backgroundColor = .clear
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(playersTable)
@@ -61,6 +61,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutMenuButton() {
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
+        menuButton.items = []
         
         let settings = KCFloatingActionButtonItem()
         settings.setButtonOfType(.settings)
@@ -72,20 +73,23 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         done.setButtonOfType(.done)
         done.handler = { item in
             self.donePressed()
+            self.layoutMenuButton()
         }
         
         let quit = KCFloatingActionButtonItem()
         quit.setButtonOfType(.quitGame)
         quit.handler = { item in
-            guard let game = GameHandler.instance.game["game"] as? String else { return }
-            GameHandler.instance.removeFromGame(game, withUser: Player.instance.username)
-            Player.instance.reinitialize()
-            //TODO: "Segue" to rootViewController
+            GameHandler.instance.quitGameForUser(Player.instance.username)
+            let gameVC = GameVC()
+            gameVC.userQuitGame = true
         }
         
         menuButton.addItem(item: settings)
-        menuButton.addItem(item: done)
-        menuButton.addItem(item: quit)
+        if shouldDisplayStepper {
+            menuButton.addItem(item: done)
+        } else {
+            menuButton.addItem(item: quit)
+        }
         
         view.addSubview(menuButton)
     }

@@ -8,7 +8,8 @@
 
 import UIKit
 
-public extension UIDevice {enum NotificationDevice {
+public extension UIDevice {
+    enum NotificationDevice {
     case haptic
     case vibrate
     case none
@@ -59,7 +60,7 @@ public extension UIDevice {enum NotificationDevice {
     
     var topLayoutBuffer: CGFloat {
         switch UIDevice.current.modelName {
-        case "iPhoneX" : return 80
+        case "iPhoneX" : return 100
         default: return 20
         }
     }

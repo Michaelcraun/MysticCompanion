@@ -24,9 +24,9 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        checkTheme()
         layoutView()
-        //TODO: Add tapToDismissKeyboard
+        //TODO: Test tapToDismissKeyboard
+        backgroundImage.addTapToDismissKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {

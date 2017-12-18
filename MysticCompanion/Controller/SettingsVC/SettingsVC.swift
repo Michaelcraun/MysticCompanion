@@ -34,13 +34,13 @@ class SettingsVC: UIViewController {
         super.viewDidLoad()
 
         attemptGameFetch()
-        previousGamesTable.reloadData()
-        checkTheme()
         layoutView()
     }
     
     func setTheme(_ theme: SystemColor) {
         defaults.set(theme.rawValue, forKey: "theme")
-        self.viewDidLoad()
+        checkTheme()
+        layoutSettingsButton()
+        previousGamesTable.reloadData()
     }
 }

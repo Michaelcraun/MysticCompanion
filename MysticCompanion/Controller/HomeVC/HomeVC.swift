@@ -28,7 +28,6 @@ class HomeVC: UIViewController, Alertable {
     
     //MARK: Firebase Variables
     var currentUserID: String? = nil
-//    var username: String? = nil
     var userIsHostingGame = false
     var nearbyGames = [Dictionary<String,AnyObject>]() {
         didSet {
@@ -40,10 +39,8 @@ class HomeVC: UIViewController, Alertable {
             gameLobbyTable.reloadData()
         }
     }
-//    var selectedGame: Dictionary<String,AnyObject>? = nil
     
     //MARK: Game Variables
-//    let player = Player()
     var winCondition = ""
     
     //MARK: MapKit Variables
@@ -65,6 +62,39 @@ class HomeVC: UIViewController, Alertable {
         checkTheme()
         layoutMenuButton()
         checkUsername(forKey: currentUserID)
+    }
+    
+    func setPlayerIcon(withDeck deck: DeckType) {
+        Player.instance.deck = deck
+        UIView.animate(withDuration: 0.5, animations: {
+            self.playerIcon.alpha = 0
+        }) { (success) in
+            self.playerIcon.backgroundColor = deck.color
+            self.playerIcon.addImage(deck.image, withWidthModifier: 20)
+            UIView.animate(withDuration: 0.5, animations: {
+                self.playerIcon.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
+    func joinGamePressed() {
+        self.userIsHostingGame = false
+        let userLoaction = self.locationManager.location
+        self.layoutGameLobby()
+        self.nearbyGames = []
+        self.observeGames(withUserLocation: userLoaction!)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "startGame" {
+            if let destination = segue.destination as? GameVC {
+                switch winCondition {
+                case "standard": destination.vpGoal += players.count * 5
+                case "custom": destination.vpGoal = 13
+                default: break
+                }
+            }
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

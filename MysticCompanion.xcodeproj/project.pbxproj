@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		43B1A16DCD40CCF439AD3AF6 /* Pods_MysticCompanion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */; };
-		9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */; };
 		9B0D31FC1FCDC581006F7805 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31FB1FCDC581006F7805 /* LoginVC.swift */; };
 		9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D31FD1FCDEAEE006F7805 /* LoginLayout.swift */; };
 		9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D32031FCE0C74006F7805 /* EndGameVC.swift */; };
@@ -52,7 +51,6 @@
 
 /* Begin PBXFileReference section */
 		66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MysticCompanion.release.xcconfig"; path = "Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion.release.xcconfig"; sourceTree = "<group>"; };
-		9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFunctions.swift; sourceTree = "<group>"; };
 		9B0D31FB1FCDC581006F7805 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		9B0D31FD1FCDEAEE006F7805 /* LoginLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginLayout.swift; sourceTree = "<group>"; };
 		9B0D32031FCE0C74006F7805 /* EndGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameVC.swift; sourceTree = "<group>"; };
@@ -254,7 +252,6 @@
 			isa = PBXGroup;
 			children = (
 				9BC7BFEB1FCC6506005741CD /* HomeVC.swift */,
-				9B0D31F61FCDB67D006F7805 /* HomeFunctions.swift */,
 				9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */,
 				9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */,
 				9BC7C0081FCC7534005741CD /* HomeFirebase.swift */,
@@ -420,7 +417,6 @@
 			files = (
 				9B0D320E1FCE4EFF006F7805 /* SettingsLayout.swift in Sources */,
 				9B0D32171FD0240C006F7805 /* SettingsCoreData.swift in Sources */,
-				9B0D31F71FCDB67D006F7805 /* HomeFunctions.swift in Sources */,
 				9BC7C0051FCC6F1B005741CD /* CircleView.swift in Sources */,
 				9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */,
 				9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */,

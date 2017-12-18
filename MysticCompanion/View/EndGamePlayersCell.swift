@@ -16,6 +16,12 @@ class EndGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.backgroundColor = .clear
+    }
+    
     func clearCell() {
         for subview in self.subviews {
             subview.removeFromSuperview()
