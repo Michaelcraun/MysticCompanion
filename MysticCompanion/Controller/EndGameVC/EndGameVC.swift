@@ -14,8 +14,6 @@ import GMStepper
 class EndGameVC: UIViewController {
     
     //MARK: Firebase Variables
-//    var game = Dictionary<String,AnyObject>()
-    //TODO: players is nil when VC is initialized... This is causing the NaN error
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
             playersTable.reloadData()

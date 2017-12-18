@@ -18,7 +18,6 @@ extension HomeVC {
                 for user in userSnapshot {
                     if user.key == key {
                         guard let username = user.childSnapshot(forPath: "username").value as? String else { return }
-//                        self.username = username
                         Player.instance.username = username
                         self.playerName.text = username
                     }
@@ -179,6 +178,7 @@ extension HomeVC {
         self.players = []
         self.players.append(["username" : Player.instance.username as AnyObject,
                              "deck" : Player.instance.deck?.rawValue as AnyObject,
+                             "finished" : false as AnyObject,
                              "victoryPoints" : 0 as AnyObject,
                              "boxVictory" : 0 as AnyObject])
         let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,

@@ -60,5 +60,9 @@ class GameHandler {
         })
     }
     
-    var game = [String : AnyObject]()
+    var game = [String : AnyObject]() {
+        willSet (newGame) {
+            
+        }
+    }
 }

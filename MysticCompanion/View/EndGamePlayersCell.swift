@@ -29,6 +29,7 @@ class EndGamePlayersCell: UITableViewCell {
     }
     
     func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool) {
+        print(player)
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
         guard let currentVP = player["victoryPoints"] as? Int else { return }

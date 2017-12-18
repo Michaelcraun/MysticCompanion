@@ -43,7 +43,7 @@ class GameVC: UIViewController, Alertable {
     var playerIndex = 0
     var currentPlayer = "" {
         didSet {
-            if currentPlayer == Player.instance.username {
+            if currentPlayer == Player.instance.username && !isEndOfGameTurn {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
             }
         }
@@ -124,9 +124,11 @@ class GameVC: UIViewController, Alertable {
         
         let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
                                                       "deck" : Player.instance.deck?.rawValue as AnyObject,
+                                                      "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
-        updateFirebaseDBGame(withUserData: userData)
+//        updateFirebaseDBGame(withUserData: userData)
+        passTurn(withUserData: userData)
         
         var delay: TimeInterval = 0.0
         for i in 0..<trackersArray.count {
