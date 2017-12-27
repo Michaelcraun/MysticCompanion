@@ -20,6 +20,7 @@ protocol PlayerDelegate {
     var wildConstant: Int { get set }
     var currentVP: Int { get set }
     var boxVP: Int { get set }
+    var hasSpoiled: Bool { get set }
 }
 
 class Player: PlayerDelegate {
@@ -36,6 +37,7 @@ class Player: PlayerDelegate {
     var wildConstant: Int = 0
     var currentVP: Int = 0
     var boxVP: Int = 0
+    var hasSpoiled: Bool = false
     
     func reinitialize() {
         username = ""
@@ -49,5 +51,6 @@ class Player: PlayerDelegate {
         wildConstant = 0
         currentVP = 0
         boxVP = 0
+        hasSpoiled = false
     }
 }

@@ -86,10 +86,14 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         
         decayTracker.initTrackerOfType(.decay)
         decayTracker.alpha = 0
+//        decayTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .valueChanged)
+        decayTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: UIControlEvents.allEvents)
         decayTracker.translatesAutoresizingMaskIntoConstraints = false
         
         growthTracker.initTrackerOfType(.growth)
         growthTracker.alpha = 0
+//        growthTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .valueChanged)
+        growthTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .touchUpInside)
         growthTracker.translatesAutoresizingMaskIntoConstraints = false
         
         animalTracker.initTrackerOfType(.animal)

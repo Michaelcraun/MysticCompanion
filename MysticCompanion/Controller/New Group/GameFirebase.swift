@@ -26,8 +26,6 @@ extension GameVC {
             for game in gameSnapshot {
                 if game.key == gameKey {
                     guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
-                    GameHandler.instance.game = gameDict
-                    
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
                     
@@ -36,6 +34,8 @@ extension GameVC {
                         guard let playerVictory = player["victoryPoints"] as? Int else { return }
                         victoryTaken += playerVictory
                     }
+                    
+                    GameHandler.instance.game = gameDict
                     self.players = playersArray
                     self.currentPlayer = currentPlayer
                     self.victoryTaken = victoryTaken

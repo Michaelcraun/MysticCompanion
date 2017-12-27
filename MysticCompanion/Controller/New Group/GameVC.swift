@@ -17,7 +17,6 @@ class GameVC: UIViewController, Alertable {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
             if victoryTaken >= vpGoal {
-                print("end of game")
                 let endingPlayer = players[0]
                 if let endingPlayerUsername = endingPlayer["username"] as? String {
                     self.endingPlayerUsername = endingPlayerUsername
@@ -43,8 +42,11 @@ class GameVC: UIViewController, Alertable {
     var playerIndex = 0
     var currentPlayer = "" {
         didSet {
-            if currentPlayer == Player.instance.username && !isEndOfGameTurn {
+            if currentPlayer == Player.instance.username {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
+                if isEndOfGameTurn {
+                    dismiss(animated: false, completion: nil)
+                }
             }
         }
     }
@@ -88,6 +90,7 @@ class GameVC: UIViewController, Alertable {
         if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
         } else {
+            Player.instance.hasSpoiled = false
             manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
             manaTracker.constantStepper.value = Double(Player.instance.manaConstant)
             decayTracker.currentStepper.value = Double(Player.instance.decayConstant)
@@ -113,21 +116,22 @@ class GameVC: UIViewController, Alertable {
     }
     
     func endPlayerTurn() {
-        Player.instance.manaConstant = Int(manaTracker.constantStepper.value)
-        Player.instance.decayConstant = Int(decayTracker.constantStepper.value)
-        Player.instance.growthConstant = Int(growthTracker.constantStepper.value)
-        Player.instance.animalConstant = Int(animalTracker.constantStepper.value)
-        Player.instance.forestConstant = Int(forestTracker.constantStepper.value)
-        Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
-        Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
-        Player.instance.currentVP = Int(victoryTracker.currentStepper.value) - Player.instance.boxVP
+        if !Player.instance.hasSpoiled {
+            Player.instance.manaConstant = Int(manaTracker.constantStepper.value)
+            Player.instance.decayConstant = Int(decayTracker.constantStepper.value)
+            Player.instance.growthConstant = Int(growthTracker.constantStepper.value)
+            Player.instance.animalConstant = Int(animalTracker.constantStepper.value)
+            Player.instance.forestConstant = Int(forestTracker.constantStepper.value)
+            Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
+            Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
+            Player.instance.currentVP = Int(victoryTracker.currentStepper.value) - Player.instance.boxVP
+        }
         
         let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
                                                       "deck" : Player.instance.deck?.rawValue as AnyObject,
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
-//        updateFirebaseDBGame(withUserData: userData)
         passTurn(withUserData: userData)
         
         var delay: TimeInterval = 0.0
@@ -143,5 +147,23 @@ class GameVC: UIViewController, Alertable {
                 self.setupPlayerTurn()
             }
         }
+    }
+    
+    @objc func checkForSpoil(sender: GMStepper) {
+        print("value changed")
+        let currentDecay = decayTracker.currentStepper.value
+        let currentGrowth = growthTracker.currentStepper.value
+        
+        if currentDecay - 3 > currentGrowth && !Player.instance.hasSpoiled {
+            Player.instance.hasSpoiled = true
+            showAlertWithOptions(withTitle: "Spoiled", andMessage: "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn.", andNotificationType: .error)
+            
+            switch sender {
+            case decayTracker.currentStepper: decayTracker.currentStepper.value -= 1
+            case growthTracker.currentStepper: growthTracker.currentStepper.value += 1
+            default: break
+            }
+        }
+        sender.reset()
     }
 }

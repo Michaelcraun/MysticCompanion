@@ -299,7 +299,7 @@ import UIKit
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
 
-        NotificationCenter.default.addObserver(self, selector: #selector(GMStepper.reset), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(GMStepper.reset), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
 
     public override func layoutSubviews() {
@@ -394,7 +394,7 @@ extension GMStepper {
         }
     }
 
-    @objc func reset() {
+    @objc open func reset() {
         panState = .Stable
         stepperState = .Stable
         resetTimer()
