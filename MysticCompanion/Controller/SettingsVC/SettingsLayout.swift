@@ -232,38 +232,42 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let games = controller.fetchedObjects, games.count > 0 {
-            return games.count
+        if previousGames.count > 0 {
+            return previousGames.count
         } else {
             return 1
         }
+        
+//        if let games = controller.fetchedObjects, games.count > 0 {
+//            return games.count
+//        } else {
+//            return 1
+//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "previousGameCell") as! PreviousGameCell
-        if let games = controller.fetchedObjects, games.count > 0 {
-            cell.layoutGame(game: games[indexPath.row])
+        if previousGames.count > 0 {
+            cell.layoutGame(game: previousGames[indexPath.row])
         } else {
             cell.layoutEmptyCell()
         }
+        
+//        if let games = controller.fetchedObjects, games.count > 0 {
+//            cell.layoutGame(game: games[indexPath.row])
+//        } else {
+//            cell.layoutEmptyCell()
+//        }
+
         return cell
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
-            if let games = self.controller.fetchedObjects, games.count > 0 {
-                let game = games[indexPath.row]
-                context.delete(game)
-                ad.saveContext()
-                self.attemptGameFetch()
-                self.previousGamesTable.deleteRows(at: [indexPath], with: .automatic)
-            }
-        }
-        
         let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
             //TODO: Add Share Functionality
         }
-        return [delete, share]
+        
+        return [share]
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -18,10 +18,12 @@ class GameHandler {
     private var _REF_BASE = DB_BASE
     private var _REF_USER = DB_BASE.child("user")
     private var _REF_GAME = DB_BASE.child("game")
+    private var _REF_DATA = DB_BASE.child("data")
     
     var REF_BASE: FIRDatabaseReference { return _REF_BASE }
     var REF_USER: FIRDatabaseReference { return _REF_USER }
     var REF_GAME: FIRDatabaseReference { return _REF_GAME }
+    var REF_DATA: FIRDatabaseReference { return _REF_DATA }
     
     func createFirebaseDBUser(uid: String, userData: Dictionary<String,Any>) {
         REF_USER.child(uid).updateChildValues(userData)
@@ -31,13 +33,26 @@ class GameHandler {
         REF_GAME.child(key).updateChildValues(gameData)
     }
     
+    func createFirebaseDBData() {
+        guard let gameKey = game["game"] as? String else { return }
+        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
+        /* TODO: Store less information on Firebase, such as:
+         * winner
+         */
+        
+        let gameInfo: Dictionary<String,AnyObject> = ["players" : playersArray as AnyObject,
+                                                      "winner" : "" as AnyObject]
+        
+        REF_DATA.child(gameKey).updateChildValues(gameInfo)
+    }
+    
     func clearCurrentGamesFromFirebaseDB(forKey key: String) {
         REF_GAME.child(key).removeValue()
     }
     
     func quitGameForUser(_ username: String) {
-        guard let game = game["game"] as? String else { return }
-        removeFromGame(game, withUser: username)
+        guard let gameKey = game["game"] as? String else { return }
+        removeFromGame(gameKey, withUser: username)
         Player.instance.reinitialize()
     }
     
@@ -60,9 +75,5 @@ class GameHandler {
         })
     }
     
-    var game = [String : AnyObject]() {
-        willSet (newGame) {
-            
-        }
-    }
+    var game = [String : AnyObject]()
 }

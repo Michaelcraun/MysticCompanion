@@ -26,6 +26,7 @@ class PlayersTableCell: UITableViewCell {
     }
     
     func layoutCell(forPlayer player: Dictionary<String,AnyObject>) {
+        print("laying out cell...")
         let username = player["username"] as! String
         let playerVP = player["victoryPoints"] as! Int
         

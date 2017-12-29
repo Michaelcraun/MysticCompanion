@@ -30,9 +30,13 @@ extension GameVC {
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
                     
                     var victoryTaken = 0
-                    for player in playersArray {
-                        guard let playerVictory = player["victoryPoints"] as? Int else { return }
-                        victoryTaken += playerVictory
+                    if playersArray.count <= 1 {
+                        self.showAlert(withTitle: "Game Ended", andMessage: "There are not enough players to continue the game. Tap OK to continue.", andNotificationType: .endOfGame)
+                    } else {
+                        for player in playersArray {
+                            guard let playerVictory = player["victoryPoints"] as? Int else { return }
+                            victoryTaken += playerVictory
+                        }
                     }
                     
                     GameHandler.instance.game = gameDict
@@ -71,6 +75,8 @@ extension GameVC {
                     guard let newCurrentPlayerUsername = newCurrentPlayer["username"] as? String else { return }
                     GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: ["currentPlayer" : newCurrentPlayerUsername,
                                                                                         "players" : newPlayersArray])
+                    
+                    //TODO: Store user statistics on Firebase
                 }
             }
         })

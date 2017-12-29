@@ -59,6 +59,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="KCX-EP-bUN"/>
                     </view>
+                    <connections>
+                        <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="6SJ-ic-CD1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3j-De-cHe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -99,6 +102,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="RzQ-dl-vGq"/>
+        <segue reference="6SJ-ic-CD1"/>
     </inferredMetricsTieBreakers>
 </document>

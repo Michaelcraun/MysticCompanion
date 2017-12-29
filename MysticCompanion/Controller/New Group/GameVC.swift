@@ -142,6 +142,7 @@ class GameVC: UIViewController, Alertable {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(trackersArray.count) * 0.15) {
             if self.isEndOfGameTurn && self.endingPlayerUsername != Player.instance.username {
+                GameHandler.instance.REF_GAME.removeAllObservers()
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             } else {
                 self.setupPlayerTurn()

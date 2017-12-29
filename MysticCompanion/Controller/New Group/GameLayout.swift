@@ -86,14 +86,12 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         
         decayTracker.initTrackerOfType(.decay)
         decayTracker.alpha = 0
-//        decayTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .valueChanged)
-        decayTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: UIControlEvents.allEvents)
+        decayTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .allEvents)
         decayTracker.translatesAutoresizingMaskIntoConstraints = false
         
         growthTracker.initTrackerOfType(.growth)
         growthTracker.alpha = 0
-//        growthTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .valueChanged)
-        growthTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .touchUpInside)
+        growthTracker.currentStepper.addTarget(self, action: #selector(checkForSpoil(sender:)), for: .allEvents)
         growthTracker.translatesAutoresizingMaskIntoConstraints = false
         
         animalTracker.initTrackerOfType(.animal)
@@ -201,10 +199,9 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let endGame = KCFloatingActionButtonItem()
         endGame.setButtonOfType(.endGame)
         endGame.handler = { item in
-            //TODO: Functionality for when host exits the game
-//            guard let gameKey = self.game["game"] as? String else { return }
-//            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
-            //Segue to EndGameVC
+            guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
+            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
+            self.performSegue(withIdentifier: "showEndGame", sender: nil)
         }
         
         menuButton.addItem(item: settings)

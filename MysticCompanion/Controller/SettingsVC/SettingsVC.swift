@@ -21,6 +21,14 @@ class SettingsVC: UIViewController {
     let previousGamesTable = UITableView()
     let menuButton = KCFloatingActionButton()
     
+    //MARK: Firebase Variables
+    var currentUserID: String?
+    var previousGames = [Dictionary<String,AnyObject>]() {
+        didSet {
+            previousGamesTable.reloadData()
+        }
+    }
+    
     //MARK: CoreData Variables
     var controller: NSFetchedResultsController<Game>!
     let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
@@ -33,6 +41,7 @@ class SettingsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        observeDataForGamesPlayed()
         attemptGameFetch()
         layoutView()
     }

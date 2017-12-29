@@ -32,6 +32,12 @@ extension Alertable where Self: UIViewController {
             }
             
             if alertController.message == "You ended the game. Please wait for the other players to complete their turns." {
+                GameHandler.instance.REF_GAME.removeAllObservers()
+                self.performSegue(withIdentifier: "showEndGame", sender: nil)
+            }
+            
+            if alertController.title == "Game Ended" {
+                GameHandler.instance.REF_GAME.removeAllObservers()
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             }
         })

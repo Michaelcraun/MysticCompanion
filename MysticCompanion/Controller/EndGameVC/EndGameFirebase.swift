@@ -11,7 +11,6 @@ import Firebase
 
 extension EndGameVC {
     func setupGameAndObserve() {
-        var finishedPlayerCount = 0
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
         players = playersArray
@@ -19,18 +18,22 @@ extension EndGameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
+                    var finishedPlayerCount = 0
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    
                     for player in playersArray {
                         guard let finished = player["finished"] as? Bool else { return }
-                        if finished {
-                            finishedPlayerCount += 1
-                        }
+                        print(finished)
+                        if finished { finishedPlayerCount += 1 }
                     }
-                    self.players = playersArray
+                    
                     if finishedPlayerCount == self.players.count {
-                        //TODO: Finish game
-                        print("game finalized")
+                        GameHandler.instance.createFirebaseDBData()
+                        //TODO: Find winner and animate winner cell
+                        //TODO: Store user statistics on Firebase
                     }
+                    
+                    self.players = playersArray
                 }
             }
         })
@@ -57,8 +60,7 @@ extension EndGameVC {
                             newPlayersArray.append(player)
                         }
                     }
-                    self.players = newPlayersArray
-                    GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["players" : self.players])
+                    GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["players" : newPlayersArray])
                 }
             }
         })
