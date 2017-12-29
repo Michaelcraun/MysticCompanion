@@ -36,12 +36,31 @@ class GameHandler {
     func createFirebaseDBData() {
         guard let gameKey = game["game"] as? String else { return }
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        /* TODO: Store less information on Firebase, such as:
-         * winner
-         */
+        var newPlayersArray = [Dictionary<String,AnyObject>]()
+        var highestVictory = 0
+        var winningPlayer = ""
         
-        let gameInfo: Dictionary<String,AnyObject> = ["players" : playersArray as AnyObject,
-                                                      "winner" : "" as AnyObject]
+        for player in playersArray {
+            guard let username = player["username"] as? String else { return }
+            guard let deck = player["deck"] as? String else { return }
+            guard let victoryPoints = player["victoryPoints"] as? Int else { return }
+            guard let boxVictory = player["boxVictory"] as? Int else { return }
+            let totalVictory = victoryPoints + boxVictory
+            
+            if totalVictory > highestVictory {
+                winningPlayer = username
+                highestVictory = totalVictory
+            }
+            
+            let newPlayer: Dictionary<String,AnyObject> = ["username" : username as AnyObject,
+                                                           "deck" : deck as AnyObject,
+                                                           "victoryPoints" : totalVictory as AnyObject]
+            
+            newPlayersArray.append(newPlayer)
+        }
+        
+        let gameInfo: Dictionary<String,AnyObject> = ["players" : newPlayersArray as AnyObject,
+                                                      "winner" : winningPlayer as AnyObject]
         
         REF_DATA.child(gameKey).updateChildValues(gameInfo)
     }

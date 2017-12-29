@@ -11,22 +11,27 @@ import UIKit
 class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDelegate {
     
     let playersTable = UITableView()
-    var playersArrayForCell = [Dictionary<String,AnyObject>]() {
-        didSet {
-            playersTable.reloadData()
-        }
-    }
+    var playersArrayForCell = [Dictionary<String,AnyObject>]()
+//    {
+//        didSet {
+//            playersTable.reloadData()
+//        }
+//    }
     
     override func layoutSubviews() {
+        print("BRETT: In layoutSubviews")
         super.layoutSubviews()
         
         self.layer.cornerRadius = 15
         self.layer.borderColor = UIColor.black.cgColor
         self.layer.borderWidth = 2
+        
+        playersTable.dataSource = self
+        playersTable.delegate = self
     }
     
     func layoutGame(game: Dictionary<String,AnyObject>) {
-        print("game found...")
+        print("BRETT: In layoutGame.")
         playersArrayForCell = []
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
         
@@ -38,13 +43,12 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
             let playerData: Dictionary<String,AnyObject> = ["username" : playerUsername as AnyObject,
                                                             "victoryPoints" : totalVP as AnyObject]
             playersArrayForCell.append(playerData)
+            print("BRETT: Data Append")
         }
         
-        playersTable.dataSource = self
-        playersTable.delegate = self
         playersTable.separatorStyle = .none
         playersTable.backgroundColor = .clear
-        playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "playersTableCell")
+        playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "previousGamePlayersTableCell")
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(playersTable)
@@ -56,6 +60,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     }
     
     func layoutEmptyCell() {
+        print("BRETT: layoutEmptyCell.")
         let noGamesLabel = UILabel()
         noGamesLabel.font = UIFont(name: fontFamily, size: 20)
         noGamesLabel.textAlignment = .center
@@ -70,14 +75,22 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         noGamesLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        print("BRETT: In heightForRow")
+        return 20
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("BRETT: \(tableView)")
+        print(playersArrayForCell.count)
         return playersArrayForCell.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "playersTableCell") as! PlayersTableCell
-        print(playersArrayForCell[indexPath.row])
-        cell.layoutCell(forPlayer: playersArrayForCell[indexPath.row])
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "previousGamePlayersTableCell") as! PlayersTableCell
+        print("BRETT: \(playersArrayForCell[indexPath.row])")
+//        cell.layoutCell(forPlayer: playersArrayForCell[indexPath.row])
+        let cell = UITableViewCell()
         return cell
     }
 }

@@ -23,11 +23,7 @@ class SettingsVC: UIViewController {
     
     //MARK: Firebase Variables
     var currentUserID: String?
-    var previousGames = [Dictionary<String,AnyObject>]() {
-        didSet {
-            previousGamesTable.reloadData()
-        }
-    }
+    var previousGames = [Dictionary<String,AnyObject>]()
     
     //MARK: CoreData Variables
     var controller: NSFetchedResultsController<Game>!
