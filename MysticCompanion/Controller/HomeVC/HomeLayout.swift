@@ -292,7 +292,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         gameLobbyTable.delegate = self
         gameLobbyTable.separatorStyle = .none
         gameLobbyTable.backgroundColor = .clear
-        gameLobbyTable.allowsSelection = false
         gameLobbyTable.register(GameLobbyCell.self, forCellReuseIdentifier: "gameLobbyCell")
         gameLobbyTable.translatesAutoresizingMaskIntoConstraints = false
         
@@ -384,11 +383,10 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                                                           "deck" : Player.instance.deck?.rawValue as AnyObject,
                                                           "finished" : false as AnyObject,
                                                           "victoryPoints" : 0 as AnyObject,
+                                                          "userHasQuitGame" : false as AnyObject,
                                                           "boxVictory" : 0 as AnyObject]
             updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)
             observeGamesForStart(forGame: nearbyGames[indexPath.row])
-            let userLoaction = self.locationManager.location
-            observeGames(withUserLocation: userLoaction!)
             //TODO: Display waiting message
         }
         tableView.deselectRow(at: indexPath, animated: true)

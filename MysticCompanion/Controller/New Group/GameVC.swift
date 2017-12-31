@@ -79,7 +79,7 @@ class GameVC: UIViewController, Alertable {
     
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
-        layoutEndTurnButton()
+        layoutMenuButton()
         
         if userQuitGame {
             dismiss(animated: false, completion: nil)
@@ -151,7 +151,6 @@ class GameVC: UIViewController, Alertable {
     }
     
     @objc func checkForSpoil(sender: GMStepper) {
-        print("value changed")
         let currentDecay = decayTracker.currentStepper.value
         let currentGrowth = growthTracker.currentStepper.value
         
@@ -166,5 +165,17 @@ class GameVC: UIViewController, Alertable {
             }
         }
         sender.reset()
+    }
+    
+//    func quitGamePressed() {
+//        GameHandler.instance.quitGameForUser(Player.instance.username)
+//        GameHandler.instance.REF_GAME.removeAllObservers()
+//        performSegue(withIdentifier: "showEndGame", sender: nil)
+//    }
+    
+    func endGame() {
+        guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
+        GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
+        performSegue(withIdentifier: "showEndGame", sender: nil)
     }
 }

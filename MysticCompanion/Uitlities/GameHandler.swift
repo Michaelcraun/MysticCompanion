@@ -13,6 +13,7 @@ let DB_BASE = FIRDatabase.database().reference()
 
 class GameHandler {
     static let instance = GameHandler()
+    var game = [String : AnyObject]()
     
     //MARK: Firebase Variables
     private var _REF_BASE = DB_BASE
@@ -68,31 +69,4 @@ class GameHandler {
     func clearCurrentGamesFromFirebaseDB(forKey key: String) {
         REF_GAME.child(key).removeValue()
     }
-    
-    func quitGameForUser(_ username: String) {
-        guard let gameKey = game["game"] as? String else { return }
-        removeFromGame(gameKey, withUser: username)
-        Player.instance.reinitialize()
-    }
-    
-    func removeFromGame(_ key: String, withUser username: String) {
-        var newPlayersArray = [Dictionary<String,AnyObject>]()
-        GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
-            for game in gameSnapshot {
-                if game.key == key {
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
-                    for player in playersArray {
-                        guard let fbPlayerUsername = player["username"] as? String else { return }
-                        if fbPlayerUsername != username {
-                            newPlayersArray.append(player)
-                        }
-                    }
-                    self.updateFirebaseDBGame(key: game.key, gameData: ["players" : newPlayersArray])
-                }
-            }
-        })
-    }
-    
-    var game = [String : AnyObject]()
 }

@@ -9,16 +9,7 @@
 import UIKit
 
 extension UITableView {
-    //TODO: Remove addBlurEffect()
-    func addBlurEffect() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        self.addSubview(blurEffectView)
-    }
+    //TODO: Eventually do something?
 }
 
 extension UITableViewCell {

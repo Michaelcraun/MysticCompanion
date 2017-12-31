@@ -18,8 +18,6 @@ class PreviousGamePlayersCell: UITableViewCell {
     func layoutCell(forPlayer player: Dictionary<String,AnyObject>, withWinner winner: String) {
         clearCell()
         
-        print("BRETT: laying out cell...")
-        print("BRETT: \(player)")
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
         guard let victoryPoints = player["victoryPoints"] as? Int else { return }
@@ -40,7 +38,11 @@ class PreviousGamePlayersCell: UITableViewCell {
         deckView.translatesAutoresizingMaskIntoConstraints = false
         
         let usernameLabel = UILabel()
-        usernameLabel.font = UIFont(name: fontFamily, size: 15)
+        if username == winner {
+            usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
+        } else {
+            usernameLabel.font = UIFont(name: fontFamily, size: 15)
+        }
         usernameLabel.text = username
         usernameLabel.numberOfLines = 1
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false

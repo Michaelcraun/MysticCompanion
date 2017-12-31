@@ -122,6 +122,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 try FIRAuth.auth()?.signOut()
                 self.dismiss(animated: true, completion: nil)
             } catch (let error) {
+                //TODO: Handle error properly
                 print(error)
             }
         }

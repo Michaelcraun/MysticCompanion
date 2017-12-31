@@ -48,6 +48,8 @@ class HomeVC: UIViewController, Alertable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //TODO: Convert CoreData game entries into Firebase entries?
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
         checkTheme()

@@ -107,36 +107,49 @@ extension HomeVC {
     }
     
     func updateGame(forGame selectedGame: Dictionary<String,AnyObject>, withUserData userData: Dictionary<String,AnyObject>) {
-        var isInGame: Bool = false
+        var isInGame = false
+        var deckTaken = false
         let gameKey = selectedGame["game"] as! String
+        guard let userUsername = userData["username"] as? String else { return }
+        guard let userDeck = userData["deck"] as? String else { return }
+        
         GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for game in gameSnapshot {
-                    if game.key == gameKey {
-                        if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
-                            self.players = playersArray
-                            if playersArray.count < 4 {
-                                for player in playersArray {
-                                    if player["username"] as! String == userData["username"] as! String {
-                                        isInGame = true
-                                        break
-                                    }
-                                }
-                                if isInGame {
-                                    self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!", andNotificationType: .error)
-                                } else {
-                                    self.players.append(userData)
-                                }
-                                
-                                var gameToUpdate = selectedGame
-                                gameToUpdate["players"] = self.players as AnyObject
-                                GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
-                            } else {
-                                print("game is full")
-                                //TODO: Test gameIsFull error
-                                self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.", andNotificationType: .error)
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == gameKey {
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    self.players = playersArray
+                    if playersArray.count < 4 {
+                        for player in playersArray {
+                            guard let playerUsername = player["username"] as? String else { return }
+                            if playerUsername == userUsername {
+                                isInGame = true
+                                break
+                            }
+                            
+                            guard let playerDeck = player["deck"] as? String else { return }
+                            if playerDeck == userDeck {
+                                deckTaken = true
+                                break
                             }
                         }
+                        
+                        //TODO: Check if user is in game AND their deck is taken and switch deck out if deck isn't taken?
+                        if isInGame {
+                            self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!", andNotificationType: .error)
+                        } else if deckTaken {
+                            self.showAlert(withTitle: "Error:", andMessage: "That deck is already taken! Please choose a different one.", andNotificationType: .error)
+                        } else {
+                            self.players.append(userData)
+                        }
+                        
+                        var gameToUpdate = selectedGame
+                        gameToUpdate["players"] = self.players as AnyObject
+                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
+                    } else {
+                        print("game is full")
+                        //TODO: Test gameIsFull error
+                        self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.", andNotificationType: .error)
                     }
                 }
             }
@@ -180,6 +193,7 @@ extension HomeVC {
                              "deck" : Player.instance.deck?.rawValue as AnyObject,
                              "finished" : false as AnyObject,
                              "victoryPoints" : 0 as AnyObject,
+                             "userHasQuitGame" : false as AnyObject,
                              "boxVictory" : 0 as AnyObject])
         let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
                                                 "winCondition" : condition,

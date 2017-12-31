@@ -28,6 +28,7 @@ extension GameVC {
                     guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
+                    guard let gameEnded = game.childSnapshot(forPath: "gameEnded").value as? Bool else { return }
                     
                     var victoryTaken = 0
                     if playersArray.count <= 1 {
@@ -37,6 +38,10 @@ extension GameVC {
                             guard let playerVictory = player["victoryPoints"] as? Int else { return }
                             victoryTaken += playerVictory
                         }
+                    }
+                    
+                    if gameEnded {
+                        self.showAlert(withTitle: "Game Ended", andMessage: "Game has been ended prematurely. Tap OK to continue.", andNotificationType: .endOfGame)
                     }
                     
                     GameHandler.instance.game = gameDict

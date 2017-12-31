@@ -9,22 +9,22 @@
 import UIKit
 
 class PlayersTableCell: UITableViewCell {
-    override func awakeFromNib() {
-        self.backgroundColor = .clear
-        super.awakeFromNib()
-    }
+//    override func awakeFromNib() {
+//        self.backgroundColor = .clear
+//        super.awakeFromNib()
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         self.backgroundColor = .clear
     }
     
     func layoutCell(forPlayer player: Dictionary<String,AnyObject>) {
-        print("laying out cell...")
-        let username = player["username"] as! String
-        let playerVP = player["victoryPoints"] as! Int
-        
         clearCell()
+        
+        guard let username = player["username"] as? String else { return }
+        guard let playerVP = player["victoryPoints"] as? Int else { return }
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)

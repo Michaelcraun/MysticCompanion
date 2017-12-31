@@ -22,6 +22,7 @@ extension SettingsVC: NSFetchedResultsControllerDelegate {
             try controller.performFetch()
         } catch {
             let error = error as NSError
+            //TODO: Handle error properly
             print("Error: \(error)")
         }
     }

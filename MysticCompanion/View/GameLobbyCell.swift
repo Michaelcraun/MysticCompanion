@@ -109,54 +109,111 @@ class GameLobbyCell: UITableViewCell {
     func layoutCellForGuest(withGame game: Dictionary<String,Any>) {
         clearCell()
         
-        var decksTaken = ["beastbrothers" : false,
-                          "dawnseekers" : false,
-                          "lifewardens" : false,
-                          "waveguards" : false]
         guard let hostName = game["username"] as? String else { return }
         guard let winCondition = game["winCondition"] as? String else { return }
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        for player in playersArray {
-            guard let deck = player["deck"] as? String else { return }
-            decksTaken[deck] = true
+        
+        let deckStack = configureDeckChoicesStackView(withPlayers: playersArray)
+        
+        let gameHostLabel = UILabel()
+        gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
+        gameHostLabel.text = hostName
+        gameHostLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        //TODO: Switch on winCondition to display VP Goal if custom?
+        let winConditionLabel = UILabel()
+        winConditionLabel.font = UIFont(name: fontFamily, size: 12)
+        winConditionLabel.textAlignment = .right
+        winConditionLabel.text = winCondition
+        winConditionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let playersLabel = UILabel()
+        var players: String = "" {
+            didSet {
+                playersLabel.text = players
+            }
+        }
+        playersLabel.font = UIFont(name: fontFamily, size: 10)
+        playersLabel.numberOfLines = 1
+        playersLabel.translatesAutoresizingMaskIntoConstraints = false
+        for i in 0..<playersArray.count {
+            if players == "" {
+                players = playersArray[i]["username"] as! String
+            } else {
+                players = "\(players), \(playersArray[i]["username"] as! String)"
+            }
         }
         
+        self.addSubview(gameHostLabel)
+        self.addSubview(winConditionLabel)
+        self.addSubview(playersLabel)
+        self.addSubview(deckStack)
+        
+        gameHostLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        gameHostLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
+        
+        winConditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        winConditionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
+        
+        playersLabel.topAnchor.constraint(equalTo: gameHostLabel.bottomAnchor, constant: 5).isActive = true
+        playersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
+        playersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
+        
+        deckStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        deckStack.leftAnchor.constraint(equalTo: gameHostLabel.rightAnchor, constant: 5).isActive = true
+        deckStack.widthAnchor.constraint(equalToConstant: 84.32).isActive = true
+        deckStack.heightAnchor.constraint(equalTo: gameHostLabel.heightAnchor).isActive = true
+    }
+    
+    func configureDeckChoicesStackView(withPlayers playersArray: [Dictionary<String,AnyObject>]) -> UIStackView {
         let deckStack = UIStackView()
-        deckStack.alignment = .center
+        deckStack.alignment = .fill
         deckStack.axis = .horizontal
         deckStack.spacing = 5
         deckStack.distribution = .fillEqually
         deckStack.translatesAutoresizingMaskIntoConstraints = false
         
-        var beastbrothersColor: UIColor? {
-            switch decksTaken["beastborthers"] {
-            case true?: return DeckType.beastbrothers.secondaryColor
-            case false?: return DeckType.beastbrothers.color
-            default: return nil
+        var beastbrothersTaken = false
+        var dawnseekersTaken = false
+        var lifewardensTaken = false
+        var waveguardsTaken = false
+        
+        for player in playersArray {
+            guard let deck = player["deck"] as? String else { break }
+            switch deck {
+            case "beastbrothers": beastbrothersTaken = true
+            case "dawnseekers": dawnseekersTaken = true
+            case "lifewardens": lifewardensTaken = true
+            case "waveguards": waveguardsTaken = true
+            default: break
             }
         }
         
-        var dawnseekersColor: UIColor? {
-            switch decksTaken["dawnseekers"] {
-            case true?: return DeckType.dawnseekers.secondaryColor
-            case false?: return DeckType.dawnseekers.color
-            default: return nil
+        var beastbrothersColor: UIColor {
+            switch beastbrothersTaken {
+            case true: return DeckType.beastbrothers.secondaryColor
+            case false: return DeckType.beastbrothers.color
             }
         }
         
-        var lifewardensColor: UIColor? {
-            switch decksTaken["lifewardens"] {
-            case true?: return DeckType.lifewardens.secondaryColor
-            case false?: return DeckType.lifewardens.color
-            default: return nil
+        var dawnseekersColor: UIColor {
+            switch dawnseekersTaken {
+            case true: return DeckType.dawnseekers.secondaryColor
+            case false: return DeckType.dawnseekers.color
             }
         }
         
-        var waveguardsColor: UIColor? {
-            switch decksTaken["waveguards"] {
-            case true?: return DeckType.waveguards.secondaryColor
-            case false?: return DeckType.waveguards.color
-            default: return nil
+        var lifewardensColor: UIColor {
+            switch lifewardensTaken {
+            case true: return DeckType.lifewardens.secondaryColor
+            case false: return DeckType.lifewardens.color
+            }
+        }
+        
+        var waveguardsColor: UIColor {
+            switch waveguardsTaken {
+            case true: return DeckType.waveguards.secondaryColor
+            case false: return DeckType.waveguards.color
             }
         }
         
@@ -185,54 +242,6 @@ class GameLobbyCell: UITableViewCell {
         deckStack.addArrangedSubview(lifewardens)
         deckStack.addArrangedSubview(waveguards)
         
-        let gameHostLabel = UILabel()
-        gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
-        gameHostLabel.text = hostName
-        gameHostLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        //TODO: Switch on winCondition to display VP Goal if custom?
-        let winConditionLabel = UILabel()
-        winConditionLabel.font = UIFont(name: fontFamily, size: 12)
-        winConditionLabel.textAlignment = .right
-        winConditionLabel.text = winCondition
-        winConditionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let playersLabel = UILabel()
-        var players: String = "" {
-            didSet {
-                playersLabel.text = players
-            }
-        }
-        playersLabel.font = UIFont(name: fontFamily, size: 10)
-        playersLabel.numberOfLines = 0
-        playersLabel.translatesAutoresizingMaskIntoConstraints = false
-        for i in 0..<playersArray.count {
-            if players == "" {
-                players = playersArray[i]["username"] as! String
-            } else {
-                players = "\(players), \(playersArray[i]["username"] as! String)"
-            }
-        }
-        
-        self.addSubview(gameHostLabel)
-        self.addSubview(winConditionLabel)
-        self.addSubview(playersLabel)
-        self.addSubview(deckStack)
-        
-        gameHostLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        gameHostLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        
-        winConditionLabel.bottomAnchor.constraint(equalTo: playersLabel.topAnchor, constant: -5)
-        winConditionLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        
-        playersLabel.topAnchor.constraint(equalTo: gameHostLabel.bottomAnchor, constant: 5).isActive = true
-        playersLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        playersLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        
-        deckStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        deckStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        deckStack.leftAnchor.constraint(equalTo: gameHostLabel.rightAnchor, constant: 5).isActive = true
-        deckStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        deckStack.widthAnchor.constraint(equalToConstant: 135).isActive = true
+        return deckStack
     }
 }

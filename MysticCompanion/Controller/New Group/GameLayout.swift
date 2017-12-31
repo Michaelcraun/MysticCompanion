@@ -16,7 +16,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         layoutBackground()
         layoutPlayersPanel()
         layoutTrackers()
-        layoutEndTurnButton()
+        layoutMenuButton()
         layoutBannerAds()
     }
     
@@ -47,7 +47,6 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playerPanel.layer.cornerRadius = 10
         playerPanel.layer.borderColor = UIColor.black.cgColor
         playerPanel.layer.borderWidth = 2
-        playerPanel.backgroundColor = theme.color
         playerPanel.clipsToBounds = true
         playerPanel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -59,6 +58,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.allowsSelection = false
         playersTable.dataSource = self
         playersTable.delegate = self
+        playersTable.backgroundColor = .clear
         playersTable.register(PlayersTableCell.self, forCellReuseIdentifier: "playersTableCell")
         playersTable.separatorStyle = .none
         playersTable.translatesAutoresizingMaskIntoConstraints = false
@@ -173,7 +173,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
     }
     
-    func layoutEndTurnButton() {
+    func layoutMenuButton() {
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
@@ -198,17 +198,13 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let quitGame = KCFloatingActionButtonItem()
         quitGame.setButtonOfType(.quitGame)
         quitGame.handler = { item in
-            GameHandler.instance.quitGameForUser(Player.instance.username)
-            self.userQuitGame = true
-            self.dismiss(animated: true, completion: nil)
+            self.endGame()
         }
         
         let endGame = KCFloatingActionButtonItem()
         endGame.setButtonOfType(.endGame)
         endGame.handler = { item in
-            guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
-            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
-            self.performSegue(withIdentifier: "showEndGame", sender: nil)
+            self.endGame()
         }
         
         menuButton.addItem(item: settings)
