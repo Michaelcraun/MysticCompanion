@@ -49,7 +49,7 @@
 		9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C00B1FCCA2A4005741CD /* Constants.swift */; };
 		9BFCBE351FF6767A00A2627B /* SettingsFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE341FF6767A00A2627B /* SettingsFirebase.swift */; };
 		9BFCBE371FF6BE5E00A2627B /* PreviousGamePlayersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */; };
-		9BFCBE391FF6BEF000A2627B /* UITableViewCellExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE381FF6BEF000A2627B /* UITableViewCellExtension.swift */; };
+		9BFCBE391FF6BEF000A2627B /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,7 +99,7 @@
 		9BC7C00B1FCCA2A4005741CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9BFCBE341FF6767A00A2627B /* SettingsFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFirebase.swift; sourceTree = "<group>"; };
 		9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousGamePlayersCell.swift; sourceTree = "<group>"; };
-		9BFCBE381FF6BEF000A2627B /* UITableViewCellExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtension.swift; sourceTree = "<group>"; };
+		9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtensions.swift; sourceTree = "<group>"; };
 		B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MysticCompanion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C86938E58E650349541B72EB /* Pods-MysticCompanion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MysticCompanion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MysticCompanion/Pods-MysticCompanion.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -194,7 +194,7 @@
 				9B167B511FE1CC7200183733 /* UIViewControllerExtension.swift */,
 				9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */,
 				9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */,
-				9BFCBE381FF6BEF000A2627B /* UITableViewCellExtension.swift */,
+				9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -441,7 +441,7 @@
 				9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */,
 				9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */,
 				9B966D471FE022C50083192B /* Products.swift in Sources */,
-				9BFCBE391FF6BEF000A2627B /* UITableViewCellExtension.swift in Sources */,
+				9BFCBE391FF6BEF000A2627B /* UITableViewExtensions.swift in Sources */,
 				9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */,
 				9B167B501FE1C5CD00183733 /* NetworkIndicator.swift in Sources */,
 				9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */,

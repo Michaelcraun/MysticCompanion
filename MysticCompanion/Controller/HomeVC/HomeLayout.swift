@@ -46,7 +46,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         
         playerIcon.widthAnchor.constraint(equalToConstant: 100).isActive = true
         playerIcon.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        playerIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        playerIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
         playerIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
@@ -268,27 +268,47 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func layoutGameLobby() {
         var bottomConstant: CGFloat {
             if PREMIUM_PURCHASED {
-                return 85
+                return 95
             } else {
-                return 135
+                return 145
             }
         }
+        
+        let gameLobby = UIView()
+        gameLobby.backgroundColor = .clear
+        gameLobby.clipsToBounds = true
+        gameLobby.layer.cornerRadius = 15
+        gameLobby.layer.borderColor = UIColor.black.cgColor
+        gameLobby.layer.borderWidth = 2
+        gameLobby.translatesAutoresizingMaskIntoConstraints = false
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = gameLobby.bounds
+        blurEffectView.tag = 1001
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         gameLobbyTable.dataSource = self
         gameLobbyTable.delegate = self
         gameLobbyTable.separatorStyle = .none
         gameLobbyTable.backgroundColor = .clear
-        gameLobbyTable.clearsContextBeforeDrawing = true
-        gameLobbyTable.rowHeight = 35
+        gameLobbyTable.allowsSelection = false
         gameLobbyTable.register(GameLobbyCell.self, forCellReuseIdentifier: "gameLobbyCell")
         gameLobbyTable.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(gameLobbyTable)
+        gameLobby.addSubview(blurEffectView)
+        gameLobby.addSubview(gameLobbyTable)
+        view.addSubview(gameLobby)
         
-        gameLobbyTable.topAnchor.constraint(equalTo: deckChoicesStackView.bottomAnchor, constant: 10).isActive = true
-        gameLobbyTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        gameLobbyTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        gameLobbyTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant).isActive = true
+        gameLobby.topAnchor.constraint(equalTo: deckChoicesStackView.bottomAnchor, constant: 20).isActive = true
+        gameLobby.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        gameLobby.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        gameLobby.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant).isActive = true
+        
+        gameLobbyTable.topAnchor.constraint(equalTo: gameLobby.topAnchor, constant: 5).isActive = true
+        gameLobbyTable.leftAnchor.constraint(equalTo: gameLobby.leftAnchor, constant: 5).isActive = true
+        gameLobbyTable.rightAnchor.constraint(equalTo: gameLobby.rightAnchor, constant: -5).isActive = true
+        gameLobbyTable.bottomAnchor.constraint(equalTo: gameLobby.bottomAnchor, constant: -5).isActive = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -375,6 +395,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        return 40
     }
 }

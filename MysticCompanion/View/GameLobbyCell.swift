@@ -9,10 +9,10 @@
 import UIKit
 
 class GameLobbyCell: UITableViewCell {
-    override func awakeFromNib() {
-        self.backgroundColor = .clear
-        super.awakeFromNib()
-    }
+//    override func awakeFromNib() {
+//        self.backgroundColor = .clear
+//        super.awakeFromNib()
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -45,11 +45,13 @@ class GameLobbyCell: UITableViewCell {
     }
 
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
+        clearCell()
+        
         guard let username = user["username"] as? String else { return }
         guard let deck = user["deck"] as? String else { return }
         var deckType: DeckType? {
             switch deck {
-            case "beasebrothers": return .beastbrothers
+            case "beastbrothers": return .beastbrothers
             case "dawnseekers": return .dawnseekers
             case "lifewardens": return .lifewardens
             case "waveguards": return .waveguards
@@ -57,9 +59,18 @@ class GameLobbyCell: UITableViewCell {
             }
         }
         
-        clearCell()
+        let playerStack = UIStackView()
+        playerStack.alignment = .fill
+        playerStack.axis = .horizontal
+        playerStack.distribution = .equalSpacing
+        playerStack.spacing = 5
+        playerStack.translatesAutoresizingMaskIntoConstraints = false
         
-        self.backgroundColor = deckType?.color
+        let deckIcon = CircleView()
+        deckIcon.addBorder()
+        deckIcon.addImage((deckType?.image)!, withWidthModifier: 10)
+        deckIcon.backgroundColor = deckType?.color
+        deckIcon.translatesAutoresizingMaskIntoConstraints = false
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
@@ -67,12 +78,15 @@ class GameLobbyCell: UITableViewCell {
         usernameLabel.textAlignment = .center
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.addSubview(usernameLabel)
+        playerStack.addArrangedSubview(deckIcon)
+        playerStack.addArrangedSubview(usernameLabel)
+        self.addSubview(playerStack)
         
-        usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        usernameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 5).isActive = true
-        usernameLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        usernameLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        playerStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        playerStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        playerStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        deckIcon.widthAnchor.constraint(equalTo: deckIcon.heightAnchor).isActive = true
     }
     
     func layoutStartGameCell() {
