@@ -22,12 +22,6 @@ class EndGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func clearCell() {
-        for subview in self.subviews {
-            subview.removeFromSuperview()
-        }
-    }
-    
     func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool) {
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }

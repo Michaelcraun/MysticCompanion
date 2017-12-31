@@ -101,7 +101,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         previousGamesTable.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 10).isActive = true
         previousGamesTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         previousGamesTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        previousGamesTable.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        previousGamesTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
     }
     
     func layoutSettingsButton() {
@@ -182,7 +182,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let themeSelector = KCFloatingActionButton()
-//        themeSelector.paddingX = view.frame.width / 2 - themeSelector.frame.width / 2
         themeSelector.setPaddingY()
         themeSelector.setMenuButtonColor()
         
@@ -237,12 +236,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         } else {
             return 1
         }
-        
-//        if let games = controller.fetchedObjects, games.count > 0 {
-//            return games.count
-//        } else {
-//            return 1
-//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,13 +245,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         } else {
             cell.layoutEmptyCell()
         }
-        
-//        if let games = controller.fetchedObjects, games.count > 0 {
-//            cell.layoutGame(game: games[indexPath.row])
-//        } else {
-//            cell.layoutEmptyCell()
-//        }
-
         return cell
     }
     
@@ -277,5 +263,18 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        //Get number of players in game and adjust cell height, accordingly
+        if previousGames.count > 0 {
+            var cellHeight: CGFloat = 0
+            if let playersArray = previousGames[indexPath.row]["players"] as? [Dictionary<String,AnyObject>] {
+                cellHeight = CGFloat(playersArray.count) * 27.33 + CGFloat((playersArray.count) * 5)
+            }
+            return cellHeight
+        } else {
+            return UITableViewAutomaticDimension
+        }
     }
 }

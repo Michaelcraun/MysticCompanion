@@ -19,12 +19,6 @@ class PlayersTableCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func clearCell() {
-        for subview in self.subviews {
-            subview.removeFromSuperview()
-        }
-    }
-    
     func layoutCell(forPlayer player: Dictionary<String,AnyObject>) {
         print("laying out cell...")
         let username = player["username"] as! String

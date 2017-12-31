@@ -23,17 +23,15 @@ extension EndGameVC {
                     
                     for player in playersArray {
                         guard let finished = player["finished"] as? Bool else { return }
-                        print(finished)
                         if finished { finishedPlayerCount += 1 }
                     }
                     
                     if finishedPlayerCount == self.players.count {
                         GameHandler.instance.createFirebaseDBData()
+                        self.players = playersArray
+                        self.playersTable.reloadData()
                         //TODO: Find winner and animate winner cell
-                        //TODO: Store user statistics on Firebase
                     }
-                    
-                    self.players = playersArray
                 }
             }
         })

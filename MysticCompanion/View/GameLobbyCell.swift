@@ -19,12 +19,6 @@ class GameLobbyCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func clearCell() {
-        for subview in self.subviews {
-            subview.removeFromSuperview()
-        }
-    }
-    
     func layoutWaitingForPlayersCell() {
         clearCell()
         
