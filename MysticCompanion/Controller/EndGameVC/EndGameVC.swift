@@ -45,4 +45,12 @@ class EndGameVC: UIViewController {
         self.updateUser(Player.instance.username, withDeckVP: deckVP)
         self.playersTable.reloadData()
     }
+    
+    func quitPressed() {
+        GameHandler.instance.REF_GAME.removeAllObservers()
+        
+        let gameVC = GameVC()
+        gameVC.userQuitGame = true
+        dismiss(animated: true, completion: nil)
+    }
 }

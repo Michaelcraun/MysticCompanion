@@ -12,6 +12,7 @@ import Firebase
 extension GameVC {
     func setupGameAndObserve() {
         if let players = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
+        if let currentPlayer = GameHandler.instance.game["currentPlayer"] as? String { self.currentPlayer = currentPlayer }
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let winCondition = GameHandler.instance.game["winCondition"] as? String else { return }
         switch winCondition {
@@ -28,7 +29,6 @@ extension GameVC {
                     guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
-                    guard let gameEnded = game.childSnapshot(forPath: "gameEnded").value as? Bool else { return }
                     
                     var victoryTaken = 0
                     if playersArray.count <= 1 {
@@ -40,7 +40,7 @@ extension GameVC {
                         }
                     }
                     
-                    if gameEnded {
+                    if game.hasChild("gameEnded") {
                         self.showAlert(withTitle: "Game Ended", andMessage: "Game has been ended prematurely. Tap OK to continue.", andNotificationType: .endOfGame)
                     }
                     

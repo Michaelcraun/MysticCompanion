@@ -42,11 +42,11 @@ class GameVC: UIViewController, Alertable {
     var playerIndex = 0
     var currentPlayer = "" {
         didSet {
-            if currentPlayer == Player.instance.username {
+            if currentPlayer == Player.instance.username && !isEndOfGameTurn {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
-                if isEndOfGameTurn {
-                    dismiss(animated: false, completion: nil)
-                }
+//                if isEndOfGameTurn {
+//                    dismiss(animated: false, completion: nil)
+//                }
             }
         }
     }

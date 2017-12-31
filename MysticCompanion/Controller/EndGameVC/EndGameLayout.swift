@@ -79,9 +79,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         let quit = KCFloatingActionButtonItem()
         quit.setButtonOfType(.quitGame)
         quit.handler = { item in
-//            GameHandler.instance.quitGameForUser(Player.instance.username)
-            let gameVC = GameVC()
-            gameVC.userQuitGame = true
+            self.quitPressed()
         }
         
         menuButton.addItem(item: settings)
