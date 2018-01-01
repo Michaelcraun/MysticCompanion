@@ -119,7 +119,7 @@ extension HomeVC {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     self.players = playersArray
-                    if playersArray.count < 4 {
+                    if playersArray.count <= 4 {
                         for player in playersArray {
                             guard let playerUsername = player["username"] as? String else { return }
                             if playerUsername == userUsername {
