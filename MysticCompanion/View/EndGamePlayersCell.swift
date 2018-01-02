@@ -65,6 +65,7 @@ class EndGamePlayersCell: UITableViewCell {
         playerUsernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
         playerUsernameLabel.text = username
         playerUsernameLabel.sizeToFit()
+        playerUsernameLabel.tag = 3030
         playerUsernameLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let currentVictoryLabel = UILabel()

@@ -86,4 +86,19 @@ extension GameVC {
             }
         })
     }
+    
+    func updateFBUserStatistics() {
+        GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for user in userSnapshot {
+                if user.key == FIRAuth.auth()?.currentUser?.uid {
+                    guard let mostManaGainedInOneTurn = user.childSnapshot(forPath: "mostManaGainedInOneTurn").value as? Int else { return }
+                    guard let averageTurnTime = user.childSnapshot(forPath: "averageTurnTime").value as? Double else { return }
+                    
+                    print(mostManaGainedInOneTurn)
+                    print(averageTurnTime)
+                }
+            }
+        })
+    }
 }

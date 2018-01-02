@@ -39,7 +39,7 @@ extension EndGameVC {
                         self.playersTable.reloadData()
                         
                         for player in playersArray {
-                            guard let playerVictoryPoints = player["totalVictoryPoints"] as? Int else { return }
+                            guard let playerVictoryPoints = player["victoryPoints"] as? Int else { return }
                             if playerVictoryPoints > winningVP {
                                 guard let playerUsername = player["username"] as? String else { return }
                                 
@@ -48,7 +48,18 @@ extension EndGameVC {
                                 print("GAME OVER: \(winningUsername)")
                             }
                         }
-                        //TODO: Animate cell with username that matches winningUsername
+                        
+                        guard let playersTableCells = self.playersTable.visibleCells as? [PlayersTableCell] else { return }
+                        for cell in playersTableCells {
+                            for subview in cell.subviews {
+                                if subview.tag == 3030 {
+                                    guard let usernameLabel = subview as? UILabel else { return }
+                                    if usernameLabel.text == winningUsername {
+                                        //TODO: Animate cell
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     if gameFinalized && game.key == FIRAuth.auth()?.currentUser?.uid {
@@ -69,13 +80,12 @@ extension EndGameVC {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     for player in playersArray {
-                        guard let fbPlayerUsername = player["username"] as? String else { return }
-                        if fbPlayerUsername == Player.instance.username {
+                        guard let firebasePlayerUsername = player["username"] as? String else { return }
+                        if firebasePlayerUsername == Player.instance.username {
                             var newPlayer = player
                             guard let firebasePlayerVP = player["victoryPoints"] as? Int else { return }
-                            guard let firebasePlayerBoxVP = player["boxVictory"] as? Int else { return }
-                            let newCurrentVP = firebasePlayerVP + firebasePlayerBoxVP + deckVP
-                            newPlayer["totalVictoryPoints"] = newCurrentVP as AnyObject
+                            let newCurrentVP = firebasePlayerVP + deckVP
+                            newPlayer["victoryPoints"] = newCurrentVP as AnyObject
                             newPlayer["finished"] = true as AnyObject
                             newPlayersArray.append(newPlayer)
                         } else {
