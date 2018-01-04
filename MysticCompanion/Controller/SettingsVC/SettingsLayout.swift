@@ -118,13 +118,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let logout = KCFloatingActionButtonItem()
         logout.setButtonOfType(.logout)
         logout.handler = { item in
-            do {
-                try FIRAuth.auth()?.signOut()
-                self.dismiss(animated: true, completion: nil)
-            } catch (let error) {
-                //TODO: Handle error properly
-                print(error)
-            }
+            self.logout()
         }
         
         let contactSupport = KCFloatingActionButtonItem()

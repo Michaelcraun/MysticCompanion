@@ -47,6 +47,10 @@
 		9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */; };
 		9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C0081FCC7534005741CD /* HomeFirebase.swift */; };
 		9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C00B1FCCA2A4005741CD /* Constants.swift */; };
+		9BD2409C1FFC6366001F5F29 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409B1FFC6366001F5F29 /* StoreKit.framework */; };
+		9BD240A01FFDBC30001F5F29 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409D1FFDBC2D001F5F29 /* FBSDKCoreKit.framework */; };
+		9BD240A11FFDBC30001F5F29 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409E1FFDBC2F001F5F29 /* Bolts.framework */; };
+		9BD240A21FFDBC30001F5F29 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409F1FFDBC30001F5F29 /* FBSDKLoginKit.framework */; };
 		9BFCBE351FF6767A00A2627B /* SettingsFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE341FF6767A00A2627B /* SettingsFirebase.swift */; };
 		9BFCBE371FF6BE5E00A2627B /* PreviousGamePlayersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */; };
 		9BFCBE391FF6BEF000A2627B /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */; };
@@ -66,8 +70,6 @@
 		9B0D32161FD0240C006F7805 /* SettingsCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoreData.swift; sourceTree = "<group>"; };
 		9B0D32181FD02C76006F7805 /* SettingsSKHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSKHelper.swift; sourceTree = "<group>"; };
 		9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLobbyCell.swift; sourceTree = "<group>"; };
-		9B0D321C1FD044B7006F7805 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		9B0D321D1FD044B7006F7805 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		9B167B471FE170B900183733 /* EndGameLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameLayout.swift; sourceTree = "<group>"; };
 		9B167B491FE173B700183733 /* EndGamePlayersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePlayersCell.swift; sourceTree = "<group>"; };
 		9B167B4B1FE173C900183733 /* EndGameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameFirebase.swift; sourceTree = "<group>"; };
@@ -97,6 +99,11 @@
 		9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLayout.swift; sourceTree = "<group>"; };
 		9BC7C0081FCC7534005741CD /* HomeFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFirebase.swift; sourceTree = "<group>"; };
 		9BC7C00B1FCCA2A4005741CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9BD2409A1FFC635D001F5F29 /* MysticCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MysticCompanion.entitlements; sourceTree = "<group>"; };
+		9BD2409B1FFC6366001F5F29 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		9BD2409D1FFDBC2D001F5F29 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		9BD2409E1FFDBC2F001F5F29 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		9BD2409F1FFDBC30001F5F29 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		9BFCBE341FF6767A00A2627B /* SettingsFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFirebase.swift; sourceTree = "<group>"; };
 		9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousGamePlayersCell.swift; sourceTree = "<group>"; };
 		9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtensions.swift; sourceTree = "<group>"; };
@@ -110,6 +117,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				43B1A16DCD40CCF439AD3AF6 /* Pods_MysticCompanion.framework in Frameworks */,
+				9BD240A01FFDBC30001F5F29 /* FBSDKCoreKit.framework in Frameworks */,
+				9BD240A21FFDBC30001F5F29 /* FBSDKLoginKit.framework in Frameworks */,
+				9BD2409C1FFC6366001F5F29 /* StoreKit.framework in Frameworks */,
+				9BD240A11FFDBC30001F5F29 /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,8 +130,10 @@
 		0A6B97D8B63CD11662DC4B00 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9B0D321C1FD044B7006F7805 /* FBSDKCoreKit.framework */,
-				9B0D321D1FD044B7006F7805 /* FBSDKLoginKit.framework */,
+				9BD2409E1FFDBC2F001F5F29 /* Bolts.framework */,
+				9BD2409D1FFDBC2D001F5F29 /* FBSDKCoreKit.framework */,
+				9BD2409F1FFDBC30001F5F29 /* FBSDKLoginKit.framework */,
+				9BD2409B1FFC6366001F5F29 /* StoreKit.framework */,
 				B0701036F9FC1BFBA71D63B8 /* Pods_MysticCompanion.framework */,
 			);
 			name = Frameworks;
@@ -228,6 +241,7 @@
 		9BC7BFE81FCC6506005741CD /* MysticCompanion */ = {
 			isa = PBXGroup;
 			children = (
+				9BD2409A1FFC635D001F5F29 /* MysticCompanion.entitlements */,
 				9B73B64C1FD8BACD007E7ECA /* Protocols */,
 				9B73B6471FD8B654007E7ECA /* Extensions */,
 				9B0D32111FD02282006F7805 /* Model */,
@@ -336,6 +350,17 @@
 					9BC7BFE51FCC6506005741CD = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -599,6 +624,7 @@
 			baseConfigurationReference = C86938E58E650349541B72EB /* Pods-MysticCompanion.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MysticCompanion/MysticCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 96SB47X67B;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -615,6 +641,7 @@
 					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleMobileAds/Frameworks\"",
 					"~/Documents/FacebookSDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MysticCompanion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -630,6 +657,7 @@
 			baseConfigurationReference = 66FCF40FC8208B788DDED33A /* Pods-MysticCompanion.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MysticCompanion/MysticCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 96SB47X67B;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -646,6 +674,7 @@
 					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleMobileAds/Frameworks\"",
 					"~/Documents/FacebookSDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MysticCompanion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

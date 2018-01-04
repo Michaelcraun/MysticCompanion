@@ -44,13 +44,21 @@ class GameVC: UIViewController, Alertable {
         didSet {
             if currentPlayer == Player.instance.username && !isEndOfGameTurn {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
-//                if isEndOfGameTurn {
-//                    dismiss(animated: false, completion: nil)
-//                }
             }
         }
     }
     var endingPlayerUsername = ""
+    var userHasSpoiled = false {
+        didSet {
+            let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
+                                                          "deck" : Player.instance.deck?.rawValue as AnyObject,
+                                                          "finished" : false as AnyObject,
+                                                          "victoryPoints" : Player.instance.currentVP as AnyObject,
+                                                          "boxVictory" : Player.instance.boxVP as AnyObject]
+            
+            passTurn(withUserData: userData)
+        }
+    }
     
     //MARK: UI Variables
     let playerPanel = UIView()
@@ -155,7 +163,7 @@ class GameVC: UIViewController, Alertable {
         let currentGrowth = growthTracker.currentStepper.value
         
         if currentDecay - 3 > currentGrowth && !Player.instance.hasSpoiled {
-            Player.instance.hasSpoiled = true
+//            Player.instance.hasSpoiled = true
             showAlertWithOptions(withTitle: "Spoiled", andMessage: "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn.", andNotificationType: .error)
             
             switch sender {

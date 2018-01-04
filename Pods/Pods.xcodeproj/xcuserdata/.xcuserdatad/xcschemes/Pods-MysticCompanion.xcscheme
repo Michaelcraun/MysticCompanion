@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'BB37AF3C829B25FA806ABD18F608AD91'
+               BlueprintIdentifier = 'B70C4E6531F8A388B4336F0C73D3E9F6'
                BlueprintName = 'Pods-MysticCompanion'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods-MysticCompanion.framework'>

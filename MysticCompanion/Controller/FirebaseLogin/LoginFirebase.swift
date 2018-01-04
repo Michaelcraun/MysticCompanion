@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import GoogleSignIn
 
 extension LoginVC: Alertable {
     func loginWithFirebase() {
@@ -51,5 +52,28 @@ extension LoginVC: Alertable {
         } else {
             showAlert(withTitle: "Error:", andMessage: "Please provide a username, valid email, and password!", andNotificationType: .error)
         }
+    }
+    
+    func login(withCredential credential: FIRAuthCredential) {
+        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
+            if let error = error {
+                print("there was an error logging into Firebase: ", error)
+                let alertTitle = "Firebase Error:"
+                guard let errorCode = FIRAuthErrorCode(rawValue: error._code) else { return }
+                switch errorCode {
+                case .errorCodeCredentialAlreadyInUse: self.showAlert(withTitle: alertTitle, andMessage: "That credential is already in use. Please try again.", andNotificationType: .error)
+                case .errorCodeAccountExistsWithDifferentCredential: self.showAlert(withTitle: alertTitle, andMessage: "That account exists with a different credential. Please try again.", andNotificationType: .error)
+                case .errorCodeInvalidCredential: self.showAlert(withTitle: alertTitle, andMessage: "That credential is invalid. Please try again.", andNotificationType: .error)
+                default: self.showAlert(withTitle: alertTitle, andMessage: "There was an unexpected error. Please try again.", andNotificationType: .error)
+                }
+                return
+            }
+            
+            guard let user = user else { return }
+            let userData = ["provider" : user.providerID,
+                            "username" : user.displayName as Any]
+            GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+            self.dismiss(animated: true, completion: nil)
+        })
     }
 }

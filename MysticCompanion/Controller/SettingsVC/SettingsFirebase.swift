@@ -26,4 +26,14 @@ extension SettingsVC {
             }
         })
     }
+    
+    func logout() {
+        let firebaseAuth = FIRAuth.auth()
+        do {
+            try firebaseAuth?.signOut()
+            viewDidLoad()
+        } catch {
+            showAlert(withTitle: "Firebase Error:", andMessage: "There was an unexpected error logging out. Please try again.", andNotificationType: .error)
+        }
+    }
 }

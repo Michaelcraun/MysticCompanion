@@ -58,7 +58,8 @@ extension Alertable where Self: UIViewController {
             }
             
             if alertController.title == "Spoiled" {
-                Player.instance.hasSpoiled = true
+                let gameVC = GameVC()
+                gameVC.userHasSpoiled = true
             }
         })
         let deny = UIAlertAction(title: "No", style: .default, handler: { action in
@@ -68,9 +69,9 @@ extension Alertable where Self: UIViewController {
                 }
             }
             
-            if alertController.title == "Spoiled" {
-                Player.instance.hasSpoiled = false
-            }
+//            if alertController.title == "Spoiled" {
+//                Player.instance.hasSpoiled = false
+//            }
         })
         
         alertController.addAction(confirm)

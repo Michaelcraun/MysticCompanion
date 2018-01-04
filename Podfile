@@ -8,12 +8,22 @@ target 'MysticCompanion' do
   use_frameworks!
 
   # Pods for MysticCompanion
+  # UI pods
   pod 'GMStepper'
   pod 'KCFloatingActionButton'
   pod 'TextFieldEffects'
+  
+  #Firebase pods
   pod 'Firebase'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
+  pod 'Firebase/Messaging'
+  
+  #GAD pods
   pod 'GoogleMobileAds'
+  
+  #Login pods
+  pod 'TwitterKit'
+  pod 'GoogleSignIn'
 
 end
