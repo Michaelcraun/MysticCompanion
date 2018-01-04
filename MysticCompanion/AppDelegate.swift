@@ -141,26 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print("GOOGLE: \(error.localizedDescription)")
-            return
-        }
-
-        guard let authentication = user.authentication else { return }
-
-        let userId = user.userID                  // For client-side use only!
-        let idToken = user.authentication.idToken // Safe to send to the server
-        let fullName = user.profile.name
-        let givenName = user.profile.givenName
-        let familyName = user.profile.familyName
-        let email = user.profile.email
-        // ...
-        print("GOOGLE: \(userId)")
-        print("GOOGLE: \(idToken)")
-        print("GOOGLE: \(fullName)")
-        print("GOOGLE: \(givenName)")
-        print("GOOGLE: \(familyName)")
-        print("GOOGLE: \(email)")
+        
     }
 
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {

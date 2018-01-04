@@ -46,12 +46,16 @@ class HomeVC: UIViewController, Alertable {
     //MARK: MapKit Variables
     var locationManager = CLLocationManager()
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //TODO: Convert CoreData game entries into Firebase entries?
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
+        
+        checkForRating()
         checkTheme()
         layoutView()
         locationManager.requestWhenInUseAuthorization()
@@ -85,6 +89,21 @@ class HomeVC: UIViewController, Alertable {
         self.layoutGameLobby()
         self.nearbyGames = []
         self.observeGames(withUserLocation: userLoaction!)
+    }
+    
+    func checkForRating() {
+        var timesAppOpened = defaults.integer(forKey: "timesAppOpened")
+        let ratingLeft = defaults.bool(forKey: "ratingLeft")
+        
+        if timesAppOpened == 10 && !ratingLeft {
+            //TODO: Show alert asking to leave rating
+            
+            timesAppOpened = 0
+        } else {
+            timesAppOpened += 1
+        }
+        
+        defaults.set(timesAppOpened, forKey: "timesAppOpened")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
