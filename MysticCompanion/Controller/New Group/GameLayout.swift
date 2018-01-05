@@ -250,4 +250,9 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 27.5
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellDelay = TimeInterval(indexPath.row - 1) / 10
+        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
+    }
 }

@@ -9,11 +9,6 @@
 import UIKit
 
 class GameLobbyCell: UITableViewCell {
-//    override func awakeFromNib() {
-//        self.backgroundColor = .clear
-//        super.awakeFromNib()
-//    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = .clear

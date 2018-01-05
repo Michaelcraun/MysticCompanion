@@ -109,6 +109,7 @@ extension HomeVC {
     func updateGame(forGame selectedGame: Dictionary<String,AnyObject>, withUserData userData: Dictionary<String,AnyObject>) {
         var isInGame = false
         var deckTaken = false
+        var newPlayersArray = [Dictionary<String,AnyObject>]()
         let gameKey = selectedGame["game"] as! String
         guard let userUsername = userData["username"] as? String else { return }
         guard let userDeck = userData["deck"] as? String else { return }
@@ -118,7 +119,7 @@ extension HomeVC {
             for game in gameSnapshot {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
-                    self.players = playersArray
+//                    self.players = playersArray
                     if playersArray.count <= 4 {
                         for player in playersArray {
                             guard let playerUsername = player["username"] as? String else { return }
@@ -137,12 +138,24 @@ extension HomeVC {
                         //TODO: Check if user is in game AND their deck is taken and switch deck out if deck isn't taken?
                         if isInGame {
                             self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!", andNotificationType: .error)
-                        } else if deckTaken {
-                            self.showAlert(withTitle: "Error:", andMessage: "That deck is already taken! Please choose a different one.", andNotificationType: .error)
+                            if deckTaken {
+                                self.showAlert(withTitle: "Error:", andMessage: "That deck is already taken! Please choose a different one.", andNotificationType: .error)
+                            } else {
+                                for player in playersArray {
+                                    guard let playerUsername = player["username"] as? String else { return }
+                                    guard let userUsername = userData["username"] as? String else { return }
+                                    if playerUsername != userUsername {
+                                        newPlayersArray.append(player)
+                                    } else {
+                                        newPlayersArray.append(userData)
+                                    }
+                                }
+                            }
                         } else {
-                            self.players.append(userData)
+                            newPlayersArray.append(userData)
                         }
                         
+                        self.players = newPlayersArray
                         var gameToUpdate = selectedGame
                         gameToUpdate["players"] = self.players as AnyObject
                         GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)

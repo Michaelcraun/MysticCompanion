@@ -272,4 +272,9 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
             return UITableViewAutomaticDimension
         }
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellDelay = TimeInterval(indexPath.row - 1) / 10
+        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
+    }
 }

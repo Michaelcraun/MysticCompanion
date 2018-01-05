@@ -12,7 +12,28 @@ import GoogleMobileAds
 
 class GameVC: UIViewController, Alertable {
     
+    //MARK: UI Variables
+    let playerPanel = UIView()
+    let gameVPLabel = UILabel()
+    let playersTable = UITableView()
+    let adBanner = GADBannerView()
+    
+    let manaTracker = TrackerView()
+    let decayTracker = TrackerView()
+    let growthTracker = TrackerView()
+    let animalTracker = TrackerView()
+    let forestTracker = TrackerView()
+    let skyTracker = TrackerView()
+    let victoryTracker = TrackerView()
+    let wildTracker = TrackerView()
+    var trackersArray = [TrackerView]()
+    var userQuitGame = false
+
     //MARK: Game Variables
+    var vpGoal = 13
+    var isEndOfGameTurn = false
+    var endingPlayerUsername = ""
+    
     var victoryTaken = 0 {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
@@ -32,23 +53,21 @@ class GameVC: UIViewController, Alertable {
             }
         }
     }
-    var vpGoal = 13
-    var isEndOfGameTurn = false
+    
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
             playersTable.reloadData()
         }
     }
-    var playerIndex = 0
+    
     var currentPlayer = "" {
         didSet {
             if currentPlayer == Player.instance.username && !isEndOfGameTurn {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
-                startTimer(true)
             }
         }
     }
-    var endingPlayerUsername = ""
+    
     var userHasSpoiled = false {
         didSet {
             let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
@@ -60,25 +79,7 @@ class GameVC: UIViewController, Alertable {
             passTurn(withUserData: userData)
         }
     }
-    var turnTime: TimeInterval = 0
     
-    //MARK: UI Variables
-    let playerPanel = UIView()
-    let gameVPLabel = UILabel()
-    let playersTable = UITableView()
-    let adBanner = GADBannerView()
-    
-    let manaTracker = TrackerView()
-    let decayTracker = TrackerView()
-    let growthTracker = TrackerView()
-    let animalTracker = TrackerView()
-    let forestTracker = TrackerView()
-    let skyTracker = TrackerView()
-    let victoryTracker = TrackerView()
-    let wildTracker = TrackerView()
-    var trackersArray = [TrackerView]()
-    var userQuitGame = false
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -135,6 +136,9 @@ class GameVC: UIViewController, Alertable {
             Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
             Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
             Player.instance.currentVP = Int(victoryTracker.currentStepper.value) - Player.instance.boxVP
+            
+            let currentMana = Int(manaTracker.currentStepper.value)
+            updateFBUserStatistics(withMana: currentMana)
         }
         
         let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
@@ -142,11 +146,7 @@ class GameVC: UIViewController, Alertable {
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
-        startTimer(false)
         passTurn(withUserData: userData)
-        
-        let currentMana = Int(manaTracker.currentStepper.value)
-        updateFBUserStatistics(withMana: currentMana, andTime: turnTime)
         
         var delay: TimeInterval = 0.0
         for i in 0..<trackersArray.count {
@@ -184,19 +184,5 @@ class GameVC: UIViewController, Alertable {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
         performSegue(withIdentifier: "showEndGame", sender: nil)
-    }
-    
-    func startTimer(_ shouldStart: Bool) {
-        //TODO: Start turn timer
-        var timer = Timer()
-        turnTime = 0
-        
-        if shouldStart {
-            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (action) in
-                self.turnTime += 1
-            })
-        } else {
-            timer.invalidate()
-        }
     }
 }

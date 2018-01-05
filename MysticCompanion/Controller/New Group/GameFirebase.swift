@@ -87,7 +87,7 @@ extension GameVC {
         })
     }
     
-    func updateFBUserStatistics(withMana mana: Int, andTime time: TimeInterval) {
+    func updateFBUserStatistics(withMana mana: Int) {
         var userData = Dictionary<String,AnyObject>()
         
         GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in

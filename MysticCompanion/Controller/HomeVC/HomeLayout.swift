@@ -325,6 +325,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
+        tableView.beginUpdates()
         if userIsHostingGame {
             if players.count == 1 {
                 if indexPath.row == 0 {
@@ -360,6 +361,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         } else {
             cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
         }
+        tableView.endUpdates()
         return cell
     }
     
@@ -394,5 +396,10 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellDelay = TimeInterval(indexPath.row - 1) / 10
+        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
     }
 }
