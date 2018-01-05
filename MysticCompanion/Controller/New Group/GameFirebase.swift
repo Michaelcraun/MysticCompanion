@@ -48,6 +48,11 @@ extension GameVC {
                     self.players = playersArray
                     self.currentPlayer = currentPlayer
                     self.victoryTaken = victoryTaken
+                    
+                    if self.victoryTaken >= self.vpGoal {
+                        self.isEndOfGameTurn = true
+                        //TODO: Test
+                    }
                 }
             }
         })
@@ -80,8 +85,6 @@ extension GameVC {
                     guard let newCurrentPlayerUsername = newCurrentPlayer["username"] as? String else { return }
                     GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: ["currentPlayer" : newCurrentPlayerUsername,
                                                                                         "players" : newPlayersArray])
-                    
-                    //TODO: Store user statistics on Firebase
                 }
             }
         })

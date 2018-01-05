@@ -42,7 +42,6 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         blurEffectView.tag = 1001
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        //TODO: playersTable customization
         playersTable.backgroundColor = .clear
         playersTable.separatorStyle = .none
         playersTable.register(PreviousGamePlayersCell.self, forCellReuseIdentifier: "previousGamePlayersCell")

@@ -32,25 +32,18 @@ class GameVC: UIViewController, Alertable {
     //MARK: Game Variables
     var vpGoal = 13
     var isEndOfGameTurn = false
-    var endingPlayerUsername = ""
+    var endingPlayerUsername = "" {
+        didSet {
+            print("END GAME: \(endingPlayerUsername)")
+        }
+    }
     
     var victoryTaken = 0 {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
-            if victoryTaken >= vpGoal {
-                let endingPlayer = players[0]
-                if let endingPlayerUsername = endingPlayer["username"] as? String {
-                    self.endingPlayerUsername = endingPlayerUsername
-                    if !isEndOfGameTurn {
-                        if endingPlayerUsername == Player.instance.username {
-                            self.showAlert(withTitle: "End of Game", andMessage: "You ended the game. Please wait for the other players to complete their turns.", andNotificationType: .endOfGame)
-                        } else {
-                            self.showAlert(withTitle: "End of Game", andMessage: "\(endingPlayerUsername) ended the game. This will be your final turn.", andNotificationType: .endOfGame)
-                        }
-                        isEndOfGameTurn = true
-                    }
-                }
-            }
+            let endingPlayer = players[0]
+            guard let endingPlayerUsername = endingPlayer["username"] as? String else { return }
+            self.endingPlayerUsername = endingPlayerUsername
         }
     }
     
@@ -62,7 +55,7 @@ class GameVC: UIViewController, Alertable {
     
     var currentPlayer = "" {
         didSet {
-            if currentPlayer == Player.instance.username && !isEndOfGameTurn {
+            if currentPlayer == Player.instance.username && currentPlayer != endingPlayerUsername {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
             }
         }

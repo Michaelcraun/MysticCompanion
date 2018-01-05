@@ -11,7 +11,7 @@ import GoogleMobileAds
 import KCFloatingActionButton
 import GMStepper
 
-class EndGameVC: UIViewController {
+class EndGameVC: UIViewController, Alertable {
     
     //MARK: Firebase Variables
     var players = [Dictionary<String,AnyObject>]() {
@@ -31,6 +31,9 @@ class EndGameVC: UIViewController {
 
         setupGameAndObserve()
         layoutView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showAlert(withTitle: "End of Game", andMessage: "The game has concluded. Please enter the amount of victory points contained in your deck.", andNotificationType: .endOfGame)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

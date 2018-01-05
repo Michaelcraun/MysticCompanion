@@ -90,7 +90,6 @@ extension Alertable where Self: UIViewController {
     }
     
     func addVibration(withNotificationType type: NotificationType) {
-        //TODO: Test
         switch UIDevice.current.notificationDevice {
         case .haptic:
             let notification = UINotificationFeedbackGenerator()

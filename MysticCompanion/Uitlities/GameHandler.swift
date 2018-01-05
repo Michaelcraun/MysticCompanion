@@ -57,9 +57,7 @@ class GameHandler {
         REF_DATA.child(gameKey).updateChildValues(gameData)
     }
     
-    //TODO: Remove createFirebaseDBData()?
     func createFirebaseDBData() {
-        //TODO: Refactor
         guard let gameKey = game["game"] as? String else { return }
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
         var newPlayersArray = [Dictionary<String,AnyObject>]()

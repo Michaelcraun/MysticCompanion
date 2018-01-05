@@ -85,11 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    //TODO: Remove reinitialize() ?
-    func reinitialize() {
-        
-    }
-    
     func scheduleNotification(withNumberOfSeconds seconds: Int) {
         let calendar = Calendar(identifier: .gregorian)
         let components = calendar.dateComponents(in: .current, from: Date())

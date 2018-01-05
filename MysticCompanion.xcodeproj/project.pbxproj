@@ -284,11 +284,11 @@
 		9BC7C0021FCC6EF6005741CD /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */,
-				9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */,
+				9B167B491FE173B700183733 /* EndGamePlayersCell.swift */,
 				9B0D321A1FD04142006F7805 /* GameLobbyCell.swift */,
 				9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */,
-				9B167B491FE173B700183733 /* EndGamePlayersCell.swift */,
+				9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */,
+				9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */,
 				9BC7C0031FCC6EFC005741CD /* Style */,
 			);
 			path = View;

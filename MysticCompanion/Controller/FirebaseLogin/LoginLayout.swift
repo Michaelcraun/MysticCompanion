@@ -112,7 +112,6 @@ extension LoginVC {
     }
     
     func layoutSocialMediaLoginButtons() {
-        //TODO: Get facebookLogin communicating with Firebase
         facebookLogin.readPermissions = ["public_profile", "email"]
         facebookLogin.translatesAutoresizingMaskIntoConstraints = false
         

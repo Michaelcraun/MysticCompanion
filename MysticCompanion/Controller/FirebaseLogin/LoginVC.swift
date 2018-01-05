@@ -52,7 +52,6 @@ class LoginVC: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLo
 //MARK: Google Sign-in
 extension LoginVC {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        //TODO: Get GoogleSignIn talking to Firebase
         if let _ = error {
             showAlert(withTitle: "Google Sign-In Error:", andMessage: "There was an unexpected error when attempting to sign in with Google. Please try again.", andNotificationType: .error)
             return
@@ -87,6 +86,7 @@ extension LoginVC {
     func twitterLoginCompletion(session: TWTRSession?, error: Error!) {
         if let _ = error {
             showAlert(withTitle: "Twitter Error:", andMessage: "There was an unexpected error when attempting to sign in with Twitter. Please try again.", andNotificationType: .error)
+            //TODO: Get Twitter working and talking to Firebase
             //Returning "Request failed: unauthorized (401) error
             //Usually means missing Consumer Secret or Consumer Secret, but these are correct...
             return

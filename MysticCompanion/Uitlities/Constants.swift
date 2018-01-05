@@ -77,7 +77,6 @@ enum DeckType: String {
     case lifewardens
     case waveguards
     
-    //TODO: add primary and secondary (less alpha) colors
     var color: UIColor {
         switch self {
         case .beastbrothers: return UIColor(red: 190 / 255, green: 50 / 255, blue: 44 / 255, alpha: 1)

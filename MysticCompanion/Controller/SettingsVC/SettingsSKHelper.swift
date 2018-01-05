@@ -10,7 +10,6 @@ import UIKit
 import StoreKit
 
 extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-    //TODO: StoreKit Functionality
     func buyProduct(productID: String) {
         for product in productList {
             let productToCheck = product.productIdentifier
