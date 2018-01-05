@@ -18,8 +18,10 @@ extension LoginVC: Alertable {
             FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error == nil {
                     guard let user = user else { return }
-                    let userData = ["provider" : user.providerID,
-                                    "username" : username]
+                    let userData: Dictionary<String,Any> = ["provider" : user.providerID,
+                                                            "username" : username,
+                                                            "mostManaGainedInOneTurn" : 0,
+                                                            "averageTurnTime" : 0.0]
                     GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                     self.dismiss(animated: true, completion: nil)
                 } else {
@@ -39,8 +41,10 @@ extension LoginVC: Alertable {
                                 }
                             } else {
                                 guard let user = user else { return }
-                                let userData = ["provider" : user.providerID,
-                                                "username" : username]
+                                let userData: Dictionary<String,Any> = ["provider" : user.providerID,
+                                                                        "username" : username,
+                                                                        "mostManaGainedInOneTurn" : 0,
+                                                                        "averageTurnTime" : 0.0]
                                 GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -70,8 +74,10 @@ extension LoginVC: Alertable {
             }
             
             guard let user = user else { return }
-            let userData = ["provider" : user.providerID,
-                            "username" : user.displayName as Any]
+            let userData: Dictionary<String,Any> = ["provider" : user.providerID,
+                                                    "username" : user.displayName as Any,
+                                                    "mostManaGainedInOneTurn" : 0,
+                                                    "averageTurnTime" : 0.0]
             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
             self.dismiss(animated: true, completion: nil)
         })

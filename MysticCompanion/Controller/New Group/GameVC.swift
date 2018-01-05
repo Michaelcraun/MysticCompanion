@@ -44,6 +44,7 @@ class GameVC: UIViewController, Alertable {
         didSet {
             if currentPlayer == Player.instance.username && !isEndOfGameTurn {
                 showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
+                startTimer(true)
             }
         }
     }
@@ -59,6 +60,7 @@ class GameVC: UIViewController, Alertable {
             passTurn(withUserData: userData)
         }
     }
+    var turnTime: TimeInterval = 0
     
     //MARK: UI Variables
     let playerPanel = UIView()
@@ -140,7 +142,11 @@ class GameVC: UIViewController, Alertable {
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
+        startTimer(false)
         passTurn(withUserData: userData)
+        
+        let currentMana = Int(manaTracker.currentStepper.value)
+        updateFBUserStatistics(withMana: currentMana, andTime: turnTime)
         
         var delay: TimeInterval = 0.0
         for i in 0..<trackersArray.count {
@@ -163,7 +169,6 @@ class GameVC: UIViewController, Alertable {
         let currentGrowth = growthTracker.currentStepper.value
         
         if currentDecay - 3 > currentGrowth && !Player.instance.hasSpoiled {
-//            Player.instance.hasSpoiled = true
             showAlertWithOptions(withTitle: "Spoiled", andMessage: "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn.", andNotificationType: .error)
             
             switch sender {
@@ -175,15 +180,23 @@ class GameVC: UIViewController, Alertable {
         sender.reset()
     }
     
-//    func quitGamePressed() {
-//        GameHandler.instance.quitGameForUser(Player.instance.username)
-//        GameHandler.instance.REF_GAME.removeAllObservers()
-//        performSegue(withIdentifier: "showEndGame", sender: nil)
-//    }
-    
     func endGame() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
         performSegue(withIdentifier: "showEndGame", sender: nil)
+    }
+    
+    func startTimer(_ shouldStart: Bool) {
+        //TODO: Start turn timer
+        var timer = Timer()
+        turnTime = 0
+        
+        if shouldStart {
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (action) in
+                self.turnTime += 1
+            })
+        } else {
+            timer.invalidate()
+        }
     }
 }
