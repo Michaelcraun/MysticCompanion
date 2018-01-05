@@ -52,8 +52,7 @@ class EndGameVC: UIViewController, Alertable {
     func quitPressed() {
         GameHandler.instance.REF_GAME.removeAllObservers()
         
-        let gameVC = GameVC()
-        gameVC.userQuitGame = true
+        Player.instance.hasQuitGame = true
         dismiss(animated: true, completion: nil)
     }
 }

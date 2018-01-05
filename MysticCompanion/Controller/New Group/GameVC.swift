@@ -27,7 +27,6 @@ class GameVC: UIViewController, Alertable {
     let victoryTracker = TrackerView()
     let wildTracker = TrackerView()
     var trackersArray = [TrackerView]()
-    var userQuitGame = false
 
     //MARK: Game Variables
     var vpGoal = 13
@@ -85,7 +84,7 @@ class GameVC: UIViewController, Alertable {
         checkTheme()
         layoutMenuButton()
         
-        if userQuitGame {
+        if Player.instance.hasQuitGame {
             dismiss(animated: false, completion: nil)
         }
     }

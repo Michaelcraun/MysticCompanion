@@ -24,6 +24,7 @@ class HomeVC: UIViewController, Alertable {
     let waveguardsIcon = CircleView()
     let menuButton = KCFloatingActionButton()
     let adBanner = GADBannerView()
+    let gameLobby = UIView()
     let gameLobbyTable = UITableView()
     
     //MARK: Firebase Variables
@@ -68,6 +69,11 @@ class HomeVC: UIViewController, Alertable {
         checkTheme()
         layoutMenuButton()
         checkUsername(forKey: currentUserID)
+        
+        if Player.instance.hasQuitGame {
+            Player.instance.reinitialize()
+            gameLobby.fadeAlphaOut()
+        }
     }
     
     func setPlayerIcon(withDeck deck: DeckType) {

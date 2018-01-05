@@ -274,7 +274,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        let gameLobby = UIView()
         gameLobby.backgroundColor = .clear
         gameLobby.clipsToBounds = true
         gameLobby.layer.cornerRadius = 15

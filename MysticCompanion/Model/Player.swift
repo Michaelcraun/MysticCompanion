@@ -21,6 +21,7 @@ protocol PlayerDelegate {
     var currentVP: Int { get set }
     var boxVP: Int { get set }
     var hasSpoiled: Bool { get set }
+    var hasQuitGame: Bool { get set }
 }
 
 class Player: PlayerDelegate {
@@ -38,6 +39,7 @@ class Player: PlayerDelegate {
     var currentVP: Int = 0
     var boxVP: Int = 0
     var hasSpoiled: Bool = false
+    var hasQuitGame: Bool = false
     
     func reinitialize() {
         username = ""
@@ -52,5 +54,6 @@ class Player: PlayerDelegate {
         currentVP = 0
         boxVP = 0
         hasSpoiled = false
+        hasQuitGame = false
     }
 }
