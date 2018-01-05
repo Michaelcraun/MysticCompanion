@@ -105,7 +105,8 @@ extension GameVC {
                         userData["mostManaGainedInOneTurn"] = mana as AnyObject
                     }
                 }
-                GameHandler.instance.createFirebaseDBUser(uid: user.key, userData: userData)
+//                GameHandler.instance.createFirebaseDBUser(uid: user.key, userData: userData)
+                //TODO: Create an updateUser function in GameHandler
             }
         })
     }

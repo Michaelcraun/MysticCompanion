@@ -31,7 +31,7 @@ extension SettingsVC {
         let firebaseAuth = FIRAuth.auth()
         do {
             try firebaseAuth?.signOut()
-            viewDidLoad()
+            dismiss(animated: true, completion: nil)
         } catch {
             showAlert(withTitle: "Firebase Error:", andMessage: "There was an unexpected error logging out. Please try again.", andNotificationType: .error)
         }
