@@ -62,16 +62,10 @@ extension EndGameVC {
                         
                         if game.key == FIRAuth.auth()?.currentUser?.uid {
                             GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
+                            GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: game.key)
                         }
                     }
                 }
-                
-//                if gameFinalized && game.key == FIRAuth.auth()?.currentUser?.uid {
-//                    self.layoutMenuButton(gameState: "GAME FINALIZED")
-//                    //TODO: Add waiting for other players animation ?
-//                    GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
-//                    print("GAME OVER: \(game.key)")
-//                }
             }
         })
     }
