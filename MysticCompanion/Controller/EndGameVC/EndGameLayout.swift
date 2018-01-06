@@ -15,7 +15,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutView() {
         layoutBackground()
         layoutPlayersTable()
-        layoutMenuButton()
+        layoutMenuButton(gameState: gameState)
         layoutAds()
     }
     
@@ -58,7 +58,9 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tableBottomBuffer).isActive = true
     }
     
-    func layoutMenuButton() {
+    func layoutMenuButton(gameState: GameState) {
+        self.gameState = gameState
+        
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY()
         menuButton.items = []
@@ -73,7 +75,6 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         done.setButtonOfType(.done)
         done.handler = { item in
             self.donePressed()
-            self.layoutMenuButton()
         }
         
         let quit = KCFloatingActionButtonItem()
@@ -83,9 +84,9 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         menuButton.addItem(item: settings)
-        if shouldDisplayStepper {
+        if gameState == .vpNeeded {
             menuButton.addItem(item: done)
-        } else {
+        } else if gameState == .gameFinalized {
             menuButton.addItem(item: quit)
         }
         

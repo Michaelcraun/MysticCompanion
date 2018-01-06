@@ -58,6 +58,7 @@ class GameHandler {
     }
     
     func createFirebaseDBData() {
+        //TODO: Not saving... Why?
         guard let gameKey = game["game"] as? String else { return }
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
         var newPlayersArray = [Dictionary<String,AnyObject>]()

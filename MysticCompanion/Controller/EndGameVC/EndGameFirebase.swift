@@ -13,6 +13,7 @@ extension EndGameVC {
     func setupGameAndObserve() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+        var finishedPlayerCount = 0
         var gameFinalized = false
         var winningVP = 0
         var winningUsername = ""
@@ -23,20 +24,18 @@ extension EndGameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    var finishedPlayerCount = 0
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     
                     for player in playersArray {
                         guard let finished = player["finished"] as? Bool else { return }
                         if finished { finishedPlayerCount += 1 }
-                        print("GAME OVER: \(self.players.count)")
-                        print("GAME OVER: \(finishedPlayerCount)")
                     }
                     
-                    if finishedPlayerCount == self.players.count {
-                        gameFinalized = true
+                    if finishedPlayerCount >= self.players.count {
+                        print("GAME OVER: game.key: \(game.key)")
                         self.players = playersArray
                         self.playersTable.reloadData()
+                        self.layoutMenuButton(gameState: .gameFinalized)
                         
                         for player in playersArray {
                             guard let playerVictoryPoints = player["victoryPoints"] as? Int else { return }
@@ -45,7 +44,6 @@ extension EndGameVC {
                                 
                                 winningVP = playerVictoryPoints
                                 winningUsername = playerUsername
-                                print("GAME OVER: \(winningUsername)")
                             }
                         }
                         
@@ -56,17 +54,24 @@ extension EndGameVC {
                                     guard let usernameLabel = subview as? UILabel else { return }
                                     if usernameLabel.text == winningUsername {
                                         //TODO: Animate cell
+                                        self.animateWinner()
                                     }
                                 }
                             }
                         }
-                    }
-                    
-                    if gameFinalized && game.key == FIRAuth.auth()?.currentUser?.uid {
-                        GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
-                        print("GAME OVER: \(game.key)")
+                        
+                        if game.key == FIRAuth.auth()?.currentUser?.uid {
+                            GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
+                        }
                     }
                 }
+                
+//                if gameFinalized && game.key == FIRAuth.auth()?.currentUser?.uid {
+//                    self.layoutMenuButton(gameState: "GAME FINALIZED")
+//                    //TODO: Add waiting for other players animation ?
+//                    GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
+//                    print("GAME OVER: \(game.key)")
+//                }
             }
         })
     }

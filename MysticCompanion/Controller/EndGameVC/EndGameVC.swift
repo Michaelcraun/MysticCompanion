@@ -13,6 +13,15 @@ import GMStepper
 
 class EndGameVC: UIViewController, Alertable {
     
+    //MARK: Game Variables
+    var gameState: GameState = .vpNeeded
+    
+    enum GameState {
+        case vpNeeded
+        case vpSubmitted
+        case gameFinalized
+    }
+    
     //MARK: Firebase Variables
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
@@ -38,7 +47,7 @@ class EndGameVC: UIViewController, Alertable {
     
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
-        layoutMenuButton()
+        layoutMenuButton(gameState: gameState)
     }
     
     func donePressed() {
@@ -47,6 +56,7 @@ class EndGameVC: UIViewController, Alertable {
         let deckVP = Int(stepper.value)
         self.updateUser(Player.instance.username, withDeckVP: deckVP)
         self.playersTable.reloadData()
+        self.layoutMenuButton(gameState: .vpSubmitted)
     }
     
     func quitPressed() {
@@ -54,5 +64,9 @@ class EndGameVC: UIViewController, Alertable {
         
         Player.instance.hasQuitGame = true
         dismiss(animated: true, completion: nil)
+    }
+    
+    func animateWinner() {
+        
     }
 }

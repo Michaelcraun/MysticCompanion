@@ -274,6 +274,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
+        gameLobby = UIView()
         gameLobby.backgroundColor = .clear
         gameLobby.clipsToBounds = true
         gameLobby.layer.cornerRadius = 15
@@ -358,6 +359,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         } else {
+            //TODO: layout waiting for games cell
             cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
         }
         tableView.endUpdates()
