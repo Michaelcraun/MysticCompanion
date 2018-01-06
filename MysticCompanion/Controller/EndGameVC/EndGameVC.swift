@@ -34,6 +34,7 @@ class EndGameVC: UIViewController, Alertable {
     let adBanner = GADBannerView()
     let menuButton = KCFloatingActionButton()
     var shouldDisplayStepper = true
+    var winningUsername: String? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +67,24 @@ class EndGameVC: UIViewController, Alertable {
         dismiss(animated: true, completion: nil)
     }
     
-    func animateWinner() {
+    func animateWinner(_ cell: UITableViewCell) {
+        let winnerHeight = cell.frame.height / 2
+        let winnerWidth = cell.frame.width
         
+        let winnerImage = UIImageView()
+        winnerImage.contentMode = .scaleAspectFit
+        winnerImage.image = #imageLiteral(resourceName: "winner")
+        winnerImage.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(winnerImage)
+        
+        winnerImage.heightAnchor.constraint(equalToConstant: winnerHeight).isActive = true
+        winnerImage.widthAnchor.constraint(equalToConstant: winnerWidth).isActive = true
+        winnerImage.rightAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        winnerImage.topAnchor.constraint(equalTo: cell.topAnchor, constant: cell.frame.height / 2 - winnerImage.frame.height / 2).isActive = true
+        
+        UIView.animate(withDuration: 0.5) {
+            winnerImage.frame.origin.x += winnerWidth
+        }
     }
 }

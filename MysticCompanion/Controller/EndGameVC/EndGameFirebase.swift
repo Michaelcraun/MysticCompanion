@@ -14,10 +14,12 @@ extension EndGameVC {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
         var finishedPlayerCount = 0
-        var gameFinalized = false
         var winningVP = 0
-        var winningUsername = ""
-        
+        var winningUsername = "" {
+            didSet {
+                self.winningUsername = winningUsername
+            }
+        }
         players = playersArray
         
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
@@ -25,6 +27,7 @@ extension EndGameVC {
             for game in gameSnapshot {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    guard let hostUsername = game.childSnapshot(forPath: "username").value as? String else { return }
                     
                     for player in playersArray {
                         guard let finished = player["finished"] as? Bool else { return }
@@ -32,7 +35,6 @@ extension EndGameVC {
                     }
                     
                     if finishedPlayerCount >= self.players.count {
-                        print("GAME OVER: game.key: \(game.key)")
                         self.players = playersArray
                         self.playersTable.reloadData()
                         self.layoutMenuButton(gameState: .gameFinalized)
@@ -47,20 +49,8 @@ extension EndGameVC {
                             }
                         }
                         
-                        guard let playersTableCells = self.playersTable.visibleCells as? [PlayersTableCell] else { return }
-                        for cell in playersTableCells {
-                            for subview in cell.subviews {
-                                if subview.tag == 3030 {
-                                    guard let usernameLabel = subview as? UILabel else { return }
-                                    if usernameLabel.text == winningUsername {
-                                        //TODO: Animate cell
-                                        self.animateWinner()
-                                    }
-                                }
-                            }
-                        }
-                        
-                        if game.key == FIRAuth.auth()?.currentUser?.uid {
+                        if hostUsername == Player.instance.username {
+                            print("GAME OVER: Creating Data entry and clearing game...")
                             GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
                             GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: game.key)
                         }

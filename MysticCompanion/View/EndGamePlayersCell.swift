@@ -22,7 +22,7 @@ class EndGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool) {
+    func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool, withWinner winner: String?) {
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
         guard let currentVP = player["victoryPoints"] as? Int else { return }
@@ -88,6 +88,11 @@ class EndGamePlayersCell: UITableViewCell {
         finishedImage.contentMode = .scaleAspectFit
         finishedImage.translatesAutoresizingMaskIntoConstraints = false
         
+        let winnerImage = UIImageView()
+        winnerImage.image = #imageLiteral(resourceName: "winner")
+        winnerImage.contentMode = .scaleAspectFit
+        winnerImage.translatesAutoresizingMaskIntoConstraints = false
+        
         self.addSubview(playerView)
         playerView.addSubview(blurEffectView)
         playerView.addSubview(playerIcon)
@@ -119,15 +124,32 @@ class EndGamePlayersCell: UITableViewCell {
             deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
             deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
             deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
-        }
-        
-        if finished {
+        } else {
             playerView.addSubview(finishedImage)
             
             finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
             finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
             finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
             finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+        }
+        
+        if username == winner {
+            playerView.addSubview(winnerImage)
+            
+            winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
+            winnerImage.widthAnchor.constraint(equalToConstant: self.frame.width).isActive = true
+            winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            winnerImage.rightAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                UIView.animate(withDuration: 0.5, animations: {
+                    winnerImage.frame.origin.x += self.frame.width
+                })
+            })
+        }
+        
+        if username != Player.instance.username {
+            //TODO: Add Waiting on User animation
         }
     }
 }
