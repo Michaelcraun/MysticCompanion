@@ -59,4 +59,14 @@ extension UIView {
     @objc func dismissKeyboard(sender: UITapGestureRecognizer) {
         self.endEditing(true)
     }
+    
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.tag = 1001
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        self.addSubview(blurEffectView)
+    }
 }

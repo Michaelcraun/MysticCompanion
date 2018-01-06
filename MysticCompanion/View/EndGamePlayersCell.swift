@@ -88,6 +88,16 @@ class EndGamePlayersCell: UITableViewCell {
         finishedImage.contentMode = .scaleAspectFit
         finishedImage.translatesAutoresizingMaskIntoConstraints = false
         
+        let waitingOnPlayerLabel = UILabel()
+        waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
+        waitingOnPlayerLabel.textAlignment = .center
+        waitingOnPlayerLabel.text = "Waiting on \(username)..."
+        waitingOnPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.color = .black
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
         let winnerImage = UIImageView()
         winnerImage.image = #imageLiteral(resourceName: "winner")
         winnerImage.contentMode = .scaleAspectFit
@@ -117,20 +127,63 @@ class EndGamePlayersCell: UITableViewCell {
         currentVictoryLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
         currentVictoryLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
         
-        if username == Player.instance.username && shouldDisplayStepper {
-            playerView.addSubview(deckVictoryStepper)
-            
-            deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
-            deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
-            deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-            deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+//        if username == Player.instance.username && shouldDisplayStepper {
+//            playerView.addSubview(deckVictoryStepper)
+//
+//            deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
+//            deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
+//            deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+//            deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+//        } else {
+//            playerView.addSubview(finishedImage)
+//
+//            finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//            finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
+//            finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+//            finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+//        }
+        
+        if username == Player.instance.username {
+            if shouldDisplayStepper {
+                //Add Stepper
+                playerView.addSubview(deckVictoryStepper)
+                
+                deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
+                deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
+                deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+                deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+            } else {
+                //Add finished image
+                playerView.addSubview(finishedImage)
+                
+                finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
+                finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+                finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+            }
         } else {
-            playerView.addSubview(finishedImage)
-            
-            finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
-            finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-            finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+            if finished {
+                //Add finished image
+                playerView.addSubview(finishedImage)
+                
+                finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
+                finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+                finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+            } else {
+                //Add waiting on user animation
+                playerView.addBlurEffect()
+                playerView.addSubview(waitingOnPlayerLabel)
+                playerView.addSubview(activityIndicator)
+                
+                waitingOnPlayerLabel.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
+                waitingOnPlayerLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
+                waitingOnPlayerLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
+                
+                activityIndicator.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+                activityIndicator.centerYAnchor.constraint(equalTo: playerView.centerYAnchor).isActive = true
+                activityIndicator.startAnimating()
+            }
         }
         
         if username == winner {
@@ -146,10 +199,6 @@ class EndGamePlayersCell: UITableViewCell {
                     winnerImage.frame.origin.x += self.frame.width
                 })
             })
-        }
-        
-        if username != Player.instance.username {
-            //TODO: Add Waiting on User animation
         }
     }
 }

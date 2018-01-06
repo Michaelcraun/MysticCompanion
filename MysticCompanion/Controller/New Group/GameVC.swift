@@ -85,7 +85,7 @@ class GameVC: UIViewController, Alertable {
         layoutMenuButton()
         
         if Player.instance.hasQuitGame {
-            dismiss(animated: false, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
     }
     
