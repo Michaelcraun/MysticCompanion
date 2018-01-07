@@ -28,6 +28,7 @@ extension EndGameVC {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     guard let hostUsername = game.childSnapshot(forPath: "username").value as? String else { return }
+                    finishedPlayerCount = 0
                     
                     for player in playersArray {
                         guard let finished = player["finished"] as? Bool else { return }
