@@ -47,12 +47,6 @@ class EndGamePlayersCell: UITableViewCell {
         playerView.layer.borderWidth = 2
         playerView.translatesAutoresizingMaskIntoConstraints = false
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = playerView.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         let playerIcon = CircleView()
         playerIcon.addBorder()
         playerIcon.addImage(deckImage, withWidthModifier: 10)
@@ -104,7 +98,6 @@ class EndGamePlayersCell: UITableViewCell {
         winnerImage.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(playerView)
-        playerView.addSubview(blurEffectView)
         playerView.addSubview(playerIcon)
         playerView.addSubview(playerUsernameLabel)
         playerView.addSubview(currentVictoryLabel)

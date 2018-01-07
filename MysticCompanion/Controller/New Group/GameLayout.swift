@@ -38,12 +38,6 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutPlayersPanel() {
         let panelHeight = CGFloat(players.count) * 27.5 + 16.5
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = playerPanel.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         playerPanel.layer.cornerRadius = 10
         playerPanel.layer.borderColor = UIColor.black.cgColor
         playerPanel.layer.borderWidth = 2
@@ -64,7 +58,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(playerPanel)
-        playerPanel.addSubview(blurEffectView)
+        playerPanel.addBlurEffect()
         playerPanel.addSubview(gameVPLabel)
         playerPanel.addSubview(playersTable)
         

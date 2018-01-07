@@ -171,10 +171,8 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     }
     
     func layoutThemeSelection() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addBlurEffect()
+        guard let blurEffectView = view.viewWithTag(1001) as? UIVisualEffectView else { return }
         
         let themeSelector = KCFloatingActionButton()
         themeSelector.setPaddingY()
@@ -221,7 +219,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         themeSelector.addItem(item: pastelPurple)
         themeSelector.addItem(item: pastelYellow)
         
-        view.addSubview(blurEffectView)
         blurEffectView.contentView.addSubview(themeSelector)
     }
     

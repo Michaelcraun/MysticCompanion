@@ -153,13 +153,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func layoutGameSetupView() {
         self.userIsHostingGame = true
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurEffectView.tag = 1000
-        blurEffectView.alpha = 0
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addBlurEffect()
+        guard let blurEffectView = view.viewWithTag(1001) as? UIVisualEffectView else { return }
         
         let vpSelector = KCFloatingActionButton()
         vpSelector.setMenuButtonColor()
@@ -189,7 +184,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         vpSelector.addItem(item: standard)
         if PREMIUM_PURCHASED { vpSelector.addItem(item: custom) }
         
-        view.addSubview(blurEffectView)
         blurEffectView.contentView.addSubview(vpSelector)
         blurEffectView.fadeAlphaTo(1, withDuration: 0.2)
     }
@@ -282,12 +276,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         gameLobby.layer.borderWidth = 2
         gameLobby.translatesAutoresizingMaskIntoConstraints = false
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = gameLobby.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         gameLobbyTable.dataSource = self
         gameLobbyTable.delegate = self
         gameLobbyTable.separatorStyle = .none
@@ -295,7 +283,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         gameLobbyTable.register(GameLobbyCell.self, forCellReuseIdentifier: "gameLobbyCell")
         gameLobbyTable.translatesAutoresizingMaskIntoConstraints = false
         
-        gameLobby.addSubview(blurEffectView)
+        gameLobby.addBlurEffect()
         gameLobby.addSubview(gameLobbyTable)
         view.addSubview(gameLobby)
         

@@ -20,7 +20,7 @@ protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
     func showAlert(withTitle title: String, andMessage message: String, andNotificationType type: NotificationType) {
-        addBlurEffect()
+        view.addBlurEffect()
         addVibration(withNotificationType: type)
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -46,7 +46,7 @@ extension Alertable where Self: UIViewController {
     }
     
     func showAlertWithOptions(withTitle title: String, andMessage message: String, andNotificationType type: NotificationType) {
-        addBlurEffect()
+        view.addBlurEffect()
         addVibration(withNotificationType: type)
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -68,25 +68,11 @@ extension Alertable where Self: UIViewController {
                     subview.fadeAlphaOut()
                 }
             }
-            
-//            if alertController.title == "Spoiled" {
-//                Player.instance.hasSpoiled = false
-//            }
         })
         
         alertController.addAction(confirm)
         alertController.addAction(deny)
         present(alertController, animated: true, completion: nil)
-    }
-    
-    func addBlurEffect() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        view.addSubview(blurEffectView)
     }
     
     func addVibration(withNotificationType type: NotificationType) {

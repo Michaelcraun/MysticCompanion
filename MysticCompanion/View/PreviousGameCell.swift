@@ -29,6 +29,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     
     func layoutGame(game: Dictionary<String,AnyObject>) {
         clearCell()
+        self.addBlurEffect()
         
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
         guard let winner = game["winner"] as? String else { return }
@@ -36,18 +37,11 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         self.playersArray = playersArray
         self.winner = winner
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        blurEffectView.tag = 1001
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         playersTable.backgroundColor = .clear
         playersTable.separatorStyle = .none
         playersTable.register(PreviousGamePlayersCell.self, forCellReuseIdentifier: "previousGamePlayersCell")
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
-        self.addSubview(blurEffectView)
         self.addSubview(playersTable)
         
         playersTable.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
