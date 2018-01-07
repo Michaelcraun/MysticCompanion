@@ -36,6 +36,8 @@
 		9B966D411FDEAA0D0083192B /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */; };
 		9B966D431FDEE2360083192B /* KCFloatingActionButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */; };
 		9B966D471FE022C50083192B /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D461FE022C50083192B /* Products.swift */; };
+		9BA98C4A20029B5300B93B5E /* UIResponderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA98C4920029B5300B93B5E /* UIResponderExtension.swift */; };
+		9BA98C4C20029F9800B93B5E /* CustomSegues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA98C4B20029F9800B93B5E /* CustomSegues.swift */; };
 		9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFE91FCC6506005741CD /* AppDelegate.swift */; };
 		9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7BFEB1FCC6506005741CD /* HomeVC.swift */; };
 		9BC7BFEF1FCC6506005741CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BC7BFED1FCC6506005741CD /* Main.storyboard */; };
@@ -86,6 +88,8 @@
 		9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KCFloatingActionButtonExtension.swift; sourceTree = "<group>"; };
 		9B966D461FE022C50083192B /* Products.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
+		9BA98C4920029B5300B93B5E /* UIResponderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponderExtension.swift; sourceTree = "<group>"; };
+		9BA98C4B20029F9800B93B5E /* CustomSegues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegues.swift; sourceTree = "<group>"; };
 		9BC7BFE61FCC6506005741CD /* MysticCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MysticCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC7BFE91FCC6506005741CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BC7BFEB1FCC6506005741CD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -203,11 +207,12 @@
 		9B73B6471FD8B654007E7ECA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */,
-				9B167B511FE1CC7200183733 /* UIViewControllerExtension.swift */,
-				9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */,
 				9B966D421FDEE2360083192B /* KCFloatingActionButtonExtension.swift */,
+				9B966D401FDEAA0D0083192B /* UIDeviceExtension.swift */,
+				9BA98C4920029B5300B93B5E /* UIResponderExtension.swift */,
 				9BFCBE381FF6BEF000A2627B /* UITableViewExtensions.swift */,
+				9B167B511FE1CC7200183733 /* UIViewControllerExtension.swift */,
+				9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 			children = (
 				9BC7C0041FCC6F1B005741CD /* CircleView.swift */,
 				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
+				9BA98C4B20029F9800B93B5E /* CustomSegues.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -465,6 +471,7 @@
 				9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */,
 				9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */,
 				9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */,
+				9BA98C4A20029B5300B93B5E /* UIResponderExtension.swift in Sources */,
 				9B966D471FE022C50083192B /* Products.swift in Sources */,
 				9BFCBE391FF6BEF000A2627B /* UITableViewExtensions.swift in Sources */,
 				9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */,
@@ -484,6 +491,7 @@
 				9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */,
 				9B0D32101FCE5632006F7805 /* PreviousGameCell.swift in Sources */,
 				9B966D431FDEE2360083192B /* KCFloatingActionButtonExtension.swift in Sources */,
+				9BA98C4C20029F9800B93B5E /* CustomSegues.swift in Sources */,
 				9B0D32071FCE0CA2006F7805 /* SettingsVC.swift in Sources */,
 				9B966D411FDEAA0D0083192B /* UIDeviceExtension.swift in Sources */,
 				9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */,

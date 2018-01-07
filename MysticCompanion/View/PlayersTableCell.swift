@@ -36,10 +36,6 @@ class PlayersTableCell: UITableViewCell {
             }
         }
         
-        print("CELL: \(deck)")
-        print("CELL: \(username)")
-        print("CELL: \(playerVP)")
-        
         let deckIcon = CircleView()
         deckIcon.addBorder()
         deckIcon.backgroundColor = deckType?.color
@@ -75,8 +71,5 @@ class PlayersTableCell: UITableViewCell {
         usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         usernameLabel.leftAnchor.constraint(equalTo: deckIcon.rightAnchor, constant: 5).isActive = true
         usernameLabel.rightAnchor.constraint(equalTo: vpLabel.leftAnchor, constant: -5).isActive = true
-        
-        print("CELL: \(deckIcon.backgroundColor.debugDescription)")
-        print("CELL: \(deckIcon.frame)")
     }
 }

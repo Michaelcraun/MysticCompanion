@@ -22,6 +22,13 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         layoutBannerAds()
     }
     
+    func reinitializeView() {
+        for subview in view.subviews {
+            subview.removeFromSuperview()
+        }
+        layoutView()
+    }
+    
     func layoutBackgroundImage() {
         backgroundImage.image = #imageLiteral(resourceName: "homeBG")
         backgroundImage.contentMode = .scaleAspectFill
@@ -369,7 +376,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 performSegue(withIdentifier: "startGame", sender: nil)
             }
         } else {
-            removeUserFromAllGames()
             let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
                                                           "deck" : Player.instance.deck?.rawValue as AnyObject,
                                                           "finished" : false as AnyObject,

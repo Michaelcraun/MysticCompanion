@@ -98,6 +98,7 @@ class EndGamePlayersCell: UITableViewCell {
         winnerImage.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(playerView)
+        playerView.addBlurEffect()
         playerView.addSubview(playerIcon)
         playerView.addSubview(playerUsernameLabel)
         playerView.addSubview(currentVictoryLabel)
@@ -120,25 +121,8 @@ class EndGamePlayersCell: UITableViewCell {
         currentVictoryLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
         currentVictoryLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
         
-//        if username == Player.instance.username && shouldDisplayStepper {
-//            playerView.addSubview(deckVictoryStepper)
-//
-//            deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
-//            deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//            deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-//            deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
-//        } else {
-//            playerView.addSubview(finishedImage)
-//
-//            finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//            finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
-//            finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-//            finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
-//        }
-        
         if username == Player.instance.username {
             if shouldDisplayStepper {
-                //Add Stepper
                 playerView.addSubview(deckVictoryStepper)
                 
                 deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -146,7 +130,6 @@ class EndGamePlayersCell: UITableViewCell {
                 deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
                 deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
             } else {
-                //Add finished image
                 playerView.addSubview(finishedImage)
                 
                 finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -156,7 +139,6 @@ class EndGamePlayersCell: UITableViewCell {
             }
         } else {
             if finished {
-                //Add finished image
                 playerView.addSubview(finishedImage)
                 
                 finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -164,7 +146,6 @@ class EndGamePlayersCell: UITableViewCell {
                 finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
                 finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
             } else {
-                //Add waiting on user animation
                 playerView.addBlurEffect()
                 playerView.addSubview(waitingOnPlayerLabel)
                 playerView.addSubview(activityIndicator)

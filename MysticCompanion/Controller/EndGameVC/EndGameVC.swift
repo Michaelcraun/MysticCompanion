@@ -64,7 +64,7 @@ class EndGameVC: UIViewController, Alertable {
         GameHandler.instance.REF_GAME.removeAllObservers()
         
         Player.instance.hasQuitGame = true
-        dismiss(animated: true, completion: nil)
+        dismissPreviousViewControllers()
     }
     
     func animateWinner(_ cell: UITableViewCell) {

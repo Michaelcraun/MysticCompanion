@@ -32,7 +32,7 @@ extension GameVC {
                     
                     var victoryTaken = 0
                     if playersArray.count <= 1 {
-                        self.showAlert(withTitle: "Game Ended", andMessage: "There are not enough players to continue the game. Tap OK to continue.", andNotificationType: .endOfGame)
+                        self.performSegue(withIdentifier: "showEndGame", sender: nil)
                     } else {
                         for player in playersArray {
                             guard let playerVictory = player["victoryPoints"] as? Int else { return }
@@ -41,7 +41,7 @@ extension GameVC {
                     }
                     
                     if game.hasChild("gameEnded") {
-                        self.showAlert(withTitle: "Game Ended", andMessage: "Game has been ended prematurely. Tap OK to continue.", andNotificationType: .endOfGame)
+                        self.performSegue(withIdentifier: "showEndGame", sender: nil)
                     }
                     
                     GameHandler.instance.game = gameDict

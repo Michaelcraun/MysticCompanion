@@ -146,12 +146,6 @@ extension LoginVC {
         settingsButton.setPaddingY()
         settingsButton.items = []
         
-        let settings = KCFloatingActionButtonItem()
-        settings.setButtonOfType(.settings)
-        settings.handler = { item in
-            self.performSegue(withIdentifier: "showSettings", sender: nil)
-        }
-        
         let cancel = KCFloatingActionButtonItem()
         cancel.setButtonOfType(.cancel)
         cancel.handler = { item in
@@ -164,7 +158,6 @@ extension LoginVC {
             self.loginWithFirebase()
         }
         
-        settingsButton.addItem(item: settings)
         settingsButton.addItem(item: cancel)
         settingsButton.addItem(item: register)
         

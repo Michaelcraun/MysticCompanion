@@ -258,7 +258,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //Get number of players in game and adjust cell height, accordingly
         if previousGames.count > 0 {
             var cellHeight: CGFloat = 0
             if let playersArray = previousGames[indexPath.row]["players"] as? [Dictionary<String,AnyObject>] {

@@ -65,15 +65,18 @@ class HomeVC: UIViewController, Alertable {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if Player.instance.hasQuitGame {
+            GameHandler.instance.REF_GAME.removeAllObservers()
+            Player.instance.reinitialize()
+            reinitializeView()
+        }
+        
         currentUserID = FIRAuth.auth()?.currentUser?.uid
+        Player.instance.deck = .beastbrothers
+        
         checkTheme()
         layoutMenuButton()
         checkUsername(forKey: currentUserID)
-        
-        if Player.instance.hasQuitGame {
-            Player.instance.reinitialize()
-            gameLobby.fadeAlphaOut()
-        }
     }
     
     func setPlayerIcon(withDeck deck: DeckType) {

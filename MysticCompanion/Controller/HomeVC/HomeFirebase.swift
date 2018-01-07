@@ -156,35 +156,6 @@ extension HomeVC {
         })
     }
     
-    func removeUserFromAllGames() {
-        GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for game in gameSnapshot {
-                    if let playersArray = game.childSnapshot(forPath: "players").value as? NSArray {
-                        var newPlayersArray = [String]()
-                        for player in playersArray {
-                            if let playerUsername = player as? String {
-                                if playerUsername != Player.instance.username {
-                                    newPlayersArray.append(playerUsername)
-                                }
-                            }
-                        }
-                        guard let coordinate = game.childSnapshot(forPath: "coordinate").value as? [CLLocationDegrees] else { return }
-                        guard let gameID = game.childSnapshot(forPath: "game").value as? String else { return }
-                        guard let fbUsername = game.childSnapshot(forPath: "username").value as? String else { return }
-                        guard let winCondition = game.childSnapshot(forPath: "winCondition").value as? String else { return }
-                        let gameData: Dictionary<String,Any> = ["coordinate" : coordinate,
-                                                                "game" : gameID,
-                                                                "username" : fbUsername,
-                                                                "winCondition" : winCondition,
-                                                                "players" : newPlayersArray]
-                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameData)
-                    }
-                }
-            }
-        })
-    }
-    
     func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
         winCondition = condition
