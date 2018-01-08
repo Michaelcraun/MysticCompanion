@@ -29,9 +29,14 @@ class GameVC: UIViewController, Alertable {
     var trackersArray = [TrackerView]()
 
     //MARK: Game Variables
-    var vpGoal = 13
     var isEndOfGameTurn = false
     var endingPlayerUsername = ""
+    
+    var vpGoal = 13 {
+        didSet {
+            gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
+        }
+    }
     
     var victoryTaken = 0 {
         didSet {
@@ -124,7 +129,7 @@ class GameVC: UIViewController, Alertable {
             Player.instance.forestConstant = Int(forestTracker.constantStepper.value)
             Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
             Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
-            Player.instance.currentVP = Int(victoryTracker.currentStepper.value) - Player.instance.boxVP
+            Player.instance.currentVP = Int(victoryTracker.currentStepper.value)
             
             let currentMana = Int(manaTracker.currentStepper.value)
             updateFBUserStatistics(withMana: currentMana)
@@ -172,5 +177,16 @@ class GameVC: UIViewController, Alertable {
     func endGame() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let victoryIconBounds = victoryTracker.iconView.bounds
+        guard let location = touches.first?.location(in: victoryTracker.iconView) else { return }
+        
+        if location.x >= victoryIconBounds.minX && location.x <= victoryIconBounds.maxX {
+            if location.y >= victoryIconBounds.minY && location.y <= victoryIconBounds.maxY {
+                showVPAlert(withGame: GameHandler.instance.game)
+            }
+        }
     }
 }

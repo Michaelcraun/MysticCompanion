@@ -16,10 +16,14 @@ extension GameVC {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let winCondition = GameHandler.instance.game["winCondition"] as? String else { return }
         switch winCondition {
-        case "standard": vpGoal = 13 + (self.players.count * 5)
-        default:
+        case "standard":
+            vpGoal = 13 + (self.players.count * 5)
+            GameHandler.instance.game["vpGoal"] = vpGoal as AnyObject
+            GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: GameHandler.instance.game)
+        case "custom":
             guard let vpGoal = GameHandler.instance.game["vpGoal"] as? Int else { return }
             self.vpGoal = vpGoal
+        default: break
         }
         
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
@@ -29,6 +33,7 @@ extension GameVC {
                     guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
+                    guard let vpGoal = game.childSnapshot(forPath: "vpGoal").value as? Int else { return }
                     
                     var victoryTaken = 0
                     if playersArray.count <= 1 {
@@ -48,6 +53,7 @@ extension GameVC {
                     self.players = playersArray
                     self.currentPlayer = currentPlayer
                     self.victoryTaken = victoryTaken
+                    self.vpGoal = vpGoal
                     
                     if self.victoryTaken >= self.vpGoal {
                         self.isEndOfGameTurn = true

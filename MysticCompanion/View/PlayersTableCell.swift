@@ -9,11 +9,6 @@
 import UIKit
 
 class PlayersTableCell: UITableViewCell {
-//    override func awakeFromNib() {
-//        self.backgroundColor = .clear
-//        super.awakeFromNib()
-//    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -26,6 +21,7 @@ class PlayersTableCell: UITableViewCell {
         guard let deck = player["deck"] as? String else { return }
         guard let username = player["username"] as? String else { return }
         guard let playerVP = player["victoryPoints"] as? Int else { return }
+        guard let playerBoxVP = player["boxVictory"] as? Int else { return }
         var deckType: DeckType? {
             switch deck {
             case "beastbrothers": return .beastbrothers
@@ -49,7 +45,7 @@ class PlayersTableCell: UITableViewCell {
         
         let vpLabel = UILabel()
         vpLabel.font = UIFont(name: fontFamily, size: 15)
-        vpLabel.text = "\(playerVP)"
+        vpLabel.text = "\(playerVP + playerBoxVP)"
         vpLabel.numberOfLines = 1
         vpLabel.sizeToFit()
         vpLabel.translatesAutoresizingMaskIntoConstraints = false

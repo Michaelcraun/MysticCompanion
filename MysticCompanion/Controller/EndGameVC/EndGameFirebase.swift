@@ -41,11 +41,13 @@ extension EndGameVC {
                         
                         for player in playersArray {
                             guard let playerVictoryPoints = player["victoryPoints"] as? Int else { return }
+                            guard let playerBoxVP = player["boxVictory"] as? Int else { return }
                             guard let playerUsername = player["username"] as? String else { return }
-                            if playerVictoryPoints > winningVP {
-                                winningVP = playerVictoryPoints
+                            let playerTotalVictory = playerVictoryPoints + playerBoxVP
+                            if playerTotalVictory > winningVP {
+                                winningVP = playerTotalVictory
                                 winnersArray = [playerUsername]
-                            } else if playerVictoryPoints == winningVP {
+                            } else if playerTotalVictory == winningVP {
                                 winnersArray.append(playerUsername)
                             }
                         }

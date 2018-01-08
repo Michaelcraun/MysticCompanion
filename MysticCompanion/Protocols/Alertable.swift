@@ -14,6 +14,7 @@ enum NotificationType {
     case error
     case success
     case turnChange
+    case warning
 }
 
 protocol Alertable {  }
@@ -65,6 +66,58 @@ extension Alertable where Self: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+    func showVPAlert(withGame game: Dictionary<String,AnyObject>) {
+        view.addBlurEffect()
+        addVibration(withNotificationType: .warning)
+        
+        let alertController = UIAlertController(title: "Victory Change", message: "Please input your change to victory below:", preferredStyle: .alert)
+        alertController.addTextField { (vpToPool) in
+            vpToPool.font = UIFont(name: fontFamily, size: 15)
+            vpToPool.keyboardType = .numberPad
+            vpToPool.textAlignment = .center
+            vpToPool.placeholder = "Add Victory to the Pool"
+        }
+        
+        alertController.addTextField { (vpFromBox) in
+            vpFromBox.font = UIFont(name: fontFamily, size: 15)
+            vpFromBox.keyboardType = .numberPad
+            vpFromBox.textAlignment = .center
+            vpFromBox.placeholder = "Add Victory to Your Pool"
+        }
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            if let vpToPool = alertController.textFields![0].text {
+                if vpToPool != "" {
+                    guard let gameKey = game["game"] as? String else { return }
+                    guard let currentVPGoal = game["vpGoal"] as? Int else { return }
+                    let numVPToPool = Int(vpToPool)!
+                    let newVPGoal = currentVPGoal + numVPToPool
+                    var newGameData = game
+                    newGameData["vpGoal"] = newVPGoal as AnyObject
+                    
+                    GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: newGameData)
+                    
+                    print("EDIT VICTORY: \(numVPToPool)")
+                }
+            }
+            
+            if let vpFromBox = alertController.textFields![1].text {
+                if vpFromBox != "" {
+                    let numVPFromBox = Int(vpFromBox)!
+                    Player.instance.boxVP += numVPFromBox
+                }
+            }
+            
+            for subview in self.view.subviews {
+                if subview.tag == 1001 {
+                    subview.fadeAlphaOut()
+                }
+            }
+        }))
+        
+        present(alertController, animated: false, completion: nil)
+    }
+    
     func addVibration(withNotificationType type: NotificationType) {
         switch UIDevice.current.notificationDevice {
         case .haptic:
@@ -74,6 +127,7 @@ extension Alertable where Self: UIViewController {
             case .error: notification.notificationOccurred(.error)
             case .success: notification.notificationOccurred(.success)
             case .turnChange: notification.notificationOccurred(.warning)
+            case .warning: notification.notificationOccurred(.warning)
             }
         case .vibrate:
             let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
