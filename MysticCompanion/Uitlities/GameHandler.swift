@@ -54,7 +54,7 @@ class GameHandler {
         }
         
         let gameData: Dictionary<String,AnyObject> = ["players" : newPlayersArray as AnyObject,
-                                                      "winner" : winners as AnyObject]
+                                                      "winners" : winners as AnyObject]
         
         REF_DATA.child(gameKey).updateChildValues(gameData)
     }
