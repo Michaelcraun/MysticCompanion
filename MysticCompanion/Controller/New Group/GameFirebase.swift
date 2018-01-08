@@ -51,7 +51,6 @@ extension GameVC {
                     
                     if self.victoryTaken >= self.vpGoal {
                         self.isEndOfGameTurn = true
-                        //TODO: Test
                     }
                 }
             }

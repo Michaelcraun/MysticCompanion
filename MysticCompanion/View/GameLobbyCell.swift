@@ -106,20 +106,27 @@ class GameLobbyCell: UITableViewCell {
         
         guard let hostName = game["username"] as? String else { return }
         guard let winCondition = game["winCondition"] as? String else { return }
+        guard let vpGoal = game["vpGoal"] as? Int else { return }
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
         
         let deckStack = configureDeckChoicesStackView(withPlayers: playersArray)
+        var winConditionString: String {
+            switch winCondition {
+            case "custom": return "custom (\(vpGoal))"
+            case "standard": return "standard"
+            default: return ""
+            }
+        }
         
         let gameHostLabel = UILabel()
         gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
         gameHostLabel.text = hostName
         gameHostLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        //TODO: Switch on winCondition to display VP Goal if custom?
         let winConditionLabel = UILabel()
         winConditionLabel.font = UIFont(name: fontFamily, size: 12)
         winConditionLabel.textAlignment = .right
-        winConditionLabel.text = winCondition
+        winConditionLabel.text = winConditionString
         winConditionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let playersLabel = UILabel()
