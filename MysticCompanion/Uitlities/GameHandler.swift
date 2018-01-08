@@ -34,7 +34,7 @@ class GameHandler {
         REF_GAME.child(key).updateChildValues(gameData)
     }
     
-    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinner winner: String) {
+    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinners winners: [String]) {
         let gameKeyAddendum = generateString()
         let gameKey = "\(key)-\(gameKeyAddendum)"
         var newPlayersArray = [Dictionary<String,AnyObject>]()
@@ -42,7 +42,9 @@ class GameHandler {
         for player in playersArray {
             guard let username = player["username"] as? String else { return }
             guard let deck = player["deck"] as? String else { return }
-            guard let totalVictory = player["totalVictoryPoints"] as? Int else { return }
+            guard let victoryPoints = player["victoryPoints"] as? Int else { return }
+            guard let boxVictory = player["boxVictory"] as? Int else { return }
+            let totalVictory = victoryPoints + boxVictory
             
             let newPlayer: Dictionary<String,AnyObject> = ["username" : username as AnyObject,
                                                            "deck" : deck as AnyObject,
@@ -52,42 +54,9 @@ class GameHandler {
         }
         
         let gameData: Dictionary<String,AnyObject> = ["players" : newPlayersArray as AnyObject,
-                                                      "winner" : winner as AnyObject]
+                                                      "winner" : winners as AnyObject]
         
         REF_DATA.child(gameKey).updateChildValues(gameData)
-    }
-    
-    func createFirebaseDBData() {
-        //TODO: Not saving... Why?
-        guard let gameKey = game["game"] as? String else { return }
-        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        var newPlayersArray = [Dictionary<String,AnyObject>]()
-        var highestVictory = 0
-        var winningPlayer = ""
-        
-        for player in playersArray {
-            guard let username = player["username"] as? String else { return }
-            guard let deck = player["deck"] as? String else { return }
-            guard let victoryPoints = player["victoryPoints"] as? Int else { return }
-            guard let boxVictory = player["boxVictory"] as? Int else { return }
-            let totalVictory = victoryPoints + boxVictory
-            
-            if totalVictory > highestVictory {
-                winningPlayer = username
-                highestVictory = totalVictory
-            }
-            
-            let newPlayer: Dictionary<String,AnyObject> = ["username" : username as AnyObject,
-                                                           "deck" : deck as AnyObject,
-                                                           "victoryPoints" : totalVictory as AnyObject]
-            
-            newPlayersArray.append(newPlayer)
-        }
-        
-        let gameInfo: Dictionary<String,AnyObject> = ["players" : newPlayersArray as AnyObject,
-                                                      "winner" : winningPlayer as AnyObject]
-        
-        REF_DATA.child(gameKey).updateChildValues(gameInfo)
     }
     
     func clearCurrentGamesFromFirebaseDB(forKey key: String) {

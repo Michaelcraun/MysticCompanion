@@ -31,11 +31,7 @@ class GameVC: UIViewController, Alertable {
     //MARK: Game Variables
     var vpGoal = 13
     var isEndOfGameTurn = false
-    var endingPlayerUsername = "" {
-        didSet {
-            print("END GAME: \(endingPlayerUsername)")
-        }
-    }
+    var endingPlayerUsername = ""
     
     var victoryTaken = 0 {
         didSet {
@@ -176,6 +172,5 @@ class GameVC: UIViewController, Alertable {
     func endGame() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: ["gameEnded" : true])
-        performSegue(withIdentifier: "showEndGame", sender: nil)
     }
 }

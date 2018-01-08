@@ -15,9 +15,9 @@ extension EndGameVC {
         guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
         var finishedPlayerCount = 0
         var winningVP = 0
-        var winningUsername = "" {
+        var winnersArray = [String]() {
             didSet {
-                self.winningUsername = winningUsername
+                self.winnersArray = winnersArray
             }
         }
         players = playersArray
@@ -27,7 +27,6 @@ extension EndGameVC {
             for game in gameSnapshot {
                 if game.key == gameKey {
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
-                    guard let hostUsername = game.childSnapshot(forPath: "username").value as? String else { return }
                     finishedPlayerCount = 0
                     
                     for player in playersArray {
@@ -42,19 +41,17 @@ extension EndGameVC {
                         
                         for player in playersArray {
                             guard let playerVictoryPoints = player["victoryPoints"] as? Int else { return }
+                            guard let playerUsername = player["username"] as? String else { return }
                             if playerVictoryPoints > winningVP {
-                                guard let playerUsername = player["username"] as? String else { return }
-                                
                                 winningVP = playerVictoryPoints
-                                winningUsername = playerUsername
+                                winnersArray = [playerUsername]
+                            } else if playerVictoryPoints == winningVP {
+                                winnersArray.append(playerUsername)
                             }
                         }
                         
-                        if hostUsername == Player.instance.username {
-                            print("GAME OVER: Creating Data entry and clearing game...")
-                            GameHandler.instance.createFirebaseDBData(forGame: game.key, withPlayers: playersArray, andWinner: winningUsername)
-                            GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: game.key)
-                        }
+                        guard let gameData = game.value as? Dictionary<String,AnyObject> else { return }
+                        GameHandler.instance.game = gameData
                     }
                 }
             }

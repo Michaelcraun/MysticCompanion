@@ -10,6 +10,7 @@ import UIKit
 import GoogleMobileAds
 import KCFloatingActionButton
 import GMStepper
+import Firebase
 
 class EndGameVC: UIViewController, Alertable {
     
@@ -34,14 +35,14 @@ class EndGameVC: UIViewController, Alertable {
     let adBanner = GADBannerView()
     let menuButton = KCFloatingActionButton()
     var shouldDisplayStepper = true
-    var winningUsername: String? = nil
+    var winnersArray = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupGameAndObserve()
         layoutView()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.showAlert(withTitle: "End of Game", andMessage: "The game has concluded. Please enter the amount of victory points contained in your deck.", andNotificationType: .endOfGame)
         }
     }
@@ -61,8 +62,17 @@ class EndGameVC: UIViewController, Alertable {
     }
     
     func quitPressed() {
-        GameHandler.instance.REF_GAME.removeAllObservers()
+        guard let hostUsername = GameHandler.instance.game["username"] as? String else { return }
         
+        if hostUsername == Player.instance.username {
+            guard let currentUID = FIRAuth.auth()?.currentUser?.uid else { return }
+            guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+            
+            GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUID)
+            GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray)
+        }
+        
+        GameHandler.instance.REF_GAME.removeAllObservers()
         Player.instance.hasQuitGame = true
         dismissPreviousViewControllers()
     }

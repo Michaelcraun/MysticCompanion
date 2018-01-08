@@ -22,7 +22,7 @@ class EndGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool, withWinner winner: String?) {
+    func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool, withWinners winners: [String]) {
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
         guard let currentVP = player["victoryPoints"] as? Int else { return }
@@ -45,6 +45,7 @@ class EndGamePlayersCell: UITableViewCell {
         playerView.layer.cornerRadius = 10
         playerView.layer.borderColor = UIColor.black.cgColor
         playerView.layer.borderWidth = 2
+        playerView.clipsToBounds = true
         playerView.translatesAutoresizingMaskIntoConstraints = false
         
         let playerIcon = CircleView()
@@ -160,19 +161,22 @@ class EndGamePlayersCell: UITableViewCell {
             }
         }
         
-        if username == winner {
-            playerView.addSubview(winnerImage)
-            
-            winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
-            winnerImage.widthAnchor.constraint(equalToConstant: self.frame.width).isActive = true
-            winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-            winnerImage.rightAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                UIView.animate(withDuration: 0.5, animations: {
-                    winnerImage.frame.origin.x += self.frame.width
+        for winner in winners {
+            if username == winner {
+                playerView.addSubview(winnerImage)
+                
+                winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
+                winnerImage.widthAnchor.constraint(equalToConstant: self.frame.width).isActive = true
+                winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+                winnerImage.rightAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        winnerImage.frame.origin.x += self.frame.width
+                    })
                 })
-            })
+                break
+            }
         }
     }
 }

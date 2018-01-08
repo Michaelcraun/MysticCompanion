@@ -12,7 +12,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     
     let playersTable = UITableView()
     var playersArray = [Dictionary<String,AnyObject>]()
-    var winner = ""
+    var winners = [String]()
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -32,13 +32,14 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         self.addBlurEffect()
         
         guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        guard let winner = game["winner"] as? String else { return }
+        guard let winners = game["winners"] as? [String] else { return }
         
-        self.playersArray = playersArray
-        self.winner = winner
+         self.playersArray = playersArray
+        self.winners = winners
         
         playersTable.backgroundColor = .clear
         playersTable.separatorStyle = .none
+        playersTable.allowsSelection = false
         playersTable.register(PreviousGamePlayersCell.self, forCellReuseIdentifier: "previousGamePlayersCell")
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
@@ -73,7 +74,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "previousGamePlayersCell") as! PreviousGamePlayersCell
-        cell.layoutCell(forPlayer: playersArray[indexPath.row], withWinner: winner)
+        cell.layoutCell(forPlayer: playersArray[indexPath.row], withWinners: winners)
         return cell
     }
     

@@ -117,7 +117,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "endGamePlayersCell") as! EndGamePlayersCell
-        cell.configureCell(forPlayer: players[indexPath.row], shouldDisplayStepper: shouldDisplayStepper, withWinner: winningUsername)
+        cell.configureCell(forPlayer: players[indexPath.row], shouldDisplayStepper: shouldDisplayStepper, withWinners: winnersArray)
         return cell
     }
     
