@@ -12,6 +12,7 @@ import FirebaseAuth
 
 extension GameVC {
     func setupGameAndObserve() {
+        GameHandler.instance.REF_GAME.removeAllObservers()
         if let players = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let winCondition = GameHandler.instance.game["winCondition"] as? String else { return }

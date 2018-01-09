@@ -363,7 +363,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if userIsHostingGame {
-            var index: Int {
+            var startGameIndex: Int {
                 switch players.count {
                 case 2: return 3
                 case 3: return 4
@@ -371,7 +371,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 default: return 0
                 }
             }
-            if indexPath.row == index {
+            if indexPath.row == startGameIndex {
                 GameHandler.instance.updateFirebaseDBGame(key: currentUserID!, gameData: ["gameStarted" : true])
                 performSegue(withIdentifier: "startGame", sender: nil)
             }
@@ -382,8 +382,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                                                           "victoryPoints" : 0 as AnyObject,
                                                           "userHasQuitGame" : false as AnyObject,
                                                           "boxVictory" : 0 as AnyObject]
-            updateGame(forGame: nearbyGames[indexPath.row], withUserData: userData)
-            observeGamesForStart(forGame: nearbyGames[indexPath.row])
+            GameHandler.instance.game = nearbyGames[indexPath.row]
+            updateGame(withUserData: userData)
+            observeGameForStart()
             //TODO: Display waiting message
         }
         tableView.deselectRow(at: indexPath, animated: true)

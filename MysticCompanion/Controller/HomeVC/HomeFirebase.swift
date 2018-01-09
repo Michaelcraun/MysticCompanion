@@ -42,6 +42,8 @@ extension HomeVC {
         return userID
     }
     
+    //MARK: Firebase observers for user -- observes game directory for games that haven't
+    //started and are within 5 meters of the user
     func observeGames(withUserLocation location: CLLocation) {
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             var localGames = [Dictionary<String,AnyObject>]()
@@ -62,24 +64,14 @@ extension HomeVC {
                     }
                 }
             }
+            
             self.nearbyGames = localGames
         })
     }
     
-    func observeGamesForNewUsers() {
-        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
-            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
-            for game in gameSnapshot {
-                if game.key == self.currentUserID {
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
-                    self.players = playersArray
-                }
-            }
-        })
-    }
-    
-    func observeGamesForStart(forGame selectedGame: Dictionary<String,AnyObject>) {
-        guard let gameKey = selectedGame["game"] as? String else { return }
+    //MARK: Firebase observer for user -- observes for the host starting the game
+    func observeGameForStart() {
+        guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
@@ -95,12 +87,47 @@ extension HomeVC {
         })
     }
     
-    func updateGame(forGame selectedGame: Dictionary<String,AnyObject>, withUserData userData: Dictionary<String,AnyObject>) {
-        var isInGame = false
-        var deckTaken = false
-        let gameKey = selectedGame["game"] as! String
+    //MARK: Firebase observer for host
+    func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
+        let userLocation = self.locationManager.location
+        winCondition = condition
+        self.players.append(["username" : Player.instance.username as AnyObject,
+                             "deck" : Player.instance.deck?.rawValue as AnyObject,
+                             "finished" : false as AnyObject,
+                             "victoryPoints" : 0 as AnyObject,
+                             "userHasQuitGame" : false as AnyObject,
+                             "boxVictory" : 0 as AnyObject])
+        let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
+                                                "winCondition" : condition,
+                                                "vpGoal" : goal,
+                                                "coordinate" : [userLocation?.coordinate.latitude,
+                                                                userLocation?.coordinate.longitude],
+                                                "username" : Player.instance.username,
+                                                "players" : self.players,
+                                                "gameStarted" : false,
+                                                "currentPlayer" : Player.instance.username]
+        GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
+        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == self.currentUserID! {
+                    guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    
+                    GameHandler.instance.game = gameDict
+                    self.players = playersArray
+                }
+            }
+        })
+        self.layoutGameLobby()
+    }
+    
+    func updateGame(withUserData userData: Dictionary<String,AnyObject>) {
+        guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let userUsername = userData["username"] as? String else { return }
         guard let userDeck = userData["deck"] as? String else { return }
+        var isInGame = false
+        var deckTaken = false
         
         GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
@@ -132,9 +159,8 @@ extension HomeVC {
                             self.players.append(userData)
                         }
                         
-                        var gameToUpdate = selectedGame
-                        gameToUpdate["players"] = self.players as AnyObject
-                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: gameToUpdate)
+                        GameHandler.instance.game["players"] = self.players as AnyObject
+                        GameHandler.instance.updateFirebaseDBGame(key: game.key, gameData: GameHandler.instance.game)
                     } else {
                         print("game is full")
                         //TODO: Test gameIsFull error
@@ -143,41 +169,5 @@ extension HomeVC {
                 }
             }
         })
-    }
-    
-    func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
-        let userLocation = self.locationManager.location
-        winCondition = condition
-        self.players = []
-        self.players.append(["username" : Player.instance.username as AnyObject,
-                             "deck" : Player.instance.deck?.rawValue as AnyObject,
-                             "finished" : false as AnyObject,
-                             "victoryPoints" : 0 as AnyObject,
-                             "userHasQuitGame" : false as AnyObject,
-                             "boxVictory" : 0 as AnyObject])
-        let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
-                                                "winCondition" : condition,
-                                                "vpGoal" : goal,
-                                                "coordinate" : [userLocation?.coordinate.latitude,
-                                                                userLocation?.coordinate.longitude],
-                                                "username" : Player.instance.username,
-                                                "players" : self.players,
-                                                "gameStarted" : false,
-                                                "currentPlayer" : Player.instance.username]
-        GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
-        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
-            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
-            for game in gameSnapshot {
-                if game.key == self.currentUserID! {
-                    guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
-                    
-                    GameHandler.instance.game = gameDict
-                    self.players = playersArray
-                }
-            }
-        })
-        self.layoutGameLobby()
-        self.observeGamesForNewUsers()
     }
 }
