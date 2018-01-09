@@ -23,7 +23,11 @@ extension LoginVC: Alertable {
                     let userData: Dictionary<String,Any> = ["provider" : user.providerID,
                                                             "username" : username,
                                                             "mostManaGainedInOneTurn" : 0,
-                                                            "averageTurnTime" : 0.0]
+                                                            "mostVPGainedInOneTurn" : 0,
+                                                            "gamesPlayed" : 0,
+                                                            "gamesWon" : 0,
+                                                            "gamesLost" : 0,
+                                                            "mostVPGainedInOneGame" : 0]
                     GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                     self.dismiss(animated: true, completion: nil)
                 } else {
@@ -46,7 +50,11 @@ extension LoginVC: Alertable {
                                 let userData: Dictionary<String,Any> = ["provider" : user.providerID,
                                                                         "username" : username,
                                                                         "mostManaGainedInOneTurn" : 0,
-                                                                        "averageTurnTime" : 0.0]
+                                                                        "mostVPGainedInOneTurn" : 0,
+                                                                        "gamesPlayed" : 0,
+                                                                        "gamesWon" : 0,
+                                                                        "gamesLost" : 0,
+                                                                        "mostVPGainedInOneGame" : 0]
                                 GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -79,7 +87,11 @@ extension LoginVC: Alertable {
             let userData: Dictionary<String,Any> = ["provider" : user.providerID,
                                                     "username" : user.displayName as Any,
                                                     "mostManaGainedInOneTurn" : 0,
-                                                    "averageTurnTime" : 0.0]
+                                                    "mostVPGainedInOneTurn" : 0,
+                                                    "gamesPlayed" : 0,
+                                                    "gamesWon" : 0,
+                                                    "gamesLost" : 0,
+                                                    "mostVPGainedInOneGame" : 0]
             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
             self.dismiss(animated: true, completion: nil)
         })

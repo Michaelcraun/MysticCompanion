@@ -31,6 +31,8 @@ class GameVC: UIViewController, Alertable {
     //MARK: Game Variables
     var isEndOfGameTurn = false
     var endingPlayerUsername = ""
+    var currentVP = 0
+    var vpFromTurn = 0
     
     var vpGoal = 13 {
         didSet {
@@ -105,6 +107,8 @@ class GameVC: UIViewController, Alertable {
             wildTracker.constantStepper.value = Double(Player.instance.wildConstant)
             victoryTracker.currentStepper.value = Double(Player.instance.currentVP + Player.instance.boxVP)
             
+            currentVP = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
+            
             var delay: TimeInterval = 0.0
             for i in 0..<trackersArray.count {
                 trackersArray[i].fadeAlphaWithDelayTo(1, withDuration: Double(trackersArray.count) * 0.1, andDelay: delay)
@@ -126,7 +130,9 @@ class GameVC: UIViewController, Alertable {
             Player.instance.currentVP = Int(victoryTracker.currentStepper.value)
             
             let currentMana = Int(manaTracker.currentStepper.value)
-            updateFBUserStatistics(withMana: currentMana)
+            let vpAtEndOfTurn = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
+            vpFromTurn = vpAtEndOfTurn - currentVP
+            updateFBUserStatistics(withMana: currentMana, andVictory: vpFromTurn)
         }
         
         let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,

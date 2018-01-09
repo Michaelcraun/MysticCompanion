@@ -65,7 +65,6 @@ extension GameVC {
     }
     
     func passTurn(withUserData userData: Dictionary<String,AnyObject>) {
-        print("SPOIL: passTurn() beginning...")
         var newPlayersArray = [Dictionary<String,AnyObject>]()
         var playerToAppend = [String : AnyObject]()
         var newCurrentPlayer = [String : AnyObject]()
@@ -95,26 +94,24 @@ extension GameVC {
                 }
             }
         })
-        print("SPOIL: passTurn() ended...")
     }
     
-    func updateFBUserStatistics(withMana mana: Int) {
+    func updateFBUserStatistics(withMana mana: Int, andVictory victory: Int) {
         var userData = Dictionary<String,AnyObject>()
         
         GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for user in userSnapshot {
                 if user.key == FIRAuth.auth()?.currentUser?.uid {
-                    guard let firUser = user.value as? Dictionary<String,AnyObject> else { return }
-                    guard let mostManaGainedInOneTurn = firUser["mostManaGainedInOneTurn"] as? Int else { return }
-                    userData = firUser
+                    if let firebaseUser = user.value as? Dictionary<String,AnyObject> { userData = firebaseUser }
+                    guard let mostManaGainedInOneTurn = userData["mostManaGainedInOneTurn"] as? Int else { return }
+                    guard let mostVPGainedInOneTurn = userData["mostVPGainedInOneTurn"] as? Int else { return }
+                    print("USER STATS: \(mostVPGainedInOneTurn)")
+                    if mana > mostManaGainedInOneTurn { userData["mostManaGainedInOneTurn"] = mana as AnyObject }
+                    if victory > mostVPGainedInOneTurn { userData["mostVPGainedInOneTurn"] = victory as AnyObject }
                     
-                    if mana > mostManaGainedInOneTurn {
-                        userData["mostManaGainedInOneTurn"] = mana as AnyObject
-                    }
+                    GameHandler.instance.createFirebaseDBUser(uid: user.key, userData: userData)
                 }
-//                GameHandler.instance.createFirebaseDBUser(uid: user.key, userData: userData)
-                //TODO: Create an updateUser function in GameHandler
             }
         })
     }
