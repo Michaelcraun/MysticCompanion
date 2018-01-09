@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
 
 extension GameVC {
     func setupGameAndObserve() {
@@ -64,6 +65,7 @@ extension GameVC {
     }
     
     func passTurn(withUserData userData: Dictionary<String,AnyObject>) {
+        print("SPOIL: passTurn() beginning...")
         var newPlayersArray = [Dictionary<String,AnyObject>]()
         var playerToAppend = [String : AnyObject]()
         var newCurrentPlayer = [String : AnyObject]()
@@ -93,6 +95,7 @@ extension GameVC {
                 }
             }
         })
+        print("SPOIL: passTurn() ended...")
     }
     
     func updateFBUserStatistics(withMana mana: Int) {

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import UserNotifications
 import Firebase
+import FirebaseAuth
 
 import TwitterKit
 import FBSDKCoreKit

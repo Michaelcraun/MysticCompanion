@@ -11,6 +11,7 @@ import GoogleMobileAds
 import KCFloatingActionButton
 import GMStepper
 import Firebase
+import FirebaseAuth
 
 class EndGameVC: UIViewController, Alertable {
     

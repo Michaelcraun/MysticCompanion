@@ -10,6 +10,7 @@ import UIKit
 import KCFloatingActionButton
 import GoogleMobileAds
 import Firebase
+import FirebaseAuth
 import MapKit
 
 class HomeVC: UIViewController, Alertable {

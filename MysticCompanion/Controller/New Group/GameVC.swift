@@ -63,13 +63,10 @@ class GameVC: UIViewController, Alertable {
     
     var userHasSpoiled = false {
         didSet {
-            let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
-                                                          "deck" : Player.instance.deck?.rawValue as AnyObject,
-                                                          "finished" : false as AnyObject,
-                                                          "victoryPoints" : Player.instance.currentVP as AnyObject,
-                                                          "boxVictory" : Player.instance.boxVP as AnyObject]
-            
-            passTurn(withUserData: userData)
+            if userHasSpoiled {
+                trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
+                endPlayerTurn()
+            }
         }
     }
     
@@ -84,18 +81,14 @@ class GameVC: UIViewController, Alertable {
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
         layoutMenuButton()
-        
-        if Player.instance.hasQuitGame {
-            Player.instance.hasQuitGame = true
-            dismissPreviousViewControllers()
-        }
     }
     
     func setupPlayerTurn() {
+        print("SPOIL: setupPlayerTurn()")
         if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
         } else {
-            Player.instance.hasSpoiled = false
+            userHasSpoiled = false
             manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
             manaTracker.constantStepper.value = Double(Player.instance.manaConstant)
             decayTracker.currentStepper.value = Double(Player.instance.decayConstant)
@@ -121,7 +114,8 @@ class GameVC: UIViewController, Alertable {
     }
     
     func endPlayerTurn() {
-        if !Player.instance.hasSpoiled {
+        print("SPOIL: endPlayerTurn()")
+        if !userHasSpoiled {
             Player.instance.manaConstant = Int(manaTracker.constantStepper.value)
             Player.instance.decayConstant = Int(decayTracker.constantStepper.value)
             Player.instance.growthConstant = Int(growthTracker.constantStepper.value)
@@ -142,8 +136,12 @@ class GameVC: UIViewController, Alertable {
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
         passTurn(withUserData: userData)
         
+        print("SPOIL: \(trackersArray.count)")      //Why is this empty when you spoil, but not empty when you don't!?!??!?!?!?!??!??!?!?!?!?!?!?!!?!!?!?!?
+        //MARK: Fades out all trackers, one by one, at the end of the user's turn and then either sets up
+        //the view for the user's next turn or segues to EndGameVC (if this is the user's last turn.
         var delay: TimeInterval = 0.0
         for i in 0..<trackersArray.count {
+            print("SPOIL: \(i)")
             trackersArray[i].fadeAlphaWithDelayTo(0, withDuration: Double(trackersArray.count) * 0.1, andDelay: delay)
             delay += 0.1
         }
@@ -162,14 +160,8 @@ class GameVC: UIViewController, Alertable {
         let currentDecay = decayTracker.currentStepper.value
         let currentGrowth = growthTracker.currentStepper.value
         
-        if currentDecay - 3 > currentGrowth && !Player.instance.hasSpoiled {
+        if currentDecay - 3 > currentGrowth && !userHasSpoiled {
             showAlertWithOptions(withTitle: "Spoiled", andMessage: "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn.", andNotificationType: .error)
-            
-            switch sender {
-            case decayTracker.currentStepper: decayTracker.currentStepper.value -= 1
-            case growthTracker.currentStepper: growthTracker.currentStepper.value += 1
-            default: break
-            }
         }
         sender.reset()
     }

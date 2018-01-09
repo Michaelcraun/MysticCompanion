@@ -10,6 +10,7 @@ import UIKit
 import TextFieldEffects
 import KCFloatingActionButton
 import Firebase
+import FirebaseAuth
 
 import FBSDKCoreKit
 import FBSDKLoginKit

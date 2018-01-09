@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
 
 extension SettingsVC {
     func observeDataForGamesPlayed() {
