@@ -58,6 +58,7 @@ public extension UIDevice {
         }
     }
     
+    //TODO: Needs fixed for iPhone X
     var topLayoutBuffer: CGFloat {
         switch UIDevice.current.modelName {
         case "iPhoneX" : return 100

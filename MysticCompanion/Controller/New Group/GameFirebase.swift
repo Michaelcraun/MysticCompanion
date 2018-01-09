@@ -13,7 +13,6 @@ import FirebaseAuth
 extension GameVC {
     func setupGameAndObserve() {
         if let players = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
-        if let currentPlayer = GameHandler.instance.game["currentPlayer"] as? String { self.currentPlayer = currentPlayer }
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let winCondition = GameHandler.instance.game["winCondition"] as? String else { return }
         switch winCondition {
@@ -74,12 +73,11 @@ extension GameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    guard let currentPlayerUsername = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
                     guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
                     
                     for player in playersArray {
                         guard let playerUsername = player["username"] as? String else { return }
-                        if playerUsername == currentPlayerUsername {
+                        if playerUsername == Player.instance.username {
                             playerToAppend = userData
                         } else {
                             newPlayersArray.append(player)

@@ -95,10 +95,10 @@ class HomeVC: UIViewController, Alertable {
     
     func joinGamePressed() {
         self.userIsHostingGame = false
-        let userLoaction = self.locationManager.location
+        let userLocation = self.locationManager.location
         self.layoutGameLobby()
         self.nearbyGames = []
-        self.observeGames(withUserLocation: userLoaction!)
+        self.observeGames(withUserLocation: userLocation!)
     }
     
     func checkForRating() {

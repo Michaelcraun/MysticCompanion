@@ -33,7 +33,7 @@ extension HomeVC {
         let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let allowedCharsCount = UInt32(allowedChars.count)
         
-        for _ in 0..<20 {
+        for _ in 0..<10 {
             let randomNum = Int(arc4random_uniform(allowedCharsCount))
             let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
             let newCharacter = allowedChars[randomIndex]
@@ -68,42 +68,31 @@ extension HomeVC {
     
     func observeGamesForNewUsers() {
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
-            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for game in gameSnapshot {
-                    if game.key == self.currentUserID {
-                        if let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] {
-                            var newPlayers = [Dictionary<String,AnyObject>]()
-                            for player in playersArray {
-                                newPlayers.append(player)
-                            }
-                            self.players = newPlayers
-                        }
-                    }
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == self.currentUserID {
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    self.players = playersArray
                 }
             }
         })
     }
     
     func observeGamesForStart(forGame selectedGame: Dictionary<String,AnyObject>) {
-        if let selectedGameKey = selectedGame["game"] as? String {
-            GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
-                if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                    for game in gameSnapshot {
-                        if game.key == selectedGameKey {
-                            if let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool {
-                                if gameStarted {
-                                    if let gameDict = game.value as? Dictionary<String,AnyObject> {
-//                                        self.selectedGame = gameDict
-                                        GameHandler.instance.game = gameDict
-                                    }
-                                    self.performSegue(withIdentifier: "startGame", sender: nil)
-                                }
-                            }
-                        }
+        guard let gameKey = selectedGame["game"] as? String else { return }
+        GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == gameKey {
+                    guard let gameStarted = game.childSnapshot(forPath: "gameStarted").value as? Bool else { return }
+                    if gameStarted {
+                        guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
+                        GameHandler.instance.game = gameDict
+                        self.performSegue(withIdentifier: "startGame", sender: nil)
                     }
                 }
-            })
-        }
+            }
+        })
     }
     
     func updateGame(forGame selectedGame: Dictionary<String,AnyObject>, withUserData userData: Dictionary<String,AnyObject>) {
@@ -177,16 +166,14 @@ extension HomeVC {
                                                 "currentPlayer" : Player.instance.username]
         GameHandler.instance.updateFirebaseDBGame(key: self.currentUserID!, gameData: gameData)
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
-            if let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for game in gameSnapshot {
-                    if game.key == self.currentUserID! {
-                        if let gameDict = game.value as? Dictionary<String,AnyObject> {
-//                            self.selectedGame = gameDict
-                            GameHandler.instance.game = gameDict
-                            guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
-                            self.players = playersArray
-                        }
-                    }
+            guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for game in gameSnapshot {
+                if game.key == self.currentUserID! {
+                    guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    
+                    GameHandler.instance.game = gameDict
+                    self.players = playersArray
                 }
             }
         })

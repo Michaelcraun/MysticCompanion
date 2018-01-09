@@ -66,7 +66,6 @@ class GameVC: UIViewController, Alertable {
     var userHasSpoiled = false {
         didSet {
             if userHasSpoiled {
-                trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
                 endPlayerTurn()
             }
         }

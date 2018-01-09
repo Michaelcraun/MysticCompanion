@@ -21,6 +21,7 @@ protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
     func showAlert(withTitle title: String, andMessage message: String, andNotificationType type: NotificationType) {
+        print("MIKEY: in showAlert()")
         view.addBlurEffect()
         addVibration(withNotificationType: type)
         
