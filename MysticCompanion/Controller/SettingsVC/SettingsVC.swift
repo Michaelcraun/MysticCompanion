@@ -11,7 +11,7 @@ import CoreData
 import StoreKit
 import KCFloatingActionButton
 
-class SettingsVC: UIViewController {
+class SettingsVC: UIViewController, Connection {
 
     //MARK: UI Variables
     let backgroundImage = UIImageView()
@@ -40,6 +40,7 @@ class SettingsVC: UIViewController {
         observeDataForGamesPlayed()
         attemptGameFetch()
         layoutView()
+        beginConnectionTest()
     }
     
     func setTheme(_ theme: SystemColor) {

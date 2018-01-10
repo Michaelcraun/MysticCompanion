@@ -65,17 +65,8 @@ class EndGameVC: UIViewController, Alertable, Connection {
     }
     
     func quitPressed() {
-        guard let hostUsername = GameHandler.instance.game["username"] as? String else { return }
-        
-        if hostUsername == Player.instance.username {
-            guard let currentUID = FIRAuth.auth()?.currentUser?.uid else { return }
-            guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
-            
-            GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUID)
-            GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray)
-        }
-        
         GameHandler.instance.REF_GAME.removeAllObservers()
+        
         Player.instance.hasQuitGame = true
         dismissPreviousViewControllers()
     }
