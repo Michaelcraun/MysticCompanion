@@ -303,8 +303,8 @@
 			isa = PBXGroup;
 			children = (
 				9BC7C0041FCC6F1B005741CD /* CircleView.swift */,
-				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
 				9BA98C4B20029F9800B93B5E /* CustomSegues.swift */,
+				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";

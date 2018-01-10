@@ -21,7 +21,6 @@ protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
     func showAlert(withTitle title: String, andMessage message: String, andNotificationType type: NotificationType) {
-        print("MIKEY: in showAlert()")
         view.addBlurEffect()
         addVibration(withNotificationType: type)
         
@@ -49,9 +48,11 @@ extension Alertable where Self: UIViewController {
                 }
             }
             
+            //TODO: Clean
             if alertController.title == "Spoiled" {
-                let gameVC = GameVC()
-                gameVC.userHasSpoiled = true
+                if let vc = self as? GameVC {
+                    vc.userHasSpoiled = true
+                }
             }
         })
         let deny = UIAlertAction(title: "No", style: .default, handler: { action in

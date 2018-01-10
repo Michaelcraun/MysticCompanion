@@ -139,6 +139,7 @@ class GameVC: UIViewController, Alertable {
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
+        print("SPOIL: \(userData)")
         passTurn(withUserData: userData)
         
         print("SPOIL: \(trackersArray.count)")      //Why is this empty when you spoil, but not empty when you don't!?!??!?!?!?!??!??!?!?!?!?!?!?!!?!!?!?!?

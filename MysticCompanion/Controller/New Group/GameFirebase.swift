@@ -105,7 +105,6 @@ extension GameVC {
                     if let firebaseUser = user.value as? Dictionary<String,AnyObject> { userData = firebaseUser }
                     guard let mostManaGainedInOneTurn = userData["mostManaGainedInOneTurn"] as? Int else { return }
                     guard let mostVPGainedInOneTurn = userData["mostVPGainedInOneTurn"] as? Int else { return }
-                    print("USER STATS: \(mostVPGainedInOneTurn)")
                     if mana > mostManaGainedInOneTurn { userData["mostManaGainedInOneTurn"] = mana as AnyObject }
                     if victory > mostVPGainedInOneTurn { userData["mostVPGainedInOneTurn"] = victory as AnyObject }
                     
