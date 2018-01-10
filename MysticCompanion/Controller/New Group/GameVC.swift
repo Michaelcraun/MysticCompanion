@@ -10,7 +10,7 @@ import UIKit
 import GMStepper
 import GoogleMobileAds
 
-class GameVC: UIViewController, Alertable {
+class GameVC: UIViewController, Alertable, Connection {
     
     //MARK: UI Variables
     let playerPanel = UIView()
@@ -77,15 +77,16 @@ class GameVC: UIViewController, Alertable {
         setupGameAndObserve()
         layoutView()
         setupPlayerTurn()
+        beginConnectionTest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
         layoutMenuButton()
+        beginConnectionTest()
     }
     
     func setupPlayerTurn() {
-        print("SPOIL: setupPlayerTurn()")
         if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
         } else {
@@ -117,7 +118,6 @@ class GameVC: UIViewController, Alertable {
     }
     
     func endPlayerTurn() {
-        print("SPOIL: endPlayerTurn()")
         if !userHasSpoiled {
             Player.instance.manaConstant = Int(manaTracker.constantStepper.value)
             Player.instance.decayConstant = Int(decayTracker.constantStepper.value)
@@ -139,15 +139,12 @@ class GameVC: UIViewController, Alertable {
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
-        print("SPOIL: \(userData)")
         passTurn(withUserData: userData)
         
-        print("SPOIL: \(trackersArray.count)")      //Why is this empty when you spoil, but not empty when you don't!?!??!?!?!?!??!??!?!?!?!?!?!?!!?!!?!?!?
         //MARK: Fades out all trackers, one by one, at the end of the user's turn and then either sets up
         //the view for the user's next turn or segues to EndGameVC (if this is the user's last turn.
         var delay: TimeInterval = 0.0
         for i in 0..<trackersArray.count {
-            print("SPOIL: \(i)")
             trackersArray[i].fadeAlphaWithDelayTo(0, withDuration: Double(trackersArray.count) * 0.1, andDelay: delay)
             delay += 0.1
         }

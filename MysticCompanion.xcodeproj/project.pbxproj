@@ -49,6 +49,7 @@
 		9BC7C0071FCC6F6C005741CD /* HomeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */; };
 		9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C0081FCC7534005741CD /* HomeFirebase.swift */; };
 		9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC7C00B1FCCA2A4005741CD /* Constants.swift */; };
+		9BCA0F352006633000A00CFF /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCA0F342006633000A00CFF /* Connection.swift */; };
 		9BD2409C1FFC6366001F5F29 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409B1FFC6366001F5F29 /* StoreKit.framework */; };
 		9BD240A01FFDBC30001F5F29 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409D1FFDBC2D001F5F29 /* FBSDKCoreKit.framework */; };
 		9BD240A11FFDBC30001F5F29 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD2409E1FFDBC2F001F5F29 /* Bolts.framework */; };
@@ -103,6 +104,7 @@
 		9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLayout.swift; sourceTree = "<group>"; };
 		9BC7C0081FCC7534005741CD /* HomeFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFirebase.swift; sourceTree = "<group>"; };
 		9BC7C00B1FCCA2A4005741CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9BCA0F342006633000A00CFF /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		9BD2409A1FFC635D001F5F29 /* MysticCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MysticCompanion.entitlements; sourceTree = "<group>"; };
 		9BD2409B1FFC6366001F5F29 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9BD2409D1FFDBC2D001F5F29 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */,
+				9BCA0F342006633000A00CFF /* Connection.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				9B0D32151FD023A1006F7805 /* GameHandler.swift in Sources */,
 				9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */,
 				9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */,
+				9BCA0F352006633000A00CFF /* Connection.swift in Sources */,
 				9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */,
 				9BC7BFF21FCC6506005741CD /* MysticCompanion.xcdatamodeld in Sources */,
 				9BA98C4A20029B5300B93B5E /* UIResponderExtension.swift in Sources */,

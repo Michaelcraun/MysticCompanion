@@ -98,8 +98,6 @@ extension Alertable where Self: UIViewController {
                     newGameData["vpGoal"] = newVPGoal as AnyObject
                     
                     GameHandler.instance.updateFirebaseDBGame(key: gameKey, gameData: newGameData)
-                    
-                    print("EDIT VICTORY: \(numVPToPool)")
                 }
             }
             

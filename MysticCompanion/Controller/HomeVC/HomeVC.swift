@@ -13,7 +13,7 @@ import Firebase
 import FirebaseAuth
 import MapKit
 
-class HomeVC: UIViewController, Alertable {
+class HomeVC: UIViewController, Alertable, Connection {
 
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()
@@ -63,6 +63,7 @@ class HomeVC: UIViewController, Alertable {
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthStatus()
         checkUsername(forKey: currentUserID)
+        beginConnectionTest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,6 +79,7 @@ class HomeVC: UIViewController, Alertable {
         checkTheme()
         layoutMenuButton()
         checkUsername(forKey: currentUserID)
+        beginConnectionTest()
     }
     
     func setPlayerIcon(withDeck deck: DeckType) {

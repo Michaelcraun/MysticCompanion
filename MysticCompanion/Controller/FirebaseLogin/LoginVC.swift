@@ -17,7 +17,7 @@ import FBSDKLoginKit
 import TwitterKit
 import GoogleSignIn
 
-class LoginVC: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
+class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
     
     let backgroundImage = UIImageView()
     let logoStack = UIStackView()
@@ -42,11 +42,13 @@ class LoginVC: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLo
         layoutView()
         //TODO: Test tapToDismissKeyboard
         backgroundImage.addTapToDismissKeyboard()
+        beginConnectionTest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
         layoutMenuButton()
+        beginConnectionTest()
     }
 }
 
@@ -74,7 +76,6 @@ extension LoginVC {
         
         let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
         login(withCredential: credential)
-        print("Successfully logged in user with Facebook.")
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
@@ -97,6 +98,5 @@ extension LoginVC {
         guard let authTokenSecret = session?.authTokenSecret else { return }
         let credential = FIRTwitterAuthProvider.credential(withToken: authToken, secret: authTokenSecret)
         login(withCredential: credential)
-        print("successfully logged in under twitter")
     }
 }

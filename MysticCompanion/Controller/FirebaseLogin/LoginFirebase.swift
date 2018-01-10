@@ -71,7 +71,6 @@ extension LoginVC: Alertable {
     func login(withCredential credential: FIRAuthCredential) {
         FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
             if let error = error {
-                print("there was an error logging into Firebase: ", error)
                 let alertTitle = "Firebase Error:"
                 guard let errorCode = FIRAuthErrorCode(rawValue: error._code) else { return }
                 switch errorCode {

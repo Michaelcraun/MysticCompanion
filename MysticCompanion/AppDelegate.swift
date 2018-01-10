@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let request = UNNotificationRequest(identifier: "platformGrowth", content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request) {(error) in
+        UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {
                 print("Uh oh! We had an error: \(error)")
             }
@@ -121,13 +121,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print(remoteMessage.appData)
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        
-    }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {  }
     
-    func scheduleRemoteNotification(forUser username: String) {
-        
-    }
+    func scheduleRemoteNotification(forUser username: String) {  }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
@@ -136,11 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        
-    }
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {  }
 
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-
-    }
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {  }
 }

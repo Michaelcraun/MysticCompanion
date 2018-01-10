@@ -13,7 +13,7 @@ import GMStepper
 import Firebase
 import FirebaseAuth
 
-class EndGameVC: UIViewController, Alertable {
+class EndGameVC: UIViewController, Alertable, Connection {
     
     //MARK: Game Variables
     var gameState: GameState = .vpNeeded
@@ -43,6 +43,7 @@ class EndGameVC: UIViewController, Alertable {
 
         setupGameAndObserve()
         layoutView()
+        beginConnectionTest()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.showAlert(withTitle: "End of Game", andMessage: "The game has concluded. Please enter the amount of victory points contained in your deck.", andNotificationType: .endOfGame)
         }
@@ -51,6 +52,7 @@ class EndGameVC: UIViewController, Alertable {
     override func viewWillAppear(_ animated: Bool) {
         checkTheme()
         layoutMenuButton(gameState: gameState)
+        beginConnectionTest()
     }
     
     func donePressed() {
