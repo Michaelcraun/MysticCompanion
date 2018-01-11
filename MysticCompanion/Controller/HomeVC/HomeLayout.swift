@@ -167,9 +167,17 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutGameSetupView() {
+        var blurEffectView = UIVisualEffectView()
+        
         self.userIsHostingGame = true
         view.addBlurEffect()
-        guard let blurEffectView = view.viewWithTag(1001) as? UIVisualEffectView else { return }
+        for subview in view.subviews {
+            if subview.tag == 1001 {
+                if let view = subview as? UIVisualEffectView {
+                    blurEffectView = view
+                }
+            }
+        }
         
         let vpSelector = KCFloatingActionButton()
         vpSelector.setMenuButtonColor()

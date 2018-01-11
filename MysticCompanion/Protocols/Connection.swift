@@ -110,6 +110,8 @@ extension Connection where Self: UIViewController {
                     noConnectionLabel.fadeAlphaOut()
                     UIView.animate(withDuration: 0.2, animations: {
                         noConnectionView.frame.size.height = 20
+                        noConnectionView.heightAnchor.constraint(equalToConstant: UIDevice.current.topBannerHeight).isActive = false
+                        noConnectionView.heightAnchor.constraint(equalToConstant: 20).isActive = true
                     })
                 })
             }
