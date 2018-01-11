@@ -91,12 +91,13 @@ extension HomeVC {
     func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
         winCondition = condition
-        self.players.append(["username" : Player.instance.username as AnyObject,
-                             "deck" : Player.instance.deck?.rawValue as AnyObject,
-                             "finished" : false as AnyObject,
-                             "victoryPoints" : 0 as AnyObject,
-                             "userHasQuitGame" : false as AnyObject,
-                             "boxVictory" : 0 as AnyObject])
+        let hostData = ["username" : Player.instance.username as AnyObject,
+                        "deck" : Player.instance.deck?.rawValue as AnyObject,
+                        "finished" : false as AnyObject,
+                        "victoryPoints" : 0 as AnyObject,
+                        "userHasQuitGame" : false as AnyObject,
+                        "boxVictory" : 0 as AnyObject]
+        self.players = [hostData]
         let gameData: Dictionary<String,Any> = ["game" : self.currentUserID!,
                                                 "winCondition" : condition,
                                                 "vpGoal" : goal,
