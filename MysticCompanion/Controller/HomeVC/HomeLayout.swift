@@ -322,15 +322,16 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
         tableView.beginUpdates()
         if userIsHostingGame {
+            //TODO: Refactor
             if players.count == 1 {
                 if indexPath.row == 0 {
-                    cell.layoutWaitingForPlayersCell()
+                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
                 } else {
                     cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 }
             } else if players.count == 2 {
                 if indexPath.row == 0 {
-                    cell.layoutWaitingForPlayersCell()
+                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
                 } else if indexPath.row > 0 && indexPath.row < 3 {
                     cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 } else if indexPath.row == 3 {
@@ -338,7 +339,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 }
             } else if players.count == 3 {
                 if indexPath.row == 0 {
-                    cell.layoutWaitingForPlayersCell()
+                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
                 } else if indexPath.row > 0 && indexPath.row < 4 {
                     cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 } else if indexPath.row == 4 {
@@ -355,7 +356,11 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         } else {
             //TODO: layout waiting for games cell
-            cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
+            if nearbyGames.count <= 0 {
+                cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
+            } else {
+                cell.layoutWaitingCell(withMessage: "Waiting for games...")
+            }
         }
         tableView.endUpdates()
         return cell

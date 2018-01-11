@@ -48,10 +48,9 @@ extension Alertable where Self: UIViewController {
                 }
             }
             
-            //TODO: Clean
             if alertController.title == "Spoiled" {
-                if let vc = self as? GameVC {
-                    vc.userHasSpoiled = true
+                if let gameVC = self as? GameVC {
+                    gameVC.userHasSpoiled = true
                 }
             }
         })

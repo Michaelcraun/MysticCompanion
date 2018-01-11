@@ -14,12 +14,12 @@ class GameLobbyCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func layoutWaitingForPlayersCell() {
+    func layoutWaitingCell(withMessage message: String) {
         clearCell()
         
         let waitingForPlayersLabel = UILabel()
         waitingForPlayersLabel.font = UIFont(name: fontFamily, size: 15)
-        waitingForPlayersLabel.text = "Waiting for players..."
+        waitingForPlayersLabel.text = message
         waitingForPlayersLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let spinner = UIActivityIndicatorView()
