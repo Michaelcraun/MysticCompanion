@@ -124,20 +124,28 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         let startGame = KCFloatingActionButtonItem()
         startGame.setButtonOfType(.startGame)
         startGame.handler = { item in
-            if self.currentUserID == nil {
-                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            if self.currentConnectionStatus != .notReachable {
+                if self.currentUserID == nil {
+                    self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+                } else {
+                    self.layoutGameSetupView()
+                }
             } else {
-                self.layoutGameSetupView()
+                self.showAlert(withTitle: "No Connection", andMessage: "MysticCompanion requires an connection to track your games. Please try again when you have a connection.", andNotificationType: .error)
             }
         }
         
         let joinGame = KCFloatingActionButtonItem()
         joinGame.setButtonOfType(.joinGame)
         joinGame.handler = { item in
-            if self.currentUserID == nil {
-                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            if self.currentConnectionStatus != .notReachable {
+                if self.currentUserID == nil {
+                    self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+                } else {
+                    self.joinGamePressed()
+                }
             } else {
-                self.joinGamePressed()
+                self.showAlert(withTitle: "No Connection", andMessage: "MysticCompanion requires an connection to track your games. Please try again when you have a connection.", andNotificationType: .error)
             }
         }
         
@@ -183,13 +191,17 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         let custom = KCFloatingActionButtonItem()
         custom.setButtonOfType(.customVP)
         custom.handler = { item in
-            vpSelector.fadeAlphaOut()
-            self.layoutCustomVPSelector()
+            if PREMIUM_PURCHASED {
+                vpSelector.fadeAlphaOut()
+                self.layoutCustomVPSelector()
+            } else {
+                self.showAlertWithOptions(withTitle: "Unlock Premium", andMessage: "You have not yet purchased the premium features. Would you like to unlock premium so you can start a custom game?", andNotificationType: .error)
+            }
         }
         
         vpSelector.addItem(item: cancel)
         vpSelector.addItem(item: standard)
-        if PREMIUM_PURCHASED { vpSelector.addItem(item: custom) }
+        vpSelector.addItem(item: custom)
         
         blurEffectView.contentView.addSubview(vpSelector)
         blurEffectView.fadeAlphaTo(1, withDuration: 0.2)
@@ -320,7 +332,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
-        tableView.beginUpdates()
         if userIsHostingGame {
             //TODO: Refactor
             if players.count == 1 {
@@ -355,14 +366,12 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         } else {
-            //TODO: layout waiting for games cell
             if nearbyGames.count <= 0 {
                 cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
             } else {
                 cell.layoutWaitingCell(withMessage: "Waiting for games...")
             }
         }
-        tableView.endUpdates()
         return cell
     }
     

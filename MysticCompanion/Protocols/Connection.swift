@@ -99,13 +99,19 @@ extension Connection where Self: UIViewController {
                 noConnectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
                 noConnectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
                 noConnectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-                noConnectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                noConnectionView.heightAnchor.constraint(equalToConstant: UIDevice.current.topBannerHeight).isActive = true
                 
                 noConnectionLabel.leftAnchor.constraint(equalTo: noConnectionView.leftAnchor).isActive = true
                 noConnectionLabel.rightAnchor.constraint(equalTo: noConnectionView.rightAnchor).isActive = true
                 noConnectionLabel.bottomAnchor.constraint(equalTo: noConnectionView.bottomAnchor).isActive = true
                 
                 noConnectionView.fadeAlphaTo(1, withDuration: 0.2)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    noConnectionLabel.fadeAlphaOut()
+                    UIView.animate(withDuration: 0.2, animations: {
+                        noConnectionView.frame.size.height = 20
+                    })
+                })
             }
         } else {
             if isDisplayed {

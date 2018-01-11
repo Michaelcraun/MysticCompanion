@@ -53,6 +53,10 @@ extension Alertable where Self: UIViewController {
                     gameVC.userHasSpoiled = true
                 }
             }
+            
+            if alertController.title == "Unlock Premium" {
+                self.performSegue(withIdentifier: "showSettings", sender: nil)
+            }
         })
         let deny = UIAlertAction(title: "No", style: .default, handler: { action in
             for subview in self.view.subviews {

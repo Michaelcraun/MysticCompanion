@@ -12,6 +12,7 @@ import GoogleMobileAds
 import Firebase
 import FirebaseAuth
 import MapKit
+import StoreKit
 
 class HomeVC: UIViewController, Alertable, Connection {
 
@@ -96,20 +97,19 @@ class HomeVC: UIViewController, Alertable, Connection {
     }
     
     func joinGamePressed() {
-        self.userIsHostingGame = false
         let userLocation = self.locationManager.location
-        self.layoutGameLobby()
-        self.nearbyGames = []
-        self.observeGames(withUserLocation: userLocation!)
+        
+        userIsHostingGame = false
+        layoutGameLobby()
+        nearbyGames = []
+        observeGames(withUserLocation: userLocation!)
     }
     
     func checkForRating() {
         var timesAppOpened = defaults.integer(forKey: "timesAppOpened")
-        let ratingLeft = defaults.bool(forKey: "ratingLeft")
         
-        if timesAppOpened == 10 && !ratingLeft {
-            //TODO: Show alert asking to leave rating
-            
+        if timesAppOpened >= 10 {
+            SKStoreReviewController.requestReview()
             timesAppOpened = 0
         } else {
             timesAppOpened += 1

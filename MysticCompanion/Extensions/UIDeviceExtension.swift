@@ -73,4 +73,11 @@ public extension UIDevice {
         default: return .none
         }
     }
+    
+    var topBannerHeight: CGFloat {
+        switch UIDevice.current.modelName {
+        case "iPhone X": return 100
+        default: return 50
+        }
+    }
 }
