@@ -124,9 +124,4 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return playersTable.frame.height / CGFloat(players.count)
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellDelay = TimeInterval(indexPath.row - 1) / 10
-        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
-    }
 }

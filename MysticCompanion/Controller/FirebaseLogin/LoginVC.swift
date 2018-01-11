@@ -90,7 +90,7 @@ extension LoginVC {
             showAlert(withTitle: "Twitter Error:", andMessage: "There was an unexpected error when attempting to sign in with Twitter. Please try again.", andNotificationType: .error)
             //TODO: Get Twitter working and talking to Firebase
             //Returning "Request failed: unauthorized (401) error
-            //Usually means missing Consumer Secret or Consumer Secret, but these are correct...
+            //Usually means missing or incorrect Consumer Secret or Consumer Secret, but these are correct...
             return
         }
         

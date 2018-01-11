@@ -23,7 +23,11 @@ class SettingsVC: UIViewController, Connection {
     
     //MARK: Firebase Variables
     var currentUserID: String?
-    var previousGames = [Dictionary<String,AnyObject>]()
+    var previousGames = [Dictionary<String,AnyObject>]() {
+        willSet {
+            previousGamesTable.animate()
+        }
+    }
     
     //MARK: CoreData Variables
     var controller: NSFetchedResultsController<Game>!
@@ -47,6 +51,5 @@ class SettingsVC: UIViewController, Connection {
         defaults.set(theme.rawValue, forKey: "theme")
         checkTheme()
         layoutSettingsButton()
-        previousGamesTable.reloadData()
     }
 }

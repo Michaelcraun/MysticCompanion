@@ -33,13 +33,13 @@ class HomeVC: UIViewController, Alertable, Connection {
     var currentUserID: String? = nil
     var userIsHostingGame = false
     var nearbyGames = [Dictionary<String,AnyObject>]() {
-        didSet {
-            gameLobbyTable.reloadData()
+        willSet {
+            gameLobbyTable.animate()
         }
     }
     var players = [Dictionary<String,AnyObject>]() {
-        didSet {
-            gameLobbyTable.reloadData()
+        willSet {
+            gameLobbyTable.animate()
         }
     }
     

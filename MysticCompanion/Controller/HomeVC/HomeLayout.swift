@@ -375,9 +375,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         } else {
             if nearbyGames.count <= 0 {
-                cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
-            } else {
                 cell.layoutWaitingCell(withMessage: "Waiting for games...")
+            } else {
+                cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
             }
         }
         return cell
@@ -407,17 +407,11 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             GameHandler.instance.game = nearbyGames[indexPath.row]
             updateGame(withUserData: userData)
             observeGameForStart()
-            //TODO: Display waiting message
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellDelay = TimeInterval(indexPath.row - 1) / 10
-        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
     }
 }

@@ -9,20 +9,17 @@
 import UIKit
 
 extension UITableView {
-    func animate(_ cell: UITableViewCell, shouldBeVisible: Bool, withDelay delay: TimeInterval) {
-        UIView.animate(withDuration: 0.5, delay: delay, options: [], animations: {
-            if shouldBeVisible {
-                cell.alpha = 1
-            } else {
-                cell.alpha = 0
-            }
-        }, completion: { (finished) in
+    func animate() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.alpha = 0
+        }) { (finished) in
             if finished {
-                if !shouldBeVisible {
-                    self.animate(cell, shouldBeVisible: true, withDelay: delay)
-                }
+                self.reloadData()
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.alpha = 1
+                })
             }
-        })
+        }
     }
 }
 

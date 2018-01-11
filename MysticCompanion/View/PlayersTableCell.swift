@@ -54,7 +54,6 @@ class PlayersTableCell: UITableViewCell {
         self.addSubview(vpLabel)
         self.addSubview(usernameLabel)
         
-        //TODO: Why is the deckIcon not showing up!?
         deckIcon.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         deckIcon.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
         deckIcon.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
@@ -68,8 +67,5 @@ class PlayersTableCell: UITableViewCell {
         usernameLabel.leftAnchor.constraint(equalTo: deckIcon.rightAnchor, constant: 5).isActive = true
         usernameLabel.rightAnchor.constraint(equalTo: vpLabel.leftAnchor, constant: -5).isActive = true
         usernameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        
-        print("DECK ICON: \(deckIcon.frame)")
-        print("DECK ICON: \(self.frame.height)")
     }
 }

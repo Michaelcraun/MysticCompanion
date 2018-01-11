@@ -27,7 +27,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
     //MARK: Firebase Variables
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
-            playersTable.reloadData()
+            playersTable.animate()
         }
     }
     
@@ -56,12 +56,13 @@ class EndGameVC: UIViewController, Alertable, Connection {
     }
     
     func donePressed() {
-        self.shouldDisplayStepper = false
         let stepper = self.view.viewWithTag(4040) as! GMStepper
         let deckVP = Int(stepper.value)
-        self.updateUser(Player.instance.username, withDeckVP: deckVP)
-        self.playersTable.reloadData()
-        self.layoutMenuButton(gameState: .vpSubmitted)
+        
+        updateUser(Player.instance.username, withDeckVP: deckVP)
+        shouldDisplayStepper = false
+        playersTable.animate()
+        layoutMenuButton(gameState: .vpSubmitted)
     }
     
     func quitPressed() {

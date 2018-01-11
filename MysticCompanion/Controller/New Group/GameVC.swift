@@ -50,8 +50,8 @@ class GameVC: UIViewController, Alertable, Connection {
     }
     
     var players = [Dictionary<String,AnyObject>]() {
-        didSet {
-            playersTable.reloadData()
+        willSet {
+            playersTable.animate()
         }
     }
     

@@ -21,7 +21,6 @@ extension SettingsVC {
                     if playerUsername == Player.instance.username {
                         guard let previousGame = data.value as? Dictionary<String,AnyObject> else { return }
                         self.previousGames.append(previousGame)
-                        self.previousGamesTable.reloadData()
                     }
                 }
             }

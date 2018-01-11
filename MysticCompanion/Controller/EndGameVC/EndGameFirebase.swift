@@ -38,7 +38,6 @@ extension EndGameVC {
                     
                     if finishedPlayerCount >= self.players.count {
                         self.players = playersArray
-                        self.playersTable.reloadData()
                         self.layoutMenuButton(gameState: .gameFinalized)
                         
                         for player in playersArray {

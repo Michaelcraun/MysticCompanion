@@ -171,8 +171,16 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     }
     
     func layoutThemeSelection() {
+        var blurEffectView = UIVisualEffectView()
+        
         view.addBlurEffect()
-        guard let blurEffectView = view.viewWithTag(1001) as? UIVisualEffectView else { return }
+        for subview in view.subviews {
+            if subview.tag == 1001 {
+                if let view = subview as? UIVisualEffectView {
+                    blurEffectView = view
+                }
+            }
+        }
         
         let themeSelector = KCFloatingActionButton()
         themeSelector.setPaddingY()
@@ -267,10 +275,5 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         } else {
             return UITableViewAutomaticDimension
         }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellDelay = TimeInterval(indexPath.row - 1) / 10
-        tableView.animate(cell, shouldBeVisible: false, withDelay: cellDelay)
     }
 }
