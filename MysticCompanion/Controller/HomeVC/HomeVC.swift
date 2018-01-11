@@ -57,8 +57,9 @@ class HomeVC: UIViewController, Alertable, Connection {
         //TODO: Convert CoreData game entries into Firebase entries?
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
+        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
-        checkForRating()
+        askForRating()
         checkTheme()
         layoutView()
         locationManager.requestWhenInUseAuthorization()
@@ -105,7 +106,7 @@ class HomeVC: UIViewController, Alertable, Connection {
         observeGames(withUserLocation: userLocation!)
     }
     
-    func checkForRating() {
+    func askForRating() {
         var timesAppOpened = defaults.integer(forKey: "timesAppOpened")
         
         if timesAppOpened >= 10 {

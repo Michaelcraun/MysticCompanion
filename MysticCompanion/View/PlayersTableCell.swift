@@ -58,14 +58,18 @@ class PlayersTableCell: UITableViewCell {
         deckIcon.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         deckIcon.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
         deckIcon.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        deckIcon.widthAnchor.constraint(equalToConstant: deckIcon.frame.height).isActive = true
+        deckIcon.widthAnchor.constraint(equalTo: deckIcon.heightAnchor).isActive = true
         
         vpLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         vpLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-//        vpLabel.widthAnchor.constraint(equalToConstant: vpLabel.frame.width).isActive = true
+        vpLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
         
         usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         usernameLabel.leftAnchor.constraint(equalTo: deckIcon.rightAnchor, constant: 5).isActive = true
         usernameLabel.rightAnchor.constraint(equalTo: vpLabel.leftAnchor, constant: -5).isActive = true
+        usernameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        
+        print("DECK ICON: \(deckIcon.frame)")
+        print("DECK ICON: \(self.frame.height)")
     }
 }
