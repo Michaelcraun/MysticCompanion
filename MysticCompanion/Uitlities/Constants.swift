@@ -8,7 +8,7 @@
 
 import UIKit
 
-//MARK: Font Variables
+//MARK: UI Variables
 let fontFamily = "Georgia"
 
 //MARK: Colors

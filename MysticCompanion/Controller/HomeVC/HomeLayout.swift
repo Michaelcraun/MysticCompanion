@@ -131,7 +131,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                     self.layoutGameSetupView()
                 }
             } else {
-                self.showAlert(withTitle: "No Connection", andMessage: "MysticCompanion requires an connection to track your games. Please try again when you have a connection.", andNotificationType: .error)
+                self.showAlert(.noConnection)
             }
         }
         
@@ -145,7 +145,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                     self.joinGamePressed()
                 }
             } else {
-                self.showAlert(withTitle: "No Connection", andMessage: "MysticCompanion requires an connection to track your games. Please try again when you have a connection.", andNotificationType: .error)
+                self.showAlert(.noConnection)
             }
         }
         
@@ -203,7 +203,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 vpSelector.fadeAlphaOut()
                 self.layoutCustomVPSelector()
             } else {
-                self.showAlertWithOptions(withTitle: "Unlock Premium", andMessage: "You have not yet purchased the premium features. Would you like to unlock premium so you can start a custom game?", andNotificationType: .error)
+                self.showAlert(.unlockPremium)
             }
         }
         

@@ -45,7 +45,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
         layoutView()
         beginConnectionTest()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.showAlert(withTitle: "End of Game", andMessage: "The game has concluded. Please enter the amount of victory points contained in your deck.", andNotificationType: .endOfGame)
+            self.showAlert(.endOfGame)
         }
     }
     

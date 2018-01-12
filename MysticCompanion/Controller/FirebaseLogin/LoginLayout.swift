@@ -115,27 +115,16 @@ extension LoginVC {
         facebookLogin.readPermissions = ["public_profile", "email"]
         facebookLogin.translatesAutoresizingMaskIntoConstraints = false
         
-        twitterLogin = TWTRLogInButton(logInCompletion: { (session, error) in
-            self.twitterLoginCompletion(session: session, error: error)
-        })
-        twitterLogin.translatesAutoresizingMaskIntoConstraints = false
-        
         googleLogin.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(facebookLogin)
-        view.addSubview(twitterLogin)
         view.addSubview(googleLogin)
         
         facebookLogin.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10).isActive = true
         facebookLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         facebookLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         
-        twitterLogin.topAnchor.constraint(equalTo: facebookLogin.bottomAnchor, constant: 10).isActive = true
-        twitterLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        twitterLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        twitterLogin.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        
-        googleLogin.topAnchor.constraint(equalTo: twitterLogin.bottomAnchor, constant: 10).isActive = true
+        googleLogin.topAnchor.constraint(equalTo: facebookLogin.bottomAnchor, constant: 10).isActive = true
         googleLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         googleLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         googleLogin.heightAnchor.constraint(equalToConstant: 28).isActive = true

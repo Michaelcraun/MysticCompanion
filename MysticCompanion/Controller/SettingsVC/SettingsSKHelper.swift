@@ -32,7 +32,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             request.delegate = self
             request.start()
         } else {
-            showAlert(withTitle: "In-App Purchases Diabled.", andMessage: "Please enable in-app purchases to access the full features of this app.", andNotificationType: .error)
+            showAlert(.iapDisabled)
         }
     }
     
@@ -61,13 +61,13 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             default: break
             }
         }
-        showAlert(withTitle: "Purchases Restored", andMessage: "Your purchases have been restored. Thank you.", andNotificationType: .success)
+        showAlert(.purchasesRestored)
         NetworkIndicator.networkOperationFinished()
         shouldPresentLoadingView(false)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        showAlert(withTitle: "Error:", andMessage: "Your purchases failed to be restored. Please try again.", andNotificationType: .error)
+        showAlert(.restoreFailed)
         NetworkIndicator.networkOperationFinished()
         shouldPresentLoadingView(false)
     }
@@ -88,11 +88,11 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                 default: break
                 }
                 shouldPresentLoadingView(false)
-                showAlert(withTitle: "Purchase Complete", andMessage: "Thank you for purchasing!", andNotificationType: .success)
+                showAlert(.purchaseComplete)
                 queue.finishTransaction(trans)
             case .failed:
                 shouldPresentLoadingView(false)
-                showAlert(withTitle: "Transaction Failed", andMessage: "Please try again later or contact support.", andNotificationType: .success)
+                showAlert(.purchaseFailed)
                 queue.finishTransaction(trans)
             default: break
             }

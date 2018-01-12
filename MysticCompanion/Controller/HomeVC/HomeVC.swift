@@ -13,8 +13,9 @@ import Firebase
 import FirebaseAuth
 import MapKit
 import StoreKit
+import CoreData
 
-class HomeVC: UIViewController, Alertable, Connection {
+class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControllerDelegate {
 
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()
@@ -32,6 +33,7 @@ class HomeVC: UIViewController, Alertable, Connection {
     //MARK: Firebase Variables
     var currentUserID: String? = nil
     var userIsHostingGame = false
+    var coreDataHasBeenConverted = false
     var nearbyGames = [Dictionary<String,AnyObject>]() {
         willSet {
             gameLobbyTable.animate()
@@ -49,15 +51,19 @@ class HomeVC: UIViewController, Alertable, Connection {
     //MARK: MapKit Variables
     var locationManager = CLLocationManager()
     
+    //MARK: Data Variables
     let defaults = UserDefaults.standard
+    let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
+    var controller: NSFetchedResultsController<Game>!
+    var coreDataGames = [Game]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //TODO: Convert CoreData game entries into Firebase entries?
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
         PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
+        coreDataHasBeenConverted = defaults.bool(forKey: "coreDataHasBeenConverted")
         
         askForRating()
         checkTheme()
@@ -66,6 +72,15 @@ class HomeVC: UIViewController, Alertable, Connection {
         checkLocationAuthStatus()
         checkUsername(forKey: currentUserID)
         beginConnectionTest()
+        
+        if !coreDataHasBeenConverted {
+            attemptGameFetch()
+            if let objects = controller.fetchedObjects, objects.count > 0 { coreDataGames = objects }
+            for game in coreDataGames {
+                convertCoreDataGameIntoFirebaseEntry(forGame: game)
+            }
+            defaults.set(true, forKey: "coreDataHasBeenConverted")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,6 +170,22 @@ class HomeVC: UIViewController, Alertable, Connection {
                     setPlayerIcon(withDeck: .waveguards)
                 }
             }
+        }
+    }
+    
+    func attemptGameFetch() {
+        let dateSort = NSSortDescriptor(key: "date", ascending: true)
+        fetchRequest.sortDescriptors = [dateSort]
+        
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        controller.delegate = self
+        self.controller = controller
+        do {
+            try controller.performFetch()
+        } catch {
+            let error = error as NSError
+            //TODO: Handle error correctly
+            print("Error: \(error)")
         }
     }
 }

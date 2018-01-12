@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="16G1036" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C205" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Game" representedClassName="Game" syncable="YES" codeGenerationType="class">
-        <attribute name="datePlayed" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="players" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="winningPlayer" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="player1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player1Color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player1VP" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="player2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player2Color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player2VP" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="player3" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player3Color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player3VP" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="player4" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player4Color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="player4VP" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Game" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="Game" positionX="-63" positionY="-18" width="128" height="240"/>
     </elements>
 </model>

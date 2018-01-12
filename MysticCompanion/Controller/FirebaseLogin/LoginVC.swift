@@ -14,7 +14,6 @@ import FirebaseAuth
 
 import FBSDKCoreKit
 import FBSDKLoginKit
-import TwitterKit
 import GoogleSignIn
 
 class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
@@ -26,7 +25,6 @@ class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDeleg
     let passwordField = KaedeTextField()
     
     var facebookLogin = FBSDKLoginButton()
-    var twitterLogin = TWTRLogInButton()
     var googleLogin = GIDSignInButton()
     
     let settingsButton = KCFloatingActionButton()
@@ -56,7 +54,7 @@ class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDeleg
 extension LoginVC {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let _ = error {
-            showAlert(withTitle: "Google Sign-In Error:", andMessage: "There was an unexpected error when attempting to sign in with Google. Please try again.", andNotificationType: .error)
+            showAlert(.googleSignIn)
             return
         }
         
@@ -70,7 +68,7 @@ extension LoginVC {
 extension LoginVC {
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let _ = error {
-            showAlert(withTitle: "Facebook Error:", andMessage: "There was an unexpected error whtn attempting to sign in with Facebook. Please try again.", andNotificationType: .error)
+            showAlert(.facebookError)
             return
         }
         
@@ -80,23 +78,5 @@ extension LoginVC {
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         
-    }
-}
-
-//MARK: Twitter Login
-extension LoginVC {
-    func twitterLoginCompletion(session: TWTRSession?, error: Error!) {
-        if let _ = error {
-            showAlert(withTitle: "Twitter Error:", andMessage: "There was an unexpected error when attempting to sign in with Twitter. Please try again.", andNotificationType: .error)
-            //TODO: Get Twitter working and talking to Firebase
-            //Returning "Request failed: unauthorized (401) error
-            //Usually means missing or incorrect Consumer Secret or Consumer Secret, but these are correct...
-            return
-        }
-        
-        guard let authToken = session?.authToken else { return }
-        guard let authTokenSecret = session?.authTokenSecret else { return }
-        let credential = FIRTwitterAuthProvider.credential(withToken: authToken, secret: authTokenSecret)
-        login(withCredential: credential)
     }
 }

@@ -182,10 +182,14 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let endTurn = KCFloatingActionButtonItem()
         endTurn.setButtonOfType(.endTurn)
         endTurn.handler = { item in
-            if self.currentPlayer == Player.instance.username {
-                self.endPlayerTurn()
+            if self.currentConnectionStatus != .notReachable {
+                if self.currentPlayer == Player.instance.username {
+                    self.endPlayerTurn()
+                } else {
+                    self.showAlert(.notYourTurn)
+                }
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "It is not your turn. Please wait for other players.", andNotificationType: .error)
+                self.showAlert(.noConnection)
             }
         }
         

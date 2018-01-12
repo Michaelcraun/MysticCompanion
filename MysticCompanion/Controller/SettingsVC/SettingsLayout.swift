@@ -132,7 +132,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 
                 self.present(composeVC, animated: true, completion: nil)
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "Your device is not able to send email.", andNotificationType: .error)
+                self.showAlert(.mailError)
             }
         }
         
@@ -150,7 +150,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 self.shouldPresentLoadingView(true)
                 self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "Cannot currently complete your request. Please try again.", andNotificationType: .error)
+                self.showAlert(.purchaseError)
             }
         }
         
@@ -164,7 +164,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 SKPaymentQueue.default().add(self)
                 SKPaymentQueue.default().restoreCompletedTransactions()
             } else {
-                self.showAlert(withTitle: "Error:", andMessage: "Cannot currently complete your request. Please try again.", andNotificationType: .error)
+                self.showAlert(.purchaseError)
             }
         }
         

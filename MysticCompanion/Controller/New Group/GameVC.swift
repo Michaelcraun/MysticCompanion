@@ -58,7 +58,7 @@ class GameVC: UIViewController, Alertable, Connection {
     var currentPlayer = "" {
         didSet {
             if currentPlayer == Player.instance.username && currentPlayer != endingPlayerUsername {
-                showAlert(withTitle: "Your Turn", andMessage: "It is your turn. Please continue.", andNotificationType: .turnChange)
+                showAlert(.yourTurn)
             }
         }
     }
@@ -164,7 +164,7 @@ class GameVC: UIViewController, Alertable, Connection {
         let currentGrowth = growthTracker.currentStepper.value
         
         if currentDecay - 3 > currentGrowth && !userHasSpoiled {
-            showAlertWithOptions(withTitle: "Spoiled", andMessage: "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn.", andNotificationType: .error)
+            showAlert(.spoil)
         }
         sender.reset()
     }
@@ -180,7 +180,7 @@ class GameVC: UIViewController, Alertable, Connection {
         
         if location.x >= victoryIconBounds.minX && location.x <= victoryIconBounds.maxX {
             if location.y >= victoryIconBounds.minY && location.y <= victoryIconBounds.maxY {
-                showVPAlert(withGame: GameHandler.instance.game)
+                showAlert(.victoryChange)
             }
         }
     }

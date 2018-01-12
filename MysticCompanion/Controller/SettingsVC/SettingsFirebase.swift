@@ -33,7 +33,7 @@ extension SettingsVC {
             try firebaseAuth?.signOut()
             dismiss(animated: true, completion: nil)
         } catch {
-            showAlert(withTitle: "Firebase Error:", andMessage: "There was an unexpected error logging out. Please try again.", andNotificationType: .error)
+            showAlert(.firebaseLogout)
         }
     }
 }

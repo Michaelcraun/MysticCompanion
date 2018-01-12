@@ -153,9 +153,9 @@ extension HomeVC {
                         
                         //TODO: Check if user is in game AND their deck is taken and switch deck out if deck isn't taken ?
                         if isInGame {
-                            self.showAlert(withTitle: "Error:", andMessage: "You're already in that game!", andNotificationType: .error)
+                            self.showAlert(.userExistsInGame)
                         } else if deckTaken {
-                            self.showAlert(withTitle: "Error:", andMessage: "That deck is already taken! Please choose a different one.", andNotificationType: .error)
+                            self.showAlert(.deckTaken)
                         } else {
                             self.players.append(userData)
                         }
@@ -165,10 +165,15 @@ extension HomeVC {
                     } else {
                         print("game is full")
                         //TODO: Test gameIsFull error
-                        self.showAlert(withTitle: "Error:", andMessage: "That game is full. Please select a different game.", andNotificationType: .error)
+                        self.showAlert(.gameIsFull)
                     }
                 }
             }
         })
+    }
+    
+    func convertCoreDataGameIntoFirebaseEntry(forGame game: Game) {
+        //TODO: Convert CoreData game entries into Firebase entries
+        
     }
 }
