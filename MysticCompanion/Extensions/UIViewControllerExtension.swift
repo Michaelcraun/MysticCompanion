@@ -16,7 +16,7 @@ extension UIViewController {
             fadeView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
             fadeView?.backgroundColor = .black
             fadeView?.alpha = 0
-            fadeView?.tag = 4040
+            fadeView?.tag = 5050
             
             let spinner = UIActivityIndicatorView()
             spinner.color = .white
@@ -30,7 +30,7 @@ extension UIViewController {
             fadeView?.fadeAlphaTo(0.7, withDuration: 0.2)
         } else {
             for subview in view.subviews {
-                if subview.tag == 4040 {
+                if subview.tag == 5050 {
                     UIView.animate(withDuration: 0.2, animations: {
                         subview.alpha = 0
                     }, completion: { (finished) in

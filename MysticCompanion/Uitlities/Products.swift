@@ -13,7 +13,7 @@ enum Products {
     
     var productIdentifier: String {
         switch self {
-        case .premiumUpgrade: return "com.CraunicProductions.MysticCompanion.premiumUpgrade"
+        case .premiumUpgrade: return "com.CraunicProductions.MysticCompanion.PremiumUpgrade"
         }
     }
 }

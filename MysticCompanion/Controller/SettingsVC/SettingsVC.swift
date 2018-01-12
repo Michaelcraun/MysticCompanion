@@ -20,6 +20,7 @@ class SettingsVC: UIViewController, Connection {
     let bannerView = UIView()
     let previousGamesTable = UITableView()
     let menuButton = KCFloatingActionButton()
+    var purchaseButtonsAreEnabled = false
     
     //MARK: Firebase Variables
     var currentUserID: String?
@@ -45,6 +46,7 @@ class SettingsVC: UIViewController, Connection {
         attemptGameFetch()
         layoutView()
         beginConnectionTest()
+        checkCanMakePayments()
     }
     
     func setTheme(_ theme: SystemColor) {

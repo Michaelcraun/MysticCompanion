@@ -21,9 +21,6 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                 let pay = SKPayment(product: productPurchasing)
                 SKPaymentQueue.default().add(self)
                 SKPaymentQueue.default().add(pay)
-                
-                NetworkIndicator.networkOperationFinished()
-//                shouldPresentLoadingView(false)
             }
         }
     }
@@ -47,6 +44,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             productList.append(product)
         }
         
+        purchaseButtonsAreEnabled = true
         NetworkIndicator.networkOperationFinished()
     }
     
@@ -63,9 +61,15 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
             default: break
             }
         }
-//        shouldPresentLoadingView(false)
         showAlert(withTitle: "Purchases Restored", andMessage: "Your purchases have been restored. Thank you.", andNotificationType: .success)
         NetworkIndicator.networkOperationFinished()
+        shouldPresentLoadingView(false)
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        showAlert(withTitle: "Error:", andMessage: "Your purchases failed to be restored. Please try again.", andNotificationType: .error)
+        NetworkIndicator.networkOperationFinished()
+        shouldPresentLoadingView(false)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -81,19 +85,23 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                     let defaults = UserDefaults.standard
                     PREMIUM_PURCHASED = true
                     defaults.set(PREMIUM_PURCHASED, forKey: "premium")
-                    layoutView()
                 default: break
                 }
+                shouldPresentLoadingView(false)
                 showAlert(withTitle: "Purchase Complete", andMessage: "Thank you for purchasing!", andNotificationType: .success)
                 queue.finishTransaction(trans)
             case .failed:
+                shouldPresentLoadingView(false)
                 showAlert(withTitle: "Transaction Failed", andMessage: "Please try again later or contact support.", andNotificationType: .success)
                 queue.finishTransaction(trans)
             default: break
             }
         }
         
-//        shouldPresentLoadingView(false)
         NetworkIndicator.networkOperationFinished()
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+        shouldPresentLoadingView(false)
     }
 }

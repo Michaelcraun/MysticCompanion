@@ -146,19 +146,26 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         purchase.setButtonOfType(.purchase)
         purchase.handler = { item in
             //TODO: Purchase premium version
-//            self.shouldPresentLoadingView(true)
-            self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
+            if self.purchaseButtonsAreEnabled {
+                self.shouldPresentLoadingView(true)
+                self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
+            } else {
+                self.showAlert(withTitle: "Error:", andMessage: "Cannot currently complete your request. Please try again.", andNotificationType: .error)
+            }
         }
         
         let restore = KCFloatingActionButtonItem()
         restore.setButtonOfType(.restore)
         restore.handler = { item in
             //TODO: Restore premium version
-            NetworkIndicator.networkOperationStarted()
-//            self.shouldPresentLoadingView(true)
-            
-            SKPaymentQueue.default().add(self)
-            SKPaymentQueue.default().restoreCompletedTransactions()
+            if self.purchaseButtonsAreEnabled {
+                NetworkIndicator.networkOperationStarted()
+                self.shouldPresentLoadingView(true)
+                SKPaymentQueue.default().add(self)
+                SKPaymentQueue.default().restoreCompletedTransactions()
+            } else {
+                self.showAlert(withTitle: "Error:", andMessage: "Cannot currently complete your request. Please try again.", andNotificationType: .error)
+            }
         }
         
         menuButton.addItem(item: cancel)
