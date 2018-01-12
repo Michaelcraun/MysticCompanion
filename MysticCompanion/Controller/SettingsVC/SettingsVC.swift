@@ -30,9 +30,7 @@ class SettingsVC: UIViewController, Connection {
         }
     }
     
-    //MARK: CoreData Variables
-    var controller: NSFetchedResultsController<Game>!
-    let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
+    //MARK: Data Variables
     let defaults = UserDefaults.standard
     
     //MARK: StoreKit Variables
@@ -43,7 +41,6 @@ class SettingsVC: UIViewController, Connection {
         super.viewDidLoad()
 
         observeDataForGamesPlayed()
-        attemptGameFetch()
         layoutView()
         beginConnectionTest()
         checkCanMakePayments()

@@ -12,7 +12,6 @@ import UserNotifications
 import Firebase
 import FirebaseAuth
 
-import TwitterKit
 import FBSDKCoreKit
 import GoogleSignIn
 
@@ -36,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             application.registerUserNotificationSettings(settings)
         }
         
-        Twitter.sharedInstance().start(withConsumerKey:"fQhR6SF4kAKYKgcEds0DClCGZ", consumerSecret:"Uia3zJAPHRW7KaxaJ64rmTog2MflDQlXKaTbz4AtrRZlcneLP6")
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
@@ -127,7 +125,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
-        Twitter.sharedInstance().application(app, open: url, options: options)
         GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: [:])
         return true
     }

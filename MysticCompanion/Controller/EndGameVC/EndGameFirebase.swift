@@ -62,7 +62,7 @@ extension EndGameVC {
                             guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
                             
                             GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUID)
-                            GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray)
+                            GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray, andDateString: nil)
                         }
                     }
                 }

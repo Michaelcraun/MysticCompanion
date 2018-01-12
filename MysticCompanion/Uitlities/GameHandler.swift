@@ -42,8 +42,14 @@ class GameHandler {
     }
     
     //MARK: Firebase data functions
-    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinners winners: [String]) {
-        let gameKeyAddendum = generateDateAddendum()
+    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinners winners: [String], andDateString date: String?) {
+        var gameKeyAddendum: String {
+            if date == nil {
+                return generateDateAddendum()
+            } else {
+                return date!
+            }
+        }
         let gameKey = "\(gameKeyAddendum)-\(key)"
         var newPlayersArray = [Dictionary<String,AnyObject>]()
         

@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import Firebase
+import FirebaseAuth
 
 extension HomeVC {
     func checkUsername(forKey key: String?) {
@@ -173,7 +174,115 @@ extension HomeVC {
     }
     
     func convertCoreDataGameIntoFirebaseEntry(forGame game: Game) {
-        //TODO: Convert CoreData game entries into Firebase entries
+        guard let coreDataDate = game.date else { return }
+        var coreDataGame = Dictionary<String,AnyObject>()
+        var coreDataPlayers = [Dictionary<String,AnyObject>]()
+        var coreDataWinners = [String]()
+        var player1: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
+                                                     "deck" : "" as AnyObject,
+                                                     "victoryPoints": 0 as AnyObject,
+                                                     "bocVictory" : 0 as AnyObject]
+        var player2: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
+                                                     "deck" : "" as AnyObject,
+                                                     "victoryPoints": 0 as AnyObject,
+                                                     "bocVictory" : 0 as AnyObject]
+        var player3: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
+                                                     "deck" : "" as AnyObject,
+                                                     "victoryPoints": 0 as AnyObject,
+                                                     "bocVictory" : 0 as AnyObject]
+        var player4: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
+                                                     "deck" : "" as AnyObject,
+                                                     "victoryPoints": 0 as AnyObject,
+                                                     "bocVictory" : 0 as AnyObject]
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.dateFormat = "MMDDYYYY HH:mm"
+        let dateString = dateFormatter.string(from: coreDataDate)
+        
+        if let playerName = game.player1, let playerColor = game.player1Color {
+            var playerDeck: String {
+                switch playerColor {
+                case "red": return "beastbrothers"
+                case "yellow": return "dawnseekers"
+                case "green": return "lifewardens"
+                case "blue": return "waveguards"
+                default: return ""
+                }
+            }
+            
+            player1["username"] = playerName as AnyObject
+            player1["deck"] = playerDeck as AnyObject
+            player1["victoryPoints"] = game.player1VP as AnyObject
+            coreDataPlayers.append(player1)
+        }
+        
+        if let playerName = game.player2, let playerColor = game.player2Color {
+            var playerDeck: String {
+                switch playerColor {
+                case "red": return "beastbrothers"
+                case "yellow": return "dawnseekers"
+                case "green": return "lifewardens"
+                case "blue": return "waveguards"
+                default: return ""
+                }
+            }
+            
+            player2["username"] = playerName as AnyObject
+            player2["deck"] = playerDeck as AnyObject
+            player2["victoryPoints"] = game.player2VP as AnyObject
+            coreDataPlayers.append(player2)
+        }
+        
+        if let playerName = game.player3, let playerColor = game.player3Color {
+            var playerDeck: String {
+                switch playerColor {
+                case "red": return "beastbrothers"
+                case "yellow": return "dawnseekers"
+                case "green": return "lifewardens"
+                case "blue": return "waveguards"
+                default: return ""
+                }
+            }
+            
+            player3["username"] = playerName as AnyObject
+            player3["deck"] = playerDeck as AnyObject
+            player3["victoryPoints"] = game.player3VP as AnyObject
+            coreDataPlayers.append(player3)
+        }
+        
+        if let playerName = game.player4, let playerColor = game.player4Color {
+            var playerDeck: String {
+                switch playerColor {
+                case "red": return "beastbrothers"
+                case "yellow": return "dawnseekers"
+                case "green": return "lifewardens"
+                case "blue": return "waveguards"
+                default: return ""
+                }
+            }
+            
+            player4["username"] = playerName as AnyObject
+            player4["deck"] = playerDeck as AnyObject
+            player4["victoryPoints"] = game.player4VP as AnyObject
+            coreDataPlayers.append(player4)
+        }
+        
+        var winningVP = 0
+        for player in coreDataPlayers {
+            guard let username = player["username"] as? String else { return }
+            guard let victoryPoints = player["victoryPoints"] as? Int else { return }
+            if victoryPoints > winningVP {
+                winningVP = victoryPoints
+                coreDataWinners = [username]
+            } else if victoryPoints == winningVP {
+                coreDataWinners.append(username)
+            }
+        }
+        
+        GameHandler.instance.createFirebaseDBData(forGame: (FIRAuth.auth()?.currentUser?.uid)!,
+                                                  withPlayers: coreDataPlayers,
+                                                  andWinners: coreDataWinners,
+                                                  andDateString: dateString)
     }
 }
