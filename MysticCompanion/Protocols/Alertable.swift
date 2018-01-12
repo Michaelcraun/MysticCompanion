@@ -210,7 +210,6 @@ extension Alertable where Self: UIViewController {
             }
         }
         
-        //TODO: Add actions
         alertController.addAction(defaultAction)
         if alert.needsOptions {
             alertController.addAction(yesAction)

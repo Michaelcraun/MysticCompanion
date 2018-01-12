@@ -341,36 +341,21 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
         if userIsHostingGame {
-            //TODO: Refactor
-            if players.count == 1 {
-                if indexPath.row == 0 {
-                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
-                } else {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
+            if players.count > 0 && players.count < 2 {
+                switch indexPath.row {
+                case 0: cell.layoutWaitingCell(withMessage: "Waiting for players...")
+                default: cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 }
-            } else if players.count == 2 {
-                if indexPath.row == 0 {
-                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
-                } else if indexPath.row > 0 && indexPath.row < 3 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
-                } else if indexPath.row == 3 {
-                    cell.layoutStartGameCell()
+            } else if players.count > 1 && players.count < 4 {
+                switch indexPath.row {
+                case 0: cell.layoutWaitingCell(withMessage: "Waiting for players...")
+                case players.count + 1: cell.layoutStartGameCell()
+                default: cell.layoutCellForHost(withUser: players[indexPath.row - 1])
                 }
-            } else if players.count == 3 {
-                if indexPath.row == 0 {
-                    cell.layoutWaitingCell(withMessage: "Waiting for players...")
-                } else if indexPath.row > 0 && indexPath.row < 4 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row - 1])
-                } else if indexPath.row == 4 {
-                    cell.layoutStartGameCell()
-                }
-            } else if players.count == 4 {
-                if indexPath.row == 0 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row])
-                } else if indexPath.row > 0 && indexPath.row < 4 {
-                    cell.layoutCellForHost(withUser: players[indexPath.row])
-                } else if indexPath.row == 4 {
-                    cell.layoutStartGameCell()
+            } else {
+                switch indexPath.row {
+                case 4: cell.layoutStartGameCell()
+                default: cell.layoutCellForHost(withUser: players[indexPath.row])
                 }
             }
         } else {

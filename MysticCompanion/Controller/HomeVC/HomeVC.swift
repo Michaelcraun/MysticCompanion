@@ -184,7 +184,6 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
             try controller.performFetch()
         } catch {
             let error = error as NSError
-            //TODO: Handle error correctly
             print("Error: \(error)")
         }
     }
