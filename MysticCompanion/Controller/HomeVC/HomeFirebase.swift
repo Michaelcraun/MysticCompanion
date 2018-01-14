@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+
 import Firebase
 import FirebaseAuth
 
@@ -65,7 +66,6 @@ extension HomeVC {
                     }
                 }
             }
-            
             self.nearbyGames = localGames
         })
     }
@@ -175,25 +175,8 @@ extension HomeVC {
     
     func convertCoreDataGameIntoFirebaseEntry(forGame game: Game) {
         guard let coreDataDate = game.date else { return }
-        var coreDataGame = Dictionary<String,AnyObject>()
         var coreDataPlayers = [Dictionary<String,AnyObject>]()
         var coreDataWinners = [String]()
-        var player1: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
-                                                     "deck" : "" as AnyObject,
-                                                     "victoryPoints": 0 as AnyObject,
-                                                     "bocVictory" : 0 as AnyObject]
-        var player2: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
-                                                     "deck" : "" as AnyObject,
-                                                     "victoryPoints": 0 as AnyObject,
-                                                     "bocVictory" : 0 as AnyObject]
-        var player3: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
-                                                     "deck" : "" as AnyObject,
-                                                     "victoryPoints": 0 as AnyObject,
-                                                     "bocVictory" : 0 as AnyObject]
-        var player4: Dictionary<String,AnyObject> = ["username" : "" as AnyObject,
-                                                     "deck" : "" as AnyObject,
-                                                     "victoryPoints": 0 as AnyObject,
-                                                     "bocVictory" : 0 as AnyObject]
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -201,70 +184,22 @@ extension HomeVC {
         let dateString = dateFormatter.string(from: coreDataDate)
         
         if let playerName = game.player1, let playerColor = game.player1Color {
-            var playerDeck: String {
-                switch playerColor {
-                case "red": return "beastbrothers"
-                case "yellow": return "dawnseekers"
-                case "green": return "lifewardens"
-                case "blue": return "waveguards"
-                default: return ""
-                }
-            }
-            
-            player1["username"] = playerName as AnyObject
-            player1["deck"] = playerDeck as AnyObject
-            player1["victoryPoints"] = game.player1VP as AnyObject
+            let player1 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player1VP)
             coreDataPlayers.append(player1)
         }
         
         if let playerName = game.player2, let playerColor = game.player2Color {
-            var playerDeck: String {
-                switch playerColor {
-                case "red": return "beastbrothers"
-                case "yellow": return "dawnseekers"
-                case "green": return "lifewardens"
-                case "blue": return "waveguards"
-                default: return ""
-                }
-            }
-            
-            player2["username"] = playerName as AnyObject
-            player2["deck"] = playerDeck as AnyObject
-            player2["victoryPoints"] = game.player2VP as AnyObject
+            let player2 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player2VP)
             coreDataPlayers.append(player2)
         }
         
         if let playerName = game.player3, let playerColor = game.player3Color {
-            var playerDeck: String {
-                switch playerColor {
-                case "red": return "beastbrothers"
-                case "yellow": return "dawnseekers"
-                case "green": return "lifewardens"
-                case "blue": return "waveguards"
-                default: return ""
-                }
-            }
-            
-            player3["username"] = playerName as AnyObject
-            player3["deck"] = playerDeck as AnyObject
-            player3["victoryPoints"] = game.player3VP as AnyObject
+            let player3 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player3VP)
             coreDataPlayers.append(player3)
         }
         
         if let playerName = game.player4, let playerColor = game.player4Color {
-            var playerDeck: String {
-                switch playerColor {
-                case "red": return "beastbrothers"
-                case "yellow": return "dawnseekers"
-                case "green": return "lifewardens"
-                case "blue": return "waveguards"
-                default: return ""
-                }
-            }
-            
-            player4["username"] = playerName as AnyObject
-            player4["deck"] = playerDeck as AnyObject
-            player4["victoryPoints"] = game.player4VP as AnyObject
+            let player4 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player4VP)
             coreDataPlayers.append(player4)
         }
         
@@ -284,5 +219,27 @@ extension HomeVC {
                                                   withPlayers: coreDataPlayers,
                                                   andWinners: coreDataWinners,
                                                   andDateString: dateString)
+    }
+    
+    func getDeckTypeFromCoreDataGame(forColor color: String) -> String {
+        var playerDeck: String {
+            switch color {
+            case "red": return "beastbrothers"
+            case "yellow": return "dawnseekers"
+            case "green": return "lifewardens"
+            case "blue": return "waveguards"
+            default: return ""
+            }
+        }
+        
+        return playerDeck
+    }
+    
+    func createPlayerFromCoreDataGame(_ username: String, withDeckColor color: String, andVictory victory: Int16) -> Dictionary<String,AnyObject> {
+        let player: Dictionary<String,AnyObject> = ["username"         : username as AnyObject,
+                                                    "deck"             : getDeckTypeFromCoreDataGame(forColor: color) as AnyObject,
+                                                    "victoryPoints"    : victory as AnyObject]
+        
+        return player
     }
 }

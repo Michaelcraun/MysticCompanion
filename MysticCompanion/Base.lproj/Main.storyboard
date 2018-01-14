@@ -23,7 +23,7 @@
                     <connections>
                         <segue destination="2D0-a1-Ztc" kind="show" identifier="showFirebaseLogin" id="gg1-iM-772"/>
                         <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="RzQ-dl-vGq"/>
-                        <segue destination="JfQ-Lb-VfX" kind="custom" identifier="startGame" customClass="SlideToLeft" customModule="MysticCompanion" customModuleProvider="target" id="BCm-Bf-ou6"/>
+                        <segue destination="JfQ-Lb-VfX" kind="show" identifier="startGame" id="BCm-Bf-ou6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -42,7 +42,7 @@
                     </view>
                     <connections>
                         <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="cns-hL-VcS"/>
-                        <segue destination="N1B-1o-Bwi" kind="custom" identifier="showEndGame" customClass="SlideToLeft" customModule="MysticCompanion" customModuleProvider="target" id="9ce-ms-fBQ"/>
+                        <segue destination="N1B-1o-Bwi" kind="show" identifier="showEndGame" id="9ce-ms-fBQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cjn-Bv-l1Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -61,6 +61,7 @@
                     </view>
                     <connections>
                         <segue destination="0Tj-Dq-0CA" kind="presentation" identifier="showSettings" modalTransitionStyle="flipHorizontal" id="6SJ-ic-CD1"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="startNewGame" id="WOy-f3-prK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3j-De-cHe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -99,6 +100,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cns-hL-VcS"/>
+        <segue reference="6SJ-ic-CD1"/>
     </inferredMetricsTieBreakers>
 </document>

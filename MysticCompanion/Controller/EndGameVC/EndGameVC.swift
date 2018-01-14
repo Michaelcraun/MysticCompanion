@@ -17,7 +17,6 @@ class EndGameVC: UIViewController, Alertable, Connection {
     
     //MARK: Game Variables
     var gameState: GameState = .vpNeeded
-    
     enum GameState {
         case vpNeeded
         case vpSubmitted
@@ -27,6 +26,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
     //MARK: Firebase Variables
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
+            print("SEGUE: \(players.count)")
             playersTable.animate()
         }
     }
@@ -37,6 +37,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
     let menuButton = KCFloatingActionButton()
     var shouldDisplayStepper = true
     var winnersArray = [String]()
+    lazy var slideInTransitioningDelegate = SlideInPresentationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +70,8 @@ class EndGameVC: UIViewController, Alertable, Connection {
         GameHandler.instance.REF_GAME.removeAllObservers()
         
         Player.instance.hasQuitGame = true
-        dismissPreviousViewControllers()
+//        dismissPreviousViewControllers()
+        performSegue(withIdentifier: "startNewGame", sender: nil)
     }
     
     func sharePressed() {
@@ -116,6 +118,17 @@ class EndGameVC: UIViewController, Alertable, Connection {
         
         UIView.animate(withDuration: 0.5) {
             winnerImage.frame.origin.x += winnerWidth
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "startNewGame" {
+            if let destination = segue.destination as? HomeVC {
+                slideInTransitioningDelegate.direction = .left
+                slideInTransitioningDelegate.disableCompactHeight = false
+                destination.transitioningDelegate = slideInTransitioningDelegate
+                destination.modalPresentationStyle = .custom
+            }
         }
     }
 }

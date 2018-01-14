@@ -16,7 +16,7 @@ import StoreKit
 import CoreData
 
 class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControllerDelegate {
-
+    //MARK: UI Variables
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()
     let playerName = UILabel()
@@ -29,6 +29,7 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     let adBanner = GADBannerView()
     var gameLobby = UIView()
     let gameLobbyTable = UITableView()
+    lazy var slideInTransitioningDelegate = SlideInPresentationManager()
     
     //MARK: Firebase Variables
     var currentUserID: String? = nil
@@ -47,8 +48,6 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     
     //MARK: Game Variables
     var winCondition = ""
-    
-    //MARK: MapKit Variables
     var locationManager = CLLocationManager()
     
     //MARK: Data Variables
@@ -89,6 +88,7 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
             GameHandler.instance.REF_GAME.removeAllObservers()
             Player.instance.reinitialize()
             reinitializeView()
+            dismissPreviousViewControllers()
         }
         
         currentUserID = FIRAuth.auth()?.currentUser?.uid
@@ -138,6 +138,11 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "startGame" {
             if let destination = segue.destination as? GameVC {
+                slideInTransitioningDelegate.direction = .right
+                slideInTransitioningDelegate.disableCompactHeight = false
+                destination.transitioningDelegate = slideInTransitioningDelegate
+                destination.modalPresentationStyle = .custom
+                
                 switch winCondition {
                 case "standard": destination.vpGoal += players.count * 5
                 case "custom": destination.vpGoal = 13

@@ -58,14 +58,6 @@ public extension UIDevice {
         }
     }
     
-    //TODO: Needs fixed for iPhone X
-    var topLayoutBuffer: CGFloat {
-        switch UIDevice.current.modelName {
-        case "iPhoneX" : return 100
-        default: return 20
-        }
-    }
-    
     var notificationDevice: NotificationDevice {
         switch UIDevice.current.modelName {
         case "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X": return .haptic
@@ -74,10 +66,25 @@ public extension UIDevice {
         }
     }
     
+    //TODO: Needs fixed for iPhone X
+    var topLayoutBuffer: CGFloat {
+        switch UIDevice.current.modelName {
+        case "iPhoneX" : return 100
+        default: return 20
+        }
+    }
+    
     var topBannerHeight: CGFloat {
         switch UIDevice.current.modelName {
         case "iPhone X": return 100
         default: return 50
+        }
+    }
+    
+    var adBottomBuffer: CGFloat {
+        switch UIDevice.current.modelName {
+        case "iPhoneX": return 50
+        default: return 0
         }
     }
 }

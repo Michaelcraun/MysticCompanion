@@ -24,6 +24,9 @@
 		9B167B4C1FE173C900183733 /* EndGameFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B4B1FE173C900183733 /* EndGameFirebase.swift */; };
 		9B167B501FE1C5CD00183733 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B4F1FE1C5CD00183733 /* NetworkIndicator.swift */; };
 		9B167B521FE1CC7200183733 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B167B511FE1CC7200183733 /* UIViewControllerExtension.swift */; };
+		9B1FA9CA200BAED60052FB7C /* SlideInPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C7200BAED20052FB7C /* SlideInPresentationAnimator.swift */; };
+		9B1FA9CB200BAED60052FB7C /* SlideInPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C8200BAED30052FB7C /* SlideInPresentationController.swift */; };
+		9B1FA9CC200BAED60052FB7C /* SlideInPresentationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C9200BAED60052FB7C /* SlideInPresentationManager.swift */; };
 		9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */; };
 		9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */; };
 		9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */; };
@@ -76,6 +79,9 @@
 		9B167B4B1FE173C900183733 /* EndGameFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameFirebase.swift; sourceTree = "<group>"; };
 		9B167B4F1FE1C5CD00183733 /* NetworkIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkIndicator.swift; sourceTree = "<group>"; };
 		9B167B511FE1CC7200183733 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
+		9B1FA9C7200BAED20052FB7C /* SlideInPresentationAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationAnimator.swift; sourceTree = "<group>"; };
+		9B1FA9C8200BAED30052FB7C /* SlideInPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationController.swift; sourceTree = "<group>"; };
+		9B1FA9C9200BAED60052FB7C /* SlideInPresentationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationManager.swift; sourceTree = "<group>"; };
 		9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
 		9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -203,6 +209,17 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		9B1FA9C6200BAEB80052FB7C /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				9BA98C4B20029F9800B93B5E /* CustomSegues.swift */,
+				9B1FA9C7200BAED20052FB7C /* SlideInPresentationAnimator.swift */,
+				9B1FA9C8200BAED30052FB7C /* SlideInPresentationController.swift */,
+				9B1FA9C9200BAED60052FB7C /* SlideInPresentationManager.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		9B73B6471FD8B654007E7ECA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +268,7 @@
 				9B73B6471FD8B654007E7ECA /* Extensions */,
 				9B0D32111FD02282006F7805 /* Model */,
 				9BC7C00A1FCCA28C005741CD /* Uitlities */,
+				9B1FA9C6200BAEB80052FB7C /* Presentation */,
 				9BC7C0021FCC6EF6005741CD /* View */,
 				9BC7C0001FCC6B6B005741CD /* Controller */,
 				9BC7BFE91FCC6506005741CD /* AppDelegate.swift */,
@@ -303,7 +321,6 @@
 			isa = PBXGroup;
 			children = (
 				9BC7C0041FCC6F1B005741CD /* CircleView.swift */,
-				9BA98C4B20029F9800B93B5E /* CustomSegues.swift */,
 				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
 			);
 			path = Style;
@@ -465,8 +482,10 @@
 				9BFCBE351FF6767A00A2627B /* SettingsFirebase.swift in Sources */,
 				9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */,
 				9B0D31FC1FCDC581006F7805 /* LoginVC.swift in Sources */,
+				9B1FA9CB200BAED60052FB7C /* SlideInPresentationController.swift in Sources */,
 				9B0D32151FD023A1006F7805 /* GameHandler.swift in Sources */,
 				9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */,
+				9B1FA9CA200BAED60052FB7C /* SlideInPresentationAnimator.swift in Sources */,
 				9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */,
 				9BCA0F352006633000A00CFF /* Connection.swift in Sources */,
 				9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */,
@@ -490,6 +509,7 @@
 				9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */,
 				9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */,
 				9B0D32101FCE5632006F7805 /* PreviousGameCell.swift in Sources */,
+				9B1FA9CC200BAED60052FB7C /* SlideInPresentationManager.swift in Sources */,
 				9B966D431FDEE2360083192B /* KCFloatingActionButtonExtension.swift in Sources */,
 				9BA98C4C20029F9800B93B5E /* CustomSegues.swift in Sources */,
 				9B0D32071FCE0CA2006F7805 /* SettingsVC.swift in Sources */,

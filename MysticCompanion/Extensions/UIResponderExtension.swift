@@ -4,6 +4,7 @@
 //
 //  Created by Michael Craun on 1/7/18.
 //  Copyright © 2018 Craunic Productions. All rights reserved.
+//  Courtesy Brett Chapin! :D
 //
 
 import UIKit

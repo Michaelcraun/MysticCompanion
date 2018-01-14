@@ -93,6 +93,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         previousGamesTable.delegate = self
         previousGamesTable.separatorStyle = .none
         previousGamesTable.backgroundColor = .clear
+        previousGamesTable.allowsSelection = false
         previousGamesTable.register(PreviousGameCell.self, forCellReuseIdentifier: "previousGameCell")
         previousGamesTable.translatesAutoresizingMaskIntoConstraints = false
         
@@ -257,7 +258,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
-            //TODO: Add Share Functionality
             let gameToShare = self.previousGames[indexPath.row]
             guard let winners = gameToShare["winners"] as? [String] else { return }
             var isWinner: Bool {
@@ -271,13 +271,13 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
                 return _isWinner
             }
             
+            let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
             var shareMessage: String {
                 switch isWinner {
                 case true: return "I won a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
                 case false: return "I played a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
                 }
             }
-            let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
             
             let activityVC = UIActivityViewController(activityItems: [shareURL, shareMessage], applicationActivities: nil)
             activityVC.popoverPresentationController?.sourceView = self.view
@@ -286,11 +286,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         }
         
         return [share]
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO: Segue to GameDetailsVC
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {

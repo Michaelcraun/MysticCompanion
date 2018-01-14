@@ -184,4 +184,13 @@ class GameVC: UIViewController, Alertable, Connection {
             }
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showEndGame" {
+            if let destination = segue.destination as? EndGameVC {
+                destination.transitioningDelegate = self.transitioningDelegate
+                destination.modalPresentationStyle = .custom
+            }
+        }
+    }
 }
