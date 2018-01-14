@@ -72,6 +72,32 @@ class EndGameVC: UIViewController, Alertable, Connection {
         dismissPreviousViewControllers()
     }
     
+    func sharePressed() {
+        var isWinner: Bool {
+            var _isWinner = false
+            for winner in winnersArray {
+                if winner == Player.instance.username {
+                    _isWinner = true
+                    break
+                }
+            }
+            return _isWinner
+        }
+        
+        var shareMessage: String {
+            switch isWinner {
+            case true: return "I just won a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+            case false: return "I just played a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+            }
+        }
+        let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
+        
+        let activityVC = UIActivityViewController(activityItems: [shareURL, shareMessage], applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        present(activityVC, animated: true, completion: nil)
+    }
+    
     func animateWinner(_ cell: UITableViewCell) {
         let winnerHeight = cell.frame.height / 2
         let winnerWidth = cell.frame.width

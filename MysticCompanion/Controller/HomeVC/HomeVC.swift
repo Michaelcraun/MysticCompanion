@@ -62,7 +62,8 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
-        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
+        //TODO: Uncomment before publishing
+//        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         coreDataHasBeenConverted = defaults.bool(forKey: "coreDataHasBeenConverted")
         
         askForRating()

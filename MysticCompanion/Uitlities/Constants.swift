@@ -108,4 +108,5 @@ enum DeckType: String {
 let ad = UIApplication.shared.delegate as! AppDelegate
 let context = ad.persistentContainer.viewContext
 
-var PREMIUM_PURCHASED = false
+//TODO: Set to false before publishing
+var PREMIUM_PURCHASED = true

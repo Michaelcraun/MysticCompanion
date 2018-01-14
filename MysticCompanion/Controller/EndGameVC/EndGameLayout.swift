@@ -83,11 +83,18 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
             self.quitPressed()
         }
         
+        let share = KCFloatingActionButtonItem()
+        share.setButtonOfType(.share)
+        share.handler = { item in
+            self.sharePressed()
+        }
+        
         menuButton.addItem(item: settings)
         if gameState == .vpNeeded {
             menuButton.addItem(item: done)
         } else if gameState == .gameFinalized {
             menuButton.addItem(item: quit)
+            menuButton.addItem(item: share)
         }
         
         view.addSubview(menuButton)

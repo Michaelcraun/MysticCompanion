@@ -49,6 +49,7 @@ extension KCFloatingActionButtonItem {
         case registerLogin
         case restore
         case settings
+        case share
         case standardVP
         case startGame
         
@@ -73,6 +74,7 @@ extension KCFloatingActionButtonItem {
             case .registerLogin: return "Register / Login"
             case .restore: return "Restore Purchases"
             case .settings: return "Settings"
+            case .share: return "Share"
             case .standardVP: return "Standard"
             case .startGame: return "Start Game"
             }
@@ -105,6 +107,8 @@ extension KCFloatingActionButtonItem {
             case .endTurn: return theme.color
             case .endGame: return theme.color1
             case .quitGame: return theme.color1
+            //MARK: EndGameVC
+            case .share: return theme.color2
             default: return .white
             }
         }
@@ -123,6 +127,7 @@ extension KCFloatingActionButtonItem {
             case .quitGame: return #imageLiteral(resourceName: "cancelIcon")
             case .restore: return #imageLiteral(resourceName: "restorePurchasesIcon")
             case .settings: return #imageLiteral(resourceName: "settingsIcon")
+            case .share: return #imageLiteral(resourceName: "shareIcon")
             case .standardVP: return #imageLiteral(resourceName: "victory")
             case .startGame: return #imageLiteral(resourceName: "startGameIcon")
             default: return nil

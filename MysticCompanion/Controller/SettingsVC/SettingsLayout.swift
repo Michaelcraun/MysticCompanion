@@ -145,7 +145,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let purchase = KCFloatingActionButtonItem()
         purchase.setButtonOfType(.purchase)
         purchase.handler = { item in
-            //TODO: Purchase premium version
+            //TODO: Test
             if self.purchaseButtonsAreEnabled {
                 self.shouldPresentLoadingView(true)
                 self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
@@ -157,7 +157,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let restore = KCFloatingActionButtonItem()
         restore.setButtonOfType(.restore)
         restore.handler = { item in
-            //TODO: Restore premium version
+            //TODO: Test
             if self.purchaseButtonsAreEnabled {
                 NetworkIndicator.networkOperationStarted()
                 self.shouldPresentLoadingView(true)
@@ -258,6 +258,31 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
             //TODO: Add Share Functionality
+            let gameToShare = self.previousGames[indexPath.row]
+            guard let winners = gameToShare["winners"] as? [String] else { return }
+            var isWinner: Bool {
+                var _isWinner = false
+                for winner in winners {
+                    if winner == Player.instance.username {
+                        _isWinner = true
+                        break
+                    }
+                }
+                return _isWinner
+            }
+            
+            var shareMessage: String {
+                switch isWinner {
+                case true: return "I won a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+                case false: return "I played a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+                }
+            }
+            let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
+            
+            let activityVC = UIActivityViewController(activityItems: [shareURL, shareMessage], applicationActivities: nil)
+            activityVC.popoverPresentationController?.sourceView = self.view
+            
+            self.present(activityVC, animated: true, completion: nil)
         }
         
         return [share]
