@@ -17,6 +17,11 @@ import CoreData
 
 class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControllerDelegate {
     //MARK: UI Variables
+    var needsInitialized = false {
+        didSet {
+            print("DISMISS: needsInitialized: \(needsInitialized)")
+        }
+    }
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()
     let playerName = UILabel()
@@ -84,13 +89,15 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if Player.instance.hasQuitGame {
+        print("DISMISS: in viewWillAppear(_:)")
+        if needsInitialized {
             GameHandler.instance.REF_GAME.removeAllObservers()
             Player.instance.reinitialize()
             reinitializeView()
-            dismissPreviousViewControllers()
         }
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
         
@@ -114,12 +121,10 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     }
     
     func joinGamePressed() {
-        let userLocation = self.locationManager.location
-        
         userIsHostingGame = false
         layoutGameLobby()
         nearbyGames = []
-        observeGames(withUserLocation: userLocation!)
+        observeForNearbyGames()
     }
     
     func askForRating() {

@@ -69,4 +69,6 @@ extension UIView {
         
         self.addSubview(blurEffectView)
     }
+    
+    //TODO: Create Layout Constraint variables
 }

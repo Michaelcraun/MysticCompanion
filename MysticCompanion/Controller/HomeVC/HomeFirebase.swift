@@ -46,8 +46,9 @@ extension HomeVC {
     
     //MARK: Firebase observers for user -- observes game directory for games that haven't
     //started and are within 5 meters of the user
-    func observeGames(withUserLocation location: CLLocation) {
+    func observeForNearbyGames() {
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
+            let userLocation = self.locationManager.location
             var localGames = [Dictionary<String,AnyObject>]()
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
@@ -58,8 +59,9 @@ extension HomeVC {
                         let latitude = gameLocationArray[0] as! CLLocationDegrees
                         let longitude = gameLocationArray[1] as! CLLocationDegrees
                         let gameLocation = CLLocation(latitude: latitude, longitude: longitude)
-                        let distance = location.distance(from: gameLocation)
-                        if distance <= 5 {
+                        
+                        let distance = userLocation!.distance(from: gameLocation)
+                        if distance <= 5.0 {
                             guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
                             localGames.append(gameDict)
                         }

@@ -56,6 +56,8 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         playersTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         playersTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         playersTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tableBottomBuffer).isActive = true
+        
+        playersTable.animate()
     }
     
     func layoutMenuButton(gameState: GameState) {

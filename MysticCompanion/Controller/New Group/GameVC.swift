@@ -30,6 +30,7 @@ class GameVC: UIViewController, Alertable, Connection {
 
     //MARK: Game Variables
     var isEndOfGameTurn = false
+    var userHasQuitGame = false
     var endingPlayerUsername = ""
     var currentVP = 0
     var vpFromTurn = 0
@@ -89,31 +90,31 @@ class GameVC: UIViewController, Alertable, Connection {
     func setupPlayerTurn() {
         if isEndOfGameTurn {
             performSegue(withIdentifier: "showEndGame", sender: nil)
-        } else {
-            userHasSpoiled = false
-            manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
-            manaTracker.constantStepper.value = Double(Player.instance.manaConstant)
-            decayTracker.currentStepper.value = Double(Player.instance.decayConstant)
-            decayTracker.constantStepper.value = Double(Player.instance.decayConstant)
-            growthTracker.currentStepper.value = Double(Player.instance.growthConstant)
-            growthTracker.constantStepper.value = Double(Player.instance.growthConstant)
-            animalTracker.currentStepper.value = Double(Player.instance.animalConstant)
-            animalTracker.constantStepper.value = Double(Player.instance.animalConstant)
-            forestTracker.currentStepper.value = Double(Player.instance.forestConstant)
-            forestTracker.constantStepper.value = Double(Player.instance.forestConstant)
-            skyTracker.currentStepper.value = Double(Player.instance.skyConstant)
-            skyTracker.constantStepper.value = Double(Player.instance.skyConstant)
-            wildTracker.currentStepper.value = Double(Player.instance.wildConstant)
-            wildTracker.constantStepper.value = Double(Player.instance.wildConstant)
-            victoryTracker.currentStepper.value = Double(Player.instance.currentVP + Player.instance.boxVP)
-            
-            currentVP = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
-            
-            var delay: TimeInterval = 0.0
-            for i in 0..<trackersArray.count {
-                trackersArray[i].fadeAlphaWithDelayTo(1, withDuration: Double(trackersArray.count) * 0.1, andDelay: delay)
-                delay += 0.1
-            }
+        }
+    
+        userHasSpoiled = false
+        manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
+        manaTracker.constantStepper.value = Double(Player.instance.manaConstant)
+        decayTracker.currentStepper.value = Double(Player.instance.decayConstant)
+        decayTracker.constantStepper.value = Double(Player.instance.decayConstant)
+        growthTracker.currentStepper.value = Double(Player.instance.growthConstant)
+        growthTracker.constantStepper.value = Double(Player.instance.growthConstant)
+        animalTracker.currentStepper.value = Double(Player.instance.animalConstant)
+        animalTracker.constantStepper.value = Double(Player.instance.animalConstant)
+        forestTracker.currentStepper.value = Double(Player.instance.forestConstant)
+        forestTracker.constantStepper.value = Double(Player.instance.forestConstant)
+        skyTracker.currentStepper.value = Double(Player.instance.skyConstant)
+        skyTracker.constantStepper.value = Double(Player.instance.skyConstant)
+        wildTracker.currentStepper.value = Double(Player.instance.wildConstant)
+        wildTracker.constantStepper.value = Double(Player.instance.wildConstant)
+        victoryTracker.currentStepper.value = Double(Player.instance.currentVP + Player.instance.boxVP)
+        
+        currentVP = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
+        
+        var delay: TimeInterval = 0.0
+        for i in 0..<trackersArray.count {
+            trackersArray[i].fadeAlphaWithDelayTo(1, withDuration: Double(trackersArray.count) * 0.1, andDelay: delay)
+            delay += 0.1
         }
     }
     
@@ -151,7 +152,6 @@ class GameVC: UIViewController, Alertable, Connection {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(trackersArray.count) * 0.15) {
             if self.isEndOfGameTurn && self.endingPlayerUsername != Player.instance.username {
-                GameHandler.instance.REF_GAME.removeAllObservers()
                 self.performSegue(withIdentifier: "showEndGame", sender: nil)
             } else {
                 self.setupPlayerTurn()
@@ -190,6 +190,8 @@ class GameVC: UIViewController, Alertable, Connection {
             if let destination = segue.destination as? EndGameVC {
                 destination.transitioningDelegate = self.transitioningDelegate
                 destination.modalPresentationStyle = .custom
+                
+                GameHandler.instance.REF_GAME.removeAllObservers()
             }
         }
     }

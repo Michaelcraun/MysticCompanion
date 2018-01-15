@@ -20,13 +20,16 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         layoutDeckChoices()
         layoutMenuButton()
         layoutBannerAds()
+        animateViewForStart()
     }
     
     func reinitializeView() {
+        print("DISMISS: in reinitializeView()")
         for subview in view.subviews {
             subview.removeFromSuperview()
         }
         layoutView()
+        needsInitialized = false
     }
     
     func layoutBackgroundImage() {
@@ -325,6 +328,16 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         gameLobbyTable.bottomAnchor.constraint(equalTo: gameLobby.bottomAnchor, constant: -5).isActive = true
     }
     
+    func animateViewForStart() {
+        let screenWidth = UIScreen.main.bounds.width
+        view.frame.origin.x += screenWidth
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.frame.origin.x -= screenWidth
+        }
+    }
+    
+    //MARK: Game Lobby Table setup
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if userIsHostingGame {
             switch players.count {

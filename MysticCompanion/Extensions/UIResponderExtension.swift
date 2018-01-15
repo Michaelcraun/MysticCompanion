@@ -10,7 +10,7 @@
 import UIKit
 
 extension UIResponder {
-    func parentViewControllers() -> [UIViewController]? {
+    private func parentViewControllers() -> [UIViewController]? {
         var nextResponder = self
         var responders: [UIResponder] = [nextResponder]
         while let next = nextResponder.next {
@@ -22,12 +22,15 @@ extension UIResponder {
     }
     
     func dismissPreviousViewControllers() {
-        guard let viewControllers = self.parentViewControllers() else {
-            return
-        }
+        guard let viewControllers = self.parentViewControllers() else { return }
         
         for vc in viewControllers {
             if vc == viewControllers.last {
+                if let homeVC = vc as? HomeVC {
+                    homeVC.needsInitialized = true
+                    homeVC.viewWillAppear(false)
+                    homeVC.viewDidAppear(false)
+                }
                 break
             } else {
                 vc.dismiss(animated: false, completion: nil)

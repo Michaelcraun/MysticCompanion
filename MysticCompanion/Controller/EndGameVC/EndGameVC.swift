@@ -14,19 +14,26 @@ import Firebase
 import FirebaseAuth
 
 class EndGameVC: UIViewController, Alertable, Connection {
-    
     //MARK: Game Variables
-    var gameState: GameState = .vpNeeded
     enum GameState {
         case vpNeeded
         case vpSubmitted
         case gameFinalized
     }
     
+    var gameState: GameState = .vpNeeded {
+        didSet {
+            switch gameState {
+            case .vpNeeded: shouldDisplayStepper = true
+            case .vpSubmitted: shouldDisplayStepper = false
+            case .gameFinalized: shouldDisplayStepper = false
+            }
+        }
+    }
+    
     //MARK: Firebase Variables
     var players = [Dictionary<String,AnyObject>]() {
         didSet {
-            print("SEGUE: \(players.count)")
             playersTable.animate()
         }
     }
@@ -61,7 +68,6 @@ class EndGameVC: UIViewController, Alertable, Connection {
         let deckVP = Int(stepper.value)
         
         updateUser(Player.instance.username, withDeckVP: deckVP)
-        shouldDisplayStepper = false
         playersTable.animate()
         layoutMenuButton(gameState: .vpSubmitted)
     }
@@ -70,8 +76,8 @@ class EndGameVC: UIViewController, Alertable, Connection {
         GameHandler.instance.REF_GAME.removeAllObservers()
         
         Player.instance.hasQuitGame = true
-//        dismissPreviousViewControllers()
-        performSegue(withIdentifier: "startNewGame", sender: nil)
+        //TODO: Prepare HomeVC for end of game animation
+        dismissPreviousViewControllers()
     }
     
     func sharePressed() {
@@ -118,17 +124,6 @@ class EndGameVC: UIViewController, Alertable, Connection {
         
         UIView.animate(withDuration: 0.5) {
             winnerImage.frame.origin.x += winnerWidth
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "startNewGame" {
-            if let destination = segue.destination as? HomeVC {
-                slideInTransitioningDelegate.direction = .left
-                slideInTransitioningDelegate.disableCompactHeight = false
-                destination.transitioningDelegate = slideInTransitioningDelegate
-                destination.modalPresentationStyle = .custom
-            }
         }
     }
 }

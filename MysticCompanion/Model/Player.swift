@@ -37,7 +37,11 @@ class Player: PlayerDelegate {
     var wildConstant: Int = 0
     var currentVP: Int = 0
     var boxVP: Int = 0
-    var hasQuitGame: Bool = false
+    var hasQuitGame: Bool = false {
+        didSet {
+            print("PLAYER: hasQuitGame: \(hasQuitGame)")
+        }
+    }
     
     func reinitialize() {
         username = ""
