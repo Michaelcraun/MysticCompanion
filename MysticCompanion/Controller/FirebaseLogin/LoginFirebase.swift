@@ -14,9 +14,12 @@ import GoogleSignIn
 
 extension LoginVC: Alertable {
     func loginWithFirebase() {
+        var usernameIsDifferent = false
+        
         if usernameField.text != "" && emailField.text != "" && passwordField.text != "" {
             view.endEditing(true)
             guard let username = usernameField.text, let email = emailField.text, let password = passwordField.text else { return }
+            
             FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error == nil {
                     guard let user = user else { return }

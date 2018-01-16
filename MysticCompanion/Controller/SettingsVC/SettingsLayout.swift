@@ -146,7 +146,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let purchase = KCFloatingActionButtonItem()
         purchase.setButtonOfType(.purchase)
         purchase.handler = { item in
-            //TODO: Test
             if self.purchaseButtonsAreEnabled {
                 self.shouldPresentLoadingView(true)
                 self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
@@ -158,7 +157,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let restore = KCFloatingActionButtonItem()
         restore.setButtonOfType(.restore)
         restore.handler = { item in
-            //TODO: Test
             if self.purchaseButtonsAreEnabled {
                 NetworkIndicator.networkOperationStarted()
                 self.shouldPresentLoadingView(true)
@@ -191,42 +189,37 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         }
         
         let themeSelector = KCFloatingActionButton()
-        themeSelector.setPaddingY()
+        themeSelector.setPaddingY(viewHasAds: false)
         themeSelector.setMenuButtonColor()
         
         let drabGray = KCFloatingActionButtonItem()
         drabGray.setButtonOfType(.drabGray)
         drabGray.handler = { item in
             self.setTheme(.drabGray)
-            blurEffectView.fadeAlphaOut()
         }
         
         let pastelBlue = KCFloatingActionButtonItem()
         pastelBlue.setButtonOfType(.pastelBlue)
         pastelBlue.handler = { item in
             self.setTheme(.pastelBlue)
-            blurEffectView.fadeAlphaOut()
         }
         
         let pastelGreen = KCFloatingActionButtonItem()
         pastelGreen.setButtonOfType(.pastelGreen)
         pastelGreen.handler = { item in
             self.setTheme(.pastelGreen)
-            blurEffectView.fadeAlphaOut()
         }
         
         let pastelPurple = KCFloatingActionButtonItem()
         pastelPurple.setButtonOfType(.pastelPurple)
         pastelPurple.handler = { item in
             self.setTheme(.pastelPurple)
-            blurEffectView.fadeAlphaOut()
         }
         
         let pastelYellow = KCFloatingActionButtonItem()
         pastelYellow.setButtonOfType(.pastelYellow)
         pastelYellow.handler = { item in
             self.setTheme(.pastelYellow)
-            blurEffectView.fadeAlphaOut()
         }
         
         themeSelector.addItem(item: drabGray)
@@ -260,29 +253,8 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
             let gameToShare = self.previousGames[indexPath.row]
             guard let winners = gameToShare["winners"] as? [String] else { return }
-            var isWinner: Bool {
-                var _isWinner = false
-                for winner in winners {
-                    if winner == Player.instance.username {
-                        _isWinner = true
-                        break
-                    }
-                }
-                return _isWinner
-            }
             
-            let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
-            var shareMessage: String {
-                switch isWinner {
-                case true: return "I won a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
-                case false: return "I played a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
-                }
-            }
-            
-            let activityVC = UIActivityViewController(activityItems: [shareURL, shareMessage], applicationActivities: nil)
-            activityVC.popoverPresentationController?.sourceView = self.view
-            
-            self.present(activityVC, animated: true, completion: nil)
+            self.shareGame(withWinners: winners)
         }
         
         return [share]

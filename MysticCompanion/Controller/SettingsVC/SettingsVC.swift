@@ -47,6 +47,14 @@ class SettingsVC: UIViewController, Connection {
     }
     
     func setTheme(_ theme: SystemColor) {
+        for subview in view.subviews {
+            if subview.tag == 1001 {
+                if let view = subview as? UIVisualEffectView {
+                    view.fadeAlphaOut()
+                }
+            }
+        }
+        
         defaults.set(theme.rawValue, forKey: "theme")
         checkTheme()
         layoutSettingsButton()

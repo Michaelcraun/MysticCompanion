@@ -58,13 +58,14 @@ extension LoginVC {
         
         view.addSubview(logoStack)
         
-        logoStack.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
+        logoStack.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
         logoStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         logoStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         logoStack.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func layoutUserForm() {
+        usernameField.delegate = self
         usernameField.backgroundColor = theme.color1
         usernameField.foregroundColor = theme.color
         usernameField.font = UIFont(name: fontFamily, size: 15)
@@ -73,6 +74,7 @@ extension LoginVC {
         usernameField.clipsToBounds = true
         usernameField.translatesAutoresizingMaskIntoConstraints = false
         
+        emailField.delegate = self
         emailField.backgroundColor = theme.color1
         emailField.foregroundColor = theme.color
         emailField.font = UIFont(name: fontFamily, size: 15)
@@ -82,6 +84,7 @@ extension LoginVC {
         emailField.clipsToBounds = true
         emailField.translatesAutoresizingMaskIntoConstraints = false
         
+        passwordField.delegate = self
         passwordField.backgroundColor = theme.color1
         passwordField.foregroundColor = theme.color
         passwordField.font = UIFont(name: fontFamily, size: 15)
@@ -132,7 +135,7 @@ extension LoginVC {
     
     func layoutMenuButton() {
         settingsButton.setMenuButtonColor()
-        settingsButton.setPaddingY()
+        settingsButton.setPaddingY(viewHasAds: false)
         settingsButton.items = []
         
         let cancel = KCFloatingActionButtonItem()

@@ -24,7 +24,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func reinitializeView() {
-        print("DISMISS: in reinitializeView()")
         for subview in view.subviews {
             subview.removeFromSuperview()
         }
@@ -56,7 +55,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         
         playerIcon.widthAnchor.constraint(equalToConstant: 100).isActive = true
         playerIcon.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        playerIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
+        playerIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
         playerIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
@@ -81,21 +80,21 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         beastbrothersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         dawnseekersIcon.addBorder()
-        dawnseekersIcon.backgroundColor = DeckType.dawnseekers.color
+        dawnseekersIcon.backgroundColor = DeckType.dawnseekers.secondaryColor
         dawnseekersIcon.addImage(DeckType.dawnseekers.image, withWidthModifier: 20)
         dawnseekersIcon.translatesAutoresizingMaskIntoConstraints = false
         dawnseekersIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         dawnseekersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         lifewardensIcon.addBorder()
-        lifewardensIcon.backgroundColor = DeckType.lifewardens.color
+        lifewardensIcon.backgroundColor = DeckType.lifewardens.secondaryColor
         lifewardensIcon.addImage(DeckType.lifewardens.image, withWidthModifier: 20)
         lifewardensIcon.translatesAutoresizingMaskIntoConstraints = false
         lifewardensIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
         lifewardensIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         waveguardsIcon.addBorder()
-        waveguardsIcon.backgroundColor = DeckType.waveguards.color
+        waveguardsIcon.backgroundColor = DeckType.waveguards.secondaryColor
         waveguardsIcon.addImage(DeckType.waveguards.image, withWidthModifier: 20)
         waveguardsIcon.translatesAutoresizingMaskIntoConstraints = false
         waveguardsIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
@@ -121,7 +120,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     
     func layoutMenuButton() {
         menuButton.setMenuButtonColor()
-        menuButton.setPaddingY()
+        menuButton.setPaddingY(viewHasAds: true)
         menuButton.items = []
         
         let startGame = KCFloatingActionButtonItem()
@@ -184,7 +183,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         
         let vpSelector = KCFloatingActionButton()
         vpSelector.setMenuButtonColor()
-        vpSelector.setPaddingY()
+        vpSelector.setPaddingY(viewHasAds: true)
         
         let cancel = KCFloatingActionButtonItem()
         cancel.setButtonOfType(.cancel)
@@ -230,7 +229,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         vpStepper.translatesAutoresizingMaskIntoConstraints = false
         
         let menuButton = KCFloatingActionButton()
-        menuButton.setPaddingY()
+        menuButton.setPaddingY(viewHasAds: false)
         menuButton.setMenuButtonColor()
         
         let cancel = KCFloatingActionButtonItem()
@@ -285,18 +284,12 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         
             adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
             adBanner.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomLayoutConstant).isActive = true
         }
     }
     
     func layoutGameLobby() {
-        var bottomConstant: CGFloat {
-            if PREMIUM_PURCHASED {
-                return 95
-            } else {
-                return 145
-            }
-        }
+        let gameLobbyBottomLayoutConstant = bottomLayoutConstant + adBuffer - 80
         
         gameLobby = UIView()
         gameLobby.backgroundColor = .clear
@@ -320,7 +313,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         gameLobby.topAnchor.constraint(equalTo: deckChoicesStackView.bottomAnchor, constant: 20).isActive = true
         gameLobby.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         gameLobby.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        gameLobby.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant).isActive = true
+        gameLobby.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: gameLobbyBottomLayoutConstant).isActive = true
         
         gameLobbyTable.topAnchor.constraint(equalTo: gameLobby.topAnchor, constant: 5).isActive = true
         gameLobbyTable.leftAnchor.constraint(equalTo: gameLobby.leftAnchor, constant: 5).isActive = true
@@ -372,7 +365,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         } else {
-            if nearbyGames.count <= 0 {
+            if nearbyGames.count == 0 {
                 cell.layoutWaitingCell(withMessage: "Waiting for games...")
             } else {
                 cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])

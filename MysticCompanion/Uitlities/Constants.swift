@@ -110,3 +110,33 @@ let context = ad.persistentContainer.viewContext
 
 //TODO: Set to false before publishing
 var PREMIUM_PURCHASED = true
+
+//MARK: Layout Constraint Variables
+//TODO: Needs fixed for iPhone X ?
+var topLayoutConstant: CGFloat {
+    switch UIDevice.current.modelName {
+    case "iPhoneX" : return 88
+    default: return 20
+    }
+}
+
+var bottomLayoutConstant: CGFloat {
+    switch UIDevice.current.modelName {
+    case "iPhoneX": return -34
+    default: return 0
+    }
+}
+
+var adBuffer: CGFloat {
+    switch PREMIUM_PURCHASED {
+    case true: return 0
+    case false: return -50
+    }
+}
+
+var topBannerHeight: CGFloat {
+    switch UIDevice.current.modelName {
+    case "iPhone X": return 88
+    default: return 64
+    }
+}

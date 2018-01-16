@@ -62,7 +62,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         playerPanel.addSubview(gameVPLabel)
         playerPanel.addSubview(playersTable)
         
-        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
+        playerPanel.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
         playerPanel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         playerPanel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         playerPanel.heightAnchor.constraint(equalToConstant: panelHeight).isActive = true
@@ -170,7 +170,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
     func layoutMenuButton() {
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
-        menuButton.setPaddingY()
+        menuButton.setPaddingY(viewHasAds: true)
         menuButton.items = []
         
         let settings = KCFloatingActionButtonItem()

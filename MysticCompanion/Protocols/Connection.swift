@@ -99,7 +99,7 @@ extension Connection where Self: UIViewController {
                 noConnectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
                 noConnectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
                 noConnectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-                noConnectionView.heightAnchor.constraint(equalToConstant: UIDevice.current.topBannerHeight).isActive = true
+                noConnectionView.heightAnchor.constraint(equalToConstant: topBannerHeight).isActive = true
                 
                 noConnectionLabel.leftAnchor.constraint(equalTo: noConnectionView.leftAnchor).isActive = true
                 noConnectionLabel.rightAnchor.constraint(equalTo: noConnectionView.rightAnchor).isActive = true
@@ -110,7 +110,7 @@ extension Connection where Self: UIViewController {
                     noConnectionLabel.fadeAlphaOut()
                     UIView.animate(withDuration: 0.2, animations: {
                         noConnectionView.frame.size.height = 20
-                        noConnectionView.heightAnchor.constraint(equalToConstant: UIDevice.current.topBannerHeight).isActive = false
+                        noConnectionView.heightAnchor.constraint(equalToConstant: topBannerHeight).isActive = false
                         noConnectionView.heightAnchor.constraint(equalToConstant: 20).isActive = true
                     })
                 })

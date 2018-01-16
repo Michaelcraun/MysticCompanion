@@ -28,14 +28,7 @@ extension UIView {
             self.alpha = alpha
         }, completion: nil)
     }
-    
-    func bindToKeyboard() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillChange(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillChangeFrame,
-                                               object: nil)
-    }
-    
+        
     @objc func keyboardWillChange(notification: NSNotification) {
         let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Double
         let curve = notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! UInt
@@ -69,6 +62,4 @@ extension UIView {
         
         self.addSubview(blurEffectView)
     }
-    
-    //TODO: Create Layout Constraint variables
 }

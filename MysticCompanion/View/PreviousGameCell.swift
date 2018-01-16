@@ -53,6 +53,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     
     func layoutEmptyCell() {
         clearCell()
+        addBlurEffect()
         
         let noGamesLabel = UILabel()
         noGamesLabel.font = UIFont(name: fontFamily, size: 20)

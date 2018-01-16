@@ -48,7 +48,6 @@ extension GameVC {
                     
                     if game.hasChild("gameEnded") {
                         GameHandler.instance.REF_GAME.removeAllObservers()
-                        
                         self.performSegue(withIdentifier: "showEndGame", sender: nil)
                     }
                     

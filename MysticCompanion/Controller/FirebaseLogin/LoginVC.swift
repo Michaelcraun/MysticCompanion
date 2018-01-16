@@ -16,7 +16,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import GoogleSignIn
 
-class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
+class LoginVC: UIViewController, UITextFieldDelegate, Connection, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
     
     let backgroundImage = UIImageView()
     let logoStack = UIStackView()
@@ -47,6 +47,21 @@ class LoginVC: UIViewController, Connection, GIDSignInDelegate, GIDSignInUIDeleg
         checkTheme()
         layoutMenuButton()
         beginConnectionTest()
+    }
+}
+
+//MARK: UITextFieldDelegate
+extension LoginVC {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == usernameField {
+            emailField.becomeFirstResponder()
+        } else if textField == emailField {
+            passwordField.becomeFirstResponder()
+        } else if textField == passwordField {
+            loginWithFirebase()
+        }
+        
+        return true
     }
 }
 

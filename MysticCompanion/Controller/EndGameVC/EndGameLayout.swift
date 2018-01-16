@@ -52,7 +52,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        playersTable.topAnchor.constraint(equalTo: view.topAnchor, constant: UIDevice.current.topLayoutBuffer).isActive = true
+        playersTable.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
         playersTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         playersTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         playersTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tableBottomBuffer).isActive = true
@@ -64,7 +64,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         self.gameState = gameState
         
         menuButton.setMenuButtonColor()
-        menuButton.setPaddingY()
+        menuButton.setPaddingY(viewHasAds: true)
         menuButton.items = []
         
         let settings = KCFloatingActionButtonItem()
@@ -88,7 +88,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
         let share = KCFloatingActionButtonItem()
         share.setButtonOfType(.share)
         share.handler = { item in
-            self.sharePressed()
+            self.shareGame(withWinners: self.winnersArray)
         }
         
         menuButton.addItem(item: settings)

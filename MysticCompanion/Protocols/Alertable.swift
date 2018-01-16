@@ -10,6 +10,7 @@ import UIKit
 import AudioToolbox.AudioServices
 
 enum Alert {
+    case coreDataError
     case credentialInUse
     case credentialMismatch
     case deckTaken
@@ -36,6 +37,7 @@ enum Alert {
     case userExistsInGame
     case spoil
     case victoryChange
+    case usernameTaken
     case wrongPassword
     case yourTurn
     
@@ -67,6 +69,7 @@ enum Alert {
     
     var message: String {
         switch self {
+        case .coreDataError: return "There was an error retreiving data from your device. Please try again."
         case .credentialInUse: return "That credential is already in use. Please try again."
         case .credentialMismatch: return "That account exists with a different credential. Please try again."
         case .deckTaken: return "That deck is already taken. Please choose a different one."
@@ -101,7 +104,6 @@ enum Alert {
     var notificationType: NotificationType {
         switch self {
         case .endOfGame: return .endOfGame
-        case .noConnection: return .error
         case .purchaseComplete: return .success
         case .purchasesRestored: return .success
         case .victoryChange: return .warning
@@ -125,6 +127,13 @@ enum Alert {
         }
     }
 }
+
+enum NotificationDevice {
+    case haptic
+    case vibrate
+    case none
+}
+
 enum NotificationType {
     case endOfGame
     case error
@@ -227,7 +236,15 @@ extension Alertable where Self: UIViewController {
     }
     
     func addVibration(withNotificationType type: NotificationType) {
-        switch UIDevice.current.notificationDevice {
+        var notificationDevice: NotificationDevice {
+            switch UIDevice.current.modelName {
+            case "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X": return .haptic
+            case "iPod Touch 5", "iPod Touch 6", "iPhone 4", "iPhone 5", "iPhone 5c", "iPhone 5s", "iPhone SE": return .vibrate
+            default: return .none
+            }
+        }
+        
+        switch notificationDevice {
         case .haptic:
             let notification = UINotificationFeedbackGenerator()
             switch type {

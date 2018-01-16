@@ -37,7 +37,6 @@ extension EndGameVC {
                     }
                     
                     if finishedPlayerCount >= self.players.count {
-                        self.players = playersArray
                         self.layoutMenuButton(gameState: .gameFinalized)
                         
                         for player in playersArray {
@@ -65,6 +64,8 @@ extension EndGameVC {
                             GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray, andDateString: nil)
                         }
                     }
+                
+                    self.players = playersArray
                 }
             }
         })

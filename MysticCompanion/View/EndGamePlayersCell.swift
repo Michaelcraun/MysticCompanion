@@ -69,34 +69,10 @@ class EndGamePlayersCell: UITableViewCell {
         currentVictoryLabel.sizeToFit()
         currentVictoryLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let deckVictoryStepper = GMStepper()
-        deckVictoryStepper.tag = 4040
-        deckVictoryStepper.labelFont = UIFont(name: fontFamily, size: 15)!
-        deckVictoryStepper.buttonsBackgroundColor = theme.color
-        deckVictoryStepper.labelBackgroundColor = theme.color4
-        deckVictoryStepper.maximumValue = 500
-        deckVictoryStepper.minimumValue = -500
-        deckVictoryStepper.translatesAutoresizingMaskIntoConstraints = false
-        
         let finishedImage = UIImageView()
         finishedImage.image = #imageLiteral(resourceName: "doneIcon")
         finishedImage.contentMode = .scaleAspectFit
         finishedImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        let waitingOnPlayerLabel = UILabel()
-        waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
-        waitingOnPlayerLabel.textAlignment = .center
-        waitingOnPlayerLabel.text = "Waiting on \(username)..."
-        waitingOnPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.color = .black
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        let winnerImage = UIImageView()
-        winnerImage.image = #imageLiteral(resourceName: "winner")
-        winnerImage.contentMode = .scaleAspectFit
-        winnerImage.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(playerView)
         playerView.addBlurEffect()
@@ -124,6 +100,15 @@ class EndGamePlayersCell: UITableViewCell {
         
         if username == Player.instance.username {
             if shouldDisplayStepper {
+                let deckVictoryStepper = GMStepper()
+                deckVictoryStepper.tag = 4040
+                deckVictoryStepper.labelFont = UIFont(name: fontFamily, size: 15)!
+                deckVictoryStepper.buttonsBackgroundColor = theme.color
+                deckVictoryStepper.labelBackgroundColor = theme.color4
+                deckVictoryStepper.maximumValue = 500
+                deckVictoryStepper.minimumValue = -500
+                deckVictoryStepper.translatesAutoresizingMaskIntoConstraints = false
+                
                 playerView.addSubview(deckVictoryStepper)
                 
                 deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -147,6 +132,16 @@ class EndGamePlayersCell: UITableViewCell {
                 finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
                 finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
             } else {
+                let waitingOnPlayerLabel = UILabel()
+                waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
+                waitingOnPlayerLabel.textAlignment = .center
+                waitingOnPlayerLabel.text = "Waiting on \(username)..."
+                waitingOnPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
+                
+                let activityIndicator = UIActivityIndicatorView()
+                activityIndicator.color = .black
+                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+                
                 playerView.addBlurEffect()
                 playerView.addSubview(waitingOnPlayerLabel)
                 playerView.addSubview(activityIndicator)
@@ -163,11 +158,16 @@ class EndGamePlayersCell: UITableViewCell {
         
         for winner in winners {
             if username == winner {
+                let winnerImage = UIImageView()
+                winnerImage.image = #imageLiteral(resourceName: "winner")
+                winnerImage.contentMode = .scaleAspectFit
+                winnerImage.translatesAutoresizingMaskIntoConstraints = false
+                
                 playerView.addSubview(winnerImage)
                 
-                winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
+                winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 3).isActive = true
                 winnerImage.widthAnchor.constraint(equalToConstant: self.frame.width).isActive = true
-                winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+                winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: self.frame.height / 4).isActive = true
                 winnerImage.rightAnchor.constraint(equalTo: self.leftAnchor).isActive = true
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {

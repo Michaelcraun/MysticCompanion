@@ -9,18 +9,15 @@
 import KCFloatingActionButton
 
 extension KCFloatingActionButton {
-    func setPaddingY() {
+    func setPaddingY(viewHasAds: Bool) {
         var yPadding: CGFloat {
-            switch PREMIUM_PURCHASED {
-            case true:
-                switch UIDevice.current.modelName {
-                case "iPhoneX": return 50
-                default: return 20
-                }
-            case false: return 70
+            let buttonBottomMargin: CGFloat = -10
+            switch viewHasAds {
+            case true: return bottomLayoutConstant + adBuffer + buttonBottomMargin
+            case false: return bottomLayoutConstant + buttonBottomMargin
             }
         }
-        self.paddingY = yPadding
+        self.paddingY = -yPadding
     }
     
     func setMenuButtonColor() {

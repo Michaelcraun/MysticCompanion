@@ -52,4 +52,30 @@ extension UIViewController {
         default: theme = .pastelGreen
         }
     }
+    
+    func shareGame(withWinners winnersArray: [String]) {
+        var isWinner: Bool {
+            var _isWinner = false
+            for winner in winnersArray {
+                if winner == Player.instance.username {
+                    _isWinner = true
+                    break
+                }
+            }
+            return _isWinner
+        }
+        
+        let shareURL = "https://itunes.apple.com/us/app/mysticcompanion/id1249561021?mt=8"
+        var shareMessage: String {
+            switch isWinner {
+            case true: return "I won a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+            case false: return "I played a game of Mystic Vale with my friends using #MysticCompanion. You should come play with us!"
+            }
+        }
+        
+        let activityVC = UIActivityViewController(activityItems: [shareURL, shareMessage], applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        self.present(activityVC, animated: true, completion: nil)
+    }
 }

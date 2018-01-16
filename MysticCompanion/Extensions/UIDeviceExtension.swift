@@ -9,12 +9,6 @@
 import UIKit
 
 public extension UIDevice {
-    enum NotificationDevice {
-    case haptic
-    case vibrate
-    case none
-    }
-    
     var modelName: String {
         var systemInfo = utsname()
         uname(&systemInfo)
@@ -55,36 +49,6 @@ public extension UIDevice {
         case "AppleTV5,3":                              return "Apple TV"
         case "i386", "x86_64":                          return "Simulator"
         default:                                        return identifier
-        }
-    }
-    
-    var notificationDevice: NotificationDevice {
-        switch UIDevice.current.modelName {
-        case "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X": return .haptic
-        case "iPod Touch 5", "iPod Touch 6", "iPhone 4", "iPhone 5", "iPhone 5c", "iPhone 5s", "iPhone SE": return .vibrate
-        default: return .none
-        }
-    }
-    
-    //TODO: Needs fixed for iPhone X
-    var topLayoutBuffer: CGFloat {
-        switch UIDevice.current.modelName {
-        case "iPhoneX" : return 100
-        default: return 20
-        }
-    }
-    
-    var topBannerHeight: CGFloat {
-        switch UIDevice.current.modelName {
-        case "iPhone X": return 100
-        default: return 50
-        }
-    }
-    
-    var adBottomBuffer: CGFloat {
-        switch UIDevice.current.modelName {
-        case "iPhoneX": return 50
-        default: return 0
         }
     }
 }

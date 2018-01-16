@@ -17,11 +17,7 @@ import CoreData
 
 class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControllerDelegate {
     //MARK: UI Variables
-    var needsInitialized = false {
-        didSet {
-            print("DISMISS: needsInitialized: \(needsInitialized)")
-        }
-    }
+    var needsInitialized = false
     let backgroundImage = UIImageView()
     let playerIcon = CircleView()
     let playerName = UILabel()
@@ -67,7 +63,6 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
         //TODO: Uncomment before publishing
-//        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         coreDataHasBeenConverted = defaults.bool(forKey: "coreDataHasBeenConverted")
         
         askForRating()
@@ -89,7 +84,6 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("DISMISS: in viewWillAppear(_:)")
         if needsInitialized {
             GameHandler.instance.REF_GAME.removeAllObservers()
             Player.instance.reinitialize()
@@ -100,27 +94,49 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     override func viewDidAppear(_ animated: Bool) {
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         Player.instance.deck = .beastbrothers
+//        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
         checkTheme()
         layoutMenuButton()
+        layoutBannerAds()
         checkUsername(forKey: currentUserID)
         beginConnectionTest()
     }
     
-    func setPlayerIcon(withDeck deck: DeckType) {
+    func setPlayerIcon(withDeck deck: DeckType, andDeckIcon deckIcon: CircleView) {
+        let deckIcons = [beastbrothersIcon, dawnseekersIcon, lifewardensIcon, waveguardsIcon]
+        let deckTypes: [DeckType] = [.beastbrothers, .dawnseekers, .lifewardens, .waveguards]
+        
         Player.instance.deck = deck
         UIView.animate(withDuration: 0.5, animations: {
             self.playerIcon.alpha = 0
+            for icon in deckIcons {
+                icon.alpha = 0
+            }
         }) { (success) in
             self.playerIcon.backgroundColor = deck.color
             self.playerIcon.addImage(deck.image, withWidthModifier: 20)
+            for i in 0..<deckIcons.count {
+                if deckIcons[i] == deckIcon {
+                    deckIcons[i].backgroundColor = deckTypes[i].color
+                } else {
+                    deckIcons[i].backgroundColor = deckTypes[i].secondaryColor
+                }
+            }
+            
             UIView.animate(withDuration: 0.5, animations: {
                 self.playerIcon.alpha = 1
+                for icon in deckIcons {
+                    icon.alpha = 1
+                }
             }, completion: nil)
         }
     }
     
+    
+    
     func joinGamePressed() {
+        GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUserID!)
         userIsHostingGame = false
         layoutGameLobby()
         nearbyGames = []
@@ -148,11 +164,18 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
                 destination.transitioningDelegate = slideInTransitioningDelegate
                 destination.modalPresentationStyle = .custom
                 
-                switch winCondition {
-                case "standard": destination.vpGoal += players.count * 5
-                case "custom": destination.vpGoal = 13
-                default: break
-                }
+//                switch winCondition {
+//                case "standard": destination.vpGoal += players.count * 5
+//                case "custom": destination.vpGoal = 13
+//                default: break
+//                }
+            }
+        } else if segue.identifier == "showFirebaseLogin" {
+            if let destination = segue.destination as? SettingsVC {
+                slideInTransitioningDelegate.direction = .bottom
+                slideInTransitioningDelegate.disableCompactHeight = false
+                destination.transitioningDelegate = slideInTransitioningDelegate
+                destination.modalPresentationStyle = .custom
             }
         }
     }
@@ -166,19 +189,19 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
             
             if location.x >= beastbrothersFrame.minX && location.x <= beastbrothersFrame.maxX {
                 if location.y >= beastbrothersFrame.minY && location.y <= beastbrothersFrame.maxY {
-                    setPlayerIcon(withDeck: .beastbrothers)
+                    setPlayerIcon(withDeck: .beastbrothers, andDeckIcon: beastbrothersIcon)
                 }
             } else if location.x >= dawnseekersFrame.minX && location.x <= dawnseekersFrame.maxX {
                 if location.y >= dawnseekersFrame.minY && location.y <= dawnseekersFrame.maxY {
-                    setPlayerIcon(withDeck: .dawnseekers)
+                    setPlayerIcon(withDeck: .dawnseekers, andDeckIcon: dawnseekersIcon)
                 }
             } else if location.x >= lifewardensFrame.minX && location.x <= lifewardensFrame.maxX {
                 if location.y >= lifewardensFrame.minY && location.y <= lifewardensFrame.maxY {
-                    setPlayerIcon(withDeck: .lifewardens)
+                    setPlayerIcon(withDeck: .lifewardens, andDeckIcon: lifewardensIcon)
                 }
             } else if location.x >= waveguardsFrame.minX && location.x <= waveguardsFrame.maxX {
                 if location.y >= waveguardsFrame.minY && location.y <= waveguardsFrame.maxY {
-                    setPlayerIcon(withDeck: .waveguards)
+                    setPlayerIcon(withDeck: .waveguards, andDeckIcon: waveguardsIcon)
                 }
             }
         }
@@ -194,8 +217,7 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         do {
             try controller.performFetch()
         } catch {
-            let error = error as NSError
-            print("Error: \(error)")
+            showAlert(.coreDataError)
         }
     }
 }
