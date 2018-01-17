@@ -8,6 +8,7 @@
 
 import UIKit
 import AudioToolbox.AudioServices
+import FirebaseAuth
 
 enum Alert {
     case coreDataError
@@ -32,7 +33,9 @@ enum Alert {
     case purchaseError
     case purchaseFailed
     case purchasesRestored
+    case resetPassword
     case restoreFailed
+    case sendEmailError
     case unlockPremium
     case userExistsInGame
     case spoil
@@ -58,6 +61,8 @@ enum Alert {
         case .purchaseComplete: return "Purchase Complete"
         case .purchaseFailed: return "Purchase Failed"
         case .purchasesRestored: return "Purchases Restored"
+        case .resetPassword: return Alert.firebaseError.title
+        case .sendEmailError: return Alert.firebaseError.title
         case .spoil: return "Spoiled"
         case .unlockPremium: return "Unlock Premium"
         case .victoryChange: return "Victory Change"
@@ -90,7 +95,9 @@ enum Alert {
         case .purchaseError: return "Cannot currently complete your request. Please try again later."
         case .purchaseFailed: return "Please try again or contact support."
         case .purchasesRestored: return "Your purchases have been restored. Thank you."
+        case .resetPassword: return "You have entered an incorrent password 3 times. Would you like to reset your password?"
         case .restoreFailed: return "Your purchases failed to be restored. Please try again."
+        case .sendEmailError: return "There was an error sending the email. Please try again."
         case .spoil: return "According to the rules of the game, you've spoiled. Is this true? \nIf you tap Yes, you will gain no VP this turn and play will pass to the next player when you end your turn."
         case .unlockPremium: return "You have not yet purchase premium features. Would you like to unlock premium features so you can start a custom game?"
         case .userExistsInGame: return "You're already in that game!"
@@ -114,6 +121,7 @@ enum Alert {
     
     var needsOptions: Bool {
         switch self {
+        case .resetPassword: return true
         case .spoil: return true
         case .unlockPremium: return true
         default: return false
@@ -200,6 +208,13 @@ extension Alertable where Self: UIViewController {
             
             if alertController.title == "Unlock Premium" {
                 self.performSegue(withIdentifier: "showSettings", sender: nil)
+            }
+            
+            if alert == .resetPassword {
+                let hasError = GameHandler.instance.resetPassword()
+                if hasError {
+                    self.showAlert(.sendEmailError)
+                }
             }
         }
         

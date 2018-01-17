@@ -9,6 +9,7 @@
 import UIKit
 import TextFieldEffects
 import KCFloatingActionButton
+
 import Firebase
 import FirebaseAuth
 
@@ -23,13 +24,12 @@ class LoginVC: UIViewController, UITextFieldDelegate, Connection, GIDSignInDeleg
     let usernameField = KaedeTextField()
     let emailField = KaedeTextField()
     let passwordField = KaedeTextField()
-    
     var facebookLogin = FBSDKLoginButton()
     var googleLogin = GIDSignInButton()
-    
     let settingsButton = KCFloatingActionButton()
     
     let defaults = UserDefaults.standard
+    var wrongPasswordCount = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -30,12 +30,20 @@ extension LoginVC: Alertable {
                                                             "gamesLost" : 0,
                                                             "mostVPGainedInOneGame" : 0]
                     GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+                    self.defaults.set(username, forKey: "username")
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
                     switch errorCode {
                     case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
-                    case .errorCodeWrongPassword: self.showAlert(.wrongPassword)
+                    case .errorCodeWrongPassword:
+                        self.wrongPasswordCount += 1
+                        if self.wrongPasswordCount >= 3 {
+                            GameHandler.instance.userEmail = email
+                            self.showAlert(.resetPassword)
+                        } else {
+                            self.showAlert(.wrongPassword)
+                        }
                     case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
                     case .errorCodeUserNotFound:
                         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
@@ -56,6 +64,8 @@ extension LoginVC: Alertable {
                                                                         "gamesLost" : 0,
                                                                         "mostVPGainedInOneGame" : 0]
                                 GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+                                FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: nil)
+                                self.defaults.set(username, forKey: "username")
                                 self.dismiss(animated: true, completion: nil)
                             }
                         })
@@ -63,7 +73,6 @@ extension LoginVC: Alertable {
                     }
                 }
             })
-            defaults.set(username, forKey: "username")
         } else {
             showAlert(.invalidLogin)
         }

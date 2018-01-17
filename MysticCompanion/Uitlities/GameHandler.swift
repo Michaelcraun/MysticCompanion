@@ -7,14 +7,15 @@
 //
 
 import UIKit
-import Firebase
 import MapKit
+
+import Firebase
+import FirebaseAuth
 
 let DB_BASE = FIRDatabase.database().reference()
 
 class GameHandler {
     static let instance = GameHandler()
-    var game = [String : AnyObject]()
     
     //MARK: Firebase Variables
     private var _REF_BASE = DB_BASE
@@ -26,10 +27,23 @@ class GameHandler {
     var REF_USER: FIRDatabaseReference { return _REF_USER }
     var REF_GAME: FIRDatabaseReference { return _REF_GAME }
     var REF_DATA: FIRDatabaseReference { return _REF_DATA }
+    var game = [String : AnyObject]()
+    var userEmail = ""
     
     //MARK: Firebase user functions
     func createFirebaseDBUser(uid: String, userData: Dictionary<String,Any>) {
         REF_USER.child(uid).updateChildValues(userData)
+    }
+    
+    func resetPassword() -> Bool {
+        var hasError = false
+        FIRAuth.auth()?.sendPasswordReset(withEmail: userEmail, completion: { (error) in
+            if let _ = error {
+                hasError = true
+            }
+        })
+        
+        return hasError
     }
     
     //MARK: Firebase game functions

@@ -36,7 +36,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>11</string>
+	<string>12</string>
 	<key>FacebookAppID</key>
 	<string>324946144648176</string>
 	<key>FacebookDisplayName</key>
@@ -51,11 +51,34 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>MysticCompanion needs to use your Bluetooth Peripheral because it doesn&apos;t.</string>
+	<string>MysticCompanion needs to use your Bluetooth Peripheral because it doesn't.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>MysticCompanion needs to use your Calendars to save the time you play!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MysticCompanion needs to use your location to match you with games near you!</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>startGameIcon</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>Host a local game...</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Start Game</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).StartGame</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>joinGameIcon</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>Join a local game...</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Join Game</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).JoinGame</string>
+		</dict>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -76,29 +99,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Start Game</string>
-			<key>UIApplicationShortcutItemSubtitle</key>
-			<string>Host a local game...</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).StartGame</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>startGameIcon</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Join Game</string>
-			<key>UIApplicationShortcutItemSubtitle</key>
-			<string>Join a local game...</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).JoinGame</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>joinGameIcon</string>
-		</dict>
 	</array>
 </dict>
 </plist>
