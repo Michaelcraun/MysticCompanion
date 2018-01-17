@@ -38,7 +38,6 @@ class LoginVC: UIViewController, UITextFieldDelegate, Connection, GIDSignInDeleg
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         layoutView()
-        //TODO: Test tapToDismissKeyboard
         backgroundImage.addTapToDismissKeyboard()
         beginConnectionTest()
     }

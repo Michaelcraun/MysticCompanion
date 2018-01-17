@@ -159,7 +159,6 @@ extension HomeVC {
                             }
                         }
                         
-                        //TODO: Check if user is in game AND their deck is taken and switch deck out if deck isn't taken ?
                         if isInGame {
                             self.showAlert(.userExistsInGame)
                         } else if deckTaken {

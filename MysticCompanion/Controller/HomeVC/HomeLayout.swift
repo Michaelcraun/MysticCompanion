@@ -288,7 +288,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutBannerAds() {
-        if !PREMIUM_PURCHASED {
+        if PREMIUM_PURCHASED {
+            adBanner.removeFromSuperview()
+        } else {
             //MARK: Initialize banner ads
 //            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
             adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads

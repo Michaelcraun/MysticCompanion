@@ -108,7 +108,6 @@ enum DeckType: String {
 let ad = UIApplication.shared.delegate as! AppDelegate
 let context = ad.persistentContainer.viewContext
 
-//TODO: Set to false before publishing
 var PREMIUM_PURCHASED = false
 
 //MARK: Layout Constraint Variables
