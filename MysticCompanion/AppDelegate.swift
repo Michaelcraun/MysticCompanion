@@ -18,8 +18,15 @@ import GoogleSignIn
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate, GIDSignInDelegate {
     var window: UIWindow?
+    var shortcutItem: UIApplicationShortcutItem?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        var isLaunchedFromQuickAction = false
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+            self.shortcutItem = shortcutItem
+            isLaunchedFromQuickAction = true
+        }
+        
         FIRApp.configure()
         
         if #available(iOS 10.0, *) {
@@ -41,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.registerForRemoteNotifications()
         
-        return true
+        return isLaunchedFromQuickAction
     }
 
     func applicationWillResignActive(_ application: UIApplication) {  }
@@ -50,13 +57,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationWillEnterForeground(_ application: UIApplication) {  }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {  }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        guard let shortcut = shortcutItem else { return }
+        let _ = handleQuickAction(shortcut)
+        shortcutItem = nil
+    }
 
     func applicationWillTerminate(_ application: UIApplication) {
         guard let key = FIRAuth.auth()?.currentUser?.uid else { return }
         GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: key)
         
         self.saveContext()
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        completionHandler(handleQuickAction(shortcutItem))
+    }
+    
+    func handleQuickAction(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
+        enum Shortcut: String {
+            case startGame = "com.CraunicProductions.MysticCompanion.StartGame"
+            case joinGame = "com.CraunicProductions.MysticCompanion.JoinGame"
+        }
+        
+        var quickActionHandled = false
+        if let shortcutType = Shortcut.init(rawValue: shortcutItem.type) {
+            var userIsHostingGame: Bool {
+                switch shortcutType {
+                case .startGame: return true
+                case .joinGame: return false
+                }
+            }
+            
+            if FIRAuth.auth()?.currentUser?.uid != nil {
+                guard let homeVC = window?.rootViewController as? HomeVC else { return false }
+                homeVC.gameShouldAutoStart = true
+                homeVC.userIsHostingGame = userIsHostingGame
+                homeVC.checkUsername(forKey: FIRAuth.auth()?.currentUser?.uid)
+                homeVC.autoStartGame(userIsHosting: userIsHostingGame)
+                quickActionHandled = true
+            }
+        }
+        
+        return quickActionHandled
     }
 
     // MARK: - Core Data stack

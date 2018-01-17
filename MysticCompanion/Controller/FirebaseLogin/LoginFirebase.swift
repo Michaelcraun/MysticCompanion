@@ -14,8 +14,6 @@ import GoogleSignIn
 
 extension LoginVC: Alertable {
     func loginWithFirebase() {
-        var usernameIsDifferent = false
-        
         if usernameField.text != "" && emailField.text != "" && passwordField.text != "" {
             view.endEditing(true)
             guard let username = usernameField.text, let email = emailField.text, let password = passwordField.text else { return }
@@ -65,6 +63,7 @@ extension LoginVC: Alertable {
                     }
                 }
             })
+            defaults.set(username, forKey: "username")
         } else {
             showAlert(.invalidLogin)
         }
@@ -78,13 +77,14 @@ extension LoginVC: Alertable {
                 case .errorCodeCredentialAlreadyInUse: self.showAlert(.credentialInUse)
                 case .errorCodeAccountExistsWithDifferentCredential: self.showAlert(.credentialMismatch)
                 case .errorCodeInvalidCredential: self.showAlert(.invalidCredential)
+                case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
                 default: self.showAlert(.firebaseError)
                 }
                 return
             }
             
             guard let user = user else { return }
-            let userData: Dictionary<String,Any> = ["provider" : user.providerID,
+            let userData: Dictionary<String,Any> = ["provider" : credential.provider,
                                                     "username" : user.displayName as Any,
                                                     "mostManaGainedInOneTurn" : 0,
                                                     "mostVPGainedInOneTurn" : 0,
@@ -93,6 +93,7 @@ extension LoginVC: Alertable {
                                                     "gamesLost" : 0,
                                                     "mostVPGainedInOneGame" : 0]
             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+            self.defaults.set(user.displayName, forKey: "username")
             self.dismiss(animated: true, completion: nil)
         })
     }

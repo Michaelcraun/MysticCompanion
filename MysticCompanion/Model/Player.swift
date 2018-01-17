@@ -10,7 +10,7 @@ import Foundation
 
 protocol PlayerDelegate {
     var username: String { get set }
-    var deck: DeckType? { get set }
+    var deck: DeckType { get set }
     var manaConstant: Int { get set }
     var decayConstant: Int { get set }
     var growthConstant: Int { get set }
@@ -26,7 +26,7 @@ class Player: PlayerDelegate {
     static let instance = Player()
     
     var username: String = ""
-    var deck: DeckType? = nil
+    var deck: DeckType = .beastbrothers
     var manaConstant: Int = 0
     var decayConstant: Int = 0
     var growthConstant: Int = 0
@@ -38,8 +38,6 @@ class Player: PlayerDelegate {
     var boxVP: Int = 0
     
     func reinitialize() {
-        username = ""
-        deck = nil
         manaConstant = 0
         decayConstant = 0
         growthConstant = 0

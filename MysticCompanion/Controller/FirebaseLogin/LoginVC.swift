@@ -85,13 +85,19 @@ extension LoginVC {
         if let _ = error {
             showAlert(.facebookError)
             return
+        } else {
+            let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            login(withCredential: credential)
         }
-        
-        let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        login(withCredential: credential)
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        
+        let firebaseAuth = FIRAuth.auth()
+        do {
+            try firebaseAuth?.signOut()
+            dismiss(animated: true, completion: nil)
+        } catch {
+            showAlert(.firebaseLogout)
+        }
     }
 }

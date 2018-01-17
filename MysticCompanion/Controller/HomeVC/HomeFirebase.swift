@@ -14,6 +14,11 @@ import FirebaseAuth
 
 extension HomeVC {
     func checkUsername(forKey key: String?) {
+        if let defaultsUsername = defaults.string(forKey: "username") {
+            Player.instance.username = defaultsUsername
+            playerName.text = defaultsUsername
+        }
+        
         if key != nil {
             GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
@@ -95,7 +100,7 @@ extension HomeVC {
         let userLocation = self.locationManager.location
         winCondition = condition
         let hostData = ["username" : Player.instance.username as AnyObject,
-                        "deck" : Player.instance.deck?.rawValue as AnyObject,
+                        "deck" : Player.instance.deck.rawValue as AnyObject,
                         "finished" : false as AnyObject,
                         "victoryPoints" : 0 as AnyObject,
                         "userHasQuitGame" : false as AnyObject,
@@ -175,52 +180,61 @@ extension HomeVC {
         })
     }
     
-    func convertCoreDataGameIntoFirebaseEntry(forGame game: Game) {
-        guard let coreDataDate = game.date else { return }
-        var coreDataPlayers = [Dictionary<String,AnyObject>]()
-        var coreDataWinners = [String]()
+    func convertCoreDataGamesIntoFirebaseEntries() {
+        coreDataHasBeenConverted = defaults.bool(forKey: "coreDataHasBeenConverted")
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.dateFormat = "MMDDYYYY HH:mm"
-        let dateString = dateFormatter.string(from: coreDataDate)
-        
-        if let playerName = game.player1, let playerColor = game.player1Color {
-            let player1 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player1VP)
-            coreDataPlayers.append(player1)
-        }
-        
-        if let playerName = game.player2, let playerColor = game.player2Color {
-            let player2 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player2VP)
-            coreDataPlayers.append(player2)
-        }
-        
-        if let playerName = game.player3, let playerColor = game.player3Color {
-            let player3 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player3VP)
-            coreDataPlayers.append(player3)
-        }
-        
-        if let playerName = game.player4, let playerColor = game.player4Color {
-            let player4 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player4VP)
-            coreDataPlayers.append(player4)
-        }
-        
-        var winningVP = 0
-        for player in coreDataPlayers {
-            guard let username = player["username"] as? String else { return }
-            guard let victoryPoints = player["victoryPoints"] as? Int else { return }
-            if victoryPoints > winningVP {
-                winningVP = victoryPoints
-                coreDataWinners = [username]
-            } else if victoryPoints == winningVP {
-                coreDataWinners.append(username)
+        if !coreDataHasBeenConverted {
+            attemptGameFetch()
+            if let objects = controller.fetchedObjects, objects.count > 0 { coreDataGames = objects }
+            for game in coreDataGames {
+                guard let coreDataDate = game.date else { return }
+                var coreDataPlayers = [Dictionary<String,AnyObject>]()
+                var coreDataWinners = [String]()
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .short
+                dateFormatter.dateFormat = "MMDDYYYY HH:mm"
+                let dateString = dateFormatter.string(from: coreDataDate)
+                
+                if let playerName = game.player1, let playerColor = game.player1Color {
+                    let player1 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player1VP)
+                    coreDataPlayers.append(player1)
+                }
+                
+                if let playerName = game.player2, let playerColor = game.player2Color {
+                    let player2 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player2VP)
+                    coreDataPlayers.append(player2)
+                }
+                
+                if let playerName = game.player3, let playerColor = game.player3Color {
+                    let player3 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player3VP)
+                    coreDataPlayers.append(player3)
+                }
+                
+                if let playerName = game.player4, let playerColor = game.player4Color {
+                    let player4 = createPlayerFromCoreDataGame(playerName, withDeckColor: playerColor, andVictory: game.player4VP)
+                    coreDataPlayers.append(player4)
+                }
+                
+                var winningVP = 0
+                for player in coreDataPlayers {
+                    guard let username = player["username"] as? String else { return }
+                    guard let victoryPoints = player["victoryPoints"] as? Int else { return }
+                    if victoryPoints > winningVP {
+                        winningVP = victoryPoints
+                        coreDataWinners = [username]
+                    } else if victoryPoints == winningVP {
+                        coreDataWinners.append(username)
+                    }
+                }
+                
+                GameHandler.instance.createFirebaseDBData(forGame: (FIRAuth.auth()?.currentUser?.uid)!,
+                                                          withPlayers: coreDataPlayers,
+                                                          andWinners: coreDataWinners,
+                                                          andDateString: dateString)
             }
+            defaults.set(true, forKey: "coreDataHasBeenConverted")
         }
-        
-        GameHandler.instance.createFirebaseDBData(forGame: (FIRAuth.auth()?.currentUser?.uid)!,
-                                                  withPlayers: coreDataPlayers,
-                                                  andWinners: coreDataWinners,
-                                                  andDateString: dateString)
     }
     
     func getDeckTypeFromCoreDataGame(forColor color: String) -> String {

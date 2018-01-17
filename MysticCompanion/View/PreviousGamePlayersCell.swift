@@ -11,7 +11,6 @@ import UIKit
 class PreviousGamePlayersCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         self.backgroundColor = .clear
     }
     

@@ -79,6 +79,7 @@ class GameVC: UIViewController, Alertable, Connection {
         layoutView()
         setupPlayerTurn()
         beginConnectionTest()
+        saveUserDeck()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,7 +137,7 @@ class GameVC: UIViewController, Alertable, Connection {
         }
         
         let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
-                                                      "deck" : Player.instance.deck?.rawValue as AnyObject,
+                                                      "deck" : Player.instance.deck.rawValue as AnyObject,
                                                       "finished" : false as AnyObject,
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
@@ -183,6 +184,11 @@ class GameVC: UIViewController, Alertable, Connection {
                 showAlert(.victoryChange)
             }
         }
+    }
+    
+    func saveUserDeck() {
+        let defaults = UserDefaults.standard
+        defaults.set(Player.instance.deck.rawValue, forKey: "previousDeck")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

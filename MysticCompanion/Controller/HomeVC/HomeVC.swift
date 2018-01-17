@@ -35,6 +35,7 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     //MARK: Firebase Variables
     var currentUserID: String? = nil
     var userIsHostingGame = false
+    var gameShouldAutoStart = false
     var coreDataHasBeenConverted = false
     var nearbyGames = [Dictionary<String,AnyObject>]() {
         willSet {
@@ -59,11 +60,8 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         currentUserID = FIRAuth.auth()?.currentUser?.uid
-        Player.instance.deck = .beastbrothers
-        //TODO: Uncomment before publishing
-        coreDataHasBeenConverted = defaults.bool(forKey: "coreDataHasBeenConverted")
+        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
         askForRating()
         checkTheme()
@@ -72,15 +70,8 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         checkLocationAuthStatus()
         checkUsername(forKey: currentUserID)
         beginConnectionTest()
-        
-        if !coreDataHasBeenConverted {
-            attemptGameFetch()
-            if let objects = controller.fetchedObjects, objects.count > 0 { coreDataGames = objects }
-            for game in coreDataGames {
-                convertCoreDataGameIntoFirebaseEntry(forGame: game)
-            }
-            defaults.set(true, forKey: "coreDataHasBeenConverted")
-        }
+        convertCoreDataGamesIntoFirebaseEntries()
+        autoStartGame(userIsHosting: userIsHostingGame)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,17 +84,16 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     
     override func viewDidAppear(_ animated: Bool) {
         currentUserID = FIRAuth.auth()?.currentUser?.uid
-        Player.instance.deck = .beastbrothers
-//        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
         checkTheme()
         layoutMenuButton()
         layoutBannerAds()
         checkUsername(forKey: currentUserID)
         beginConnectionTest()
+        autoStartGame(userIsHosting: userIsHostingGame)
     }
     
-    func setPlayerIcon(withDeck deck: DeckType, andDeckIcon deckIcon: CircleView) {
+    func setPlayerIcon(withDeck deck: DeckType) {
         let deckIcons = [beastbrothersIcon, dawnseekersIcon, lifewardensIcon, waveguardsIcon]
         let deckTypes: [DeckType] = [.beastbrothers, .dawnseekers, .lifewardens, .waveguards]
         
@@ -116,8 +106,8 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         }) { (success) in
             self.playerIcon.backgroundColor = deck.color
             self.playerIcon.addImage(deck.image, withWidthModifier: 20)
-            for i in 0..<deckIcons.count {
-                if deckIcons[i] == deckIcon {
+            for i in 0..<deckTypes.count {
+                if deckTypes[i] == deck {
                     deckIcons[i].backgroundColor = deckTypes[i].color
                 } else {
                     deckIcons[i].backgroundColor = deckTypes[i].secondaryColor
@@ -133,7 +123,15 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         }
     }
     
-    
+    func autoStartGame(userIsHosting: Bool) {
+        if gameShouldAutoStart {
+            if userIsHosting {
+                self.hostGameAndObserve(withWinCondition: "standard", andVPGoal: 0)
+            } else {
+                self.joinGamePressed()
+            }
+        }
+    }
     
     func joinGamePressed() {
         GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUserID!)
@@ -163,12 +161,6 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
                 slideInTransitioningDelegate.disableCompactHeight = false
                 destination.transitioningDelegate = slideInTransitioningDelegate
                 destination.modalPresentationStyle = .custom
-                
-//                switch winCondition {
-//                case "standard": destination.vpGoal += players.count * 5
-//                case "custom": destination.vpGoal = 13
-//                default: break
-//                }
             }
         } else if segue.identifier == "showFirebaseLogin" {
             if let destination = segue.destination as? SettingsVC {
@@ -189,19 +181,19 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
             
             if location.x >= beastbrothersFrame.minX && location.x <= beastbrothersFrame.maxX {
                 if location.y >= beastbrothersFrame.minY && location.y <= beastbrothersFrame.maxY {
-                    setPlayerIcon(withDeck: .beastbrothers, andDeckIcon: beastbrothersIcon)
+                    setPlayerIcon(withDeck: .beastbrothers)
                 }
             } else if location.x >= dawnseekersFrame.minX && location.x <= dawnseekersFrame.maxX {
                 if location.y >= dawnseekersFrame.minY && location.y <= dawnseekersFrame.maxY {
-                    setPlayerIcon(withDeck: .dawnseekers, andDeckIcon: dawnseekersIcon)
+                    setPlayerIcon(withDeck: .dawnseekers)
                 }
             } else if location.x >= lifewardensFrame.minX && location.x <= lifewardensFrame.maxX {
                 if location.y >= lifewardensFrame.minY && location.y <= lifewardensFrame.maxY {
-                    setPlayerIcon(withDeck: .lifewardens, andDeckIcon: lifewardensIcon)
+                    setPlayerIcon(withDeck: .lifewardens)
                 }
             } else if location.x >= waveguardsFrame.minX && location.x <= waveguardsFrame.maxX {
                 if location.y >= waveguardsFrame.minY && location.y <= waveguardsFrame.maxY {
-                    setPlayerIcon(withDeck: .waveguards, andDeckIcon: waveguardsIcon)
+                    setPlayerIcon(withDeck: .waveguards)
                 }
             }
         }

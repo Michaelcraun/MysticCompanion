@@ -72,6 +72,20 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func layoutDeckChoices() {
+        var previousDeck: DeckType {
+            var deckType: DeckType = .beastbrothers
+            if let _previousDeck = defaults.string(forKey: "previousDeck") {
+                switch _previousDeck {
+                case DeckType.beastbrothers.rawValue: deckType = .beastbrothers
+                case DeckType.dawnseekers.rawValue: deckType = .dawnseekers
+                case DeckType.lifewardens.rawValue: deckType = .lifewardens
+                case DeckType.waveguards.rawValue: deckType = .waveguards
+                default: deckType = .beastbrothers
+                }
+            }
+            return deckType
+        }
+        
         beastbrothersIcon.addBorder()
         beastbrothersIcon.backgroundColor = DeckType.beastbrothers.color
         beastbrothersIcon.addImage(DeckType.beastbrothers.image, withWidthModifier: 20)
@@ -116,6 +130,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         deckChoicesStackView.topAnchor.constraint(equalTo: playerName.bottomAnchor, constant: 10).isActive = true
         deckChoicesStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         deckChoicesStackView.widthAnchor.constraint(equalToConstant: 230).isActive = true
+        
+        Player.instance.deck = previousDeck
+        setPlayerIcon(withDeck: previousDeck)
     }
     
     func layoutMenuButton() {
@@ -390,7 +407,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         } else {
             let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
-                                                          "deck" : Player.instance.deck?.rawValue as AnyObject,
+                                                          "deck" : Player.instance.deck.rawValue as AnyObject,
                                                           "finished" : false as AnyObject,
                                                           "victoryPoints" : 0 as AnyObject,
                                                           "userHasQuitGame" : false as AnyObject,
