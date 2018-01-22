@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             isLaunchedFromQuickAction = true
         }
         
+        UIApplication.shared.isIdleTimerDisabled = true
         FIRApp.configure()
         
         if #available(iOS 10.0, *) {
@@ -64,6 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        UIApplication.shared.isIdleTimerDisabled = false
+        
         guard let key = FIRAuth.auth()?.currentUser?.uid else { return }
         GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: key)
         

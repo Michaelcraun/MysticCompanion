@@ -88,11 +88,11 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
                 default: break
                 }
                 shouldPresentLoadingView(false)
-                showAlert(.purchaseComplete)
+//                showAlert(.purchaseComplete)
                 queue.finishTransaction(trans)
             case .failed:
                 shouldPresentLoadingView(false)
-                showAlert(.purchaseFailed)
+//                showAlert(.purchaseFailed)
                 queue.finishTransaction(trans)
             default: break
             }

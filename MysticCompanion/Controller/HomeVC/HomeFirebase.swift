@@ -66,7 +66,7 @@ extension HomeVC {
                         let gameLocation = CLLocation(latitude: latitude, longitude: longitude)
                         
                         let distance = userLocation!.distance(from: gameLocation)
-                        if distance <= 5.0 {
+                        if distance <= 30.0 {
                             guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
                             localGames.append(gameDict)
                         }

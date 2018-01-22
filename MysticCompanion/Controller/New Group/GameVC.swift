@@ -31,6 +31,7 @@ class GameVC: UIViewController, Alertable, Connection {
     //MARK: Game Variables
     var isEndOfGameTurn = false
     var userHasQuitGame = false
+    var userHasSpoiled = false
     var endingPlayerUsername = ""
     var currentVP = 0
     var vpFromTurn = 0
@@ -59,15 +60,11 @@ class GameVC: UIViewController, Alertable, Connection {
     var currentPlayer = "" {
         didSet {
             if currentPlayer == Player.instance.username && currentPlayer != endingPlayerUsername {
-                showAlert(.yourTurn)
-            }
-        }
-    }
-    
-    var userHasSpoiled = false {
-        didSet {
-            if userHasSpoiled {
-                endPlayerTurn()
+                if userHasSpoiled {
+                    endPlayerTurn()
+                } else {
+                    showAlert(.yourTurn)
+                }
             }
         }
     }
@@ -75,6 +72,7 @@ class GameVC: UIViewController, Alertable, Connection {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+//        generateTestData()
         setupGameAndObserve()
         layoutView()
         setupPlayerTurn()
@@ -142,7 +140,10 @@ class GameVC: UIViewController, Alertable, Connection {
                                                       "victoryPoints" : Player.instance.currentVP as AnyObject,
                                                       "boxVictory" : Player.instance.boxVP as AnyObject]
         passTurn(withUserData: userData)
-        
+        animateTrackersOut()
+    }
+    
+    func animateTrackersOut() {
         //MARK: Fades out all trackers, one by one, at the end of the user's turn and then either sets up
         //the view for the user's next turn or segues to EndGameVC (if this is the user's last turn.
         var delay: TimeInterval = 0.0

@@ -87,6 +87,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         beastbrothersIcon.addBorder()
+        beastbrothersIcon.alpha = 0
         beastbrothersIcon.backgroundColor = DeckType.beastbrothers.color
         beastbrothersIcon.addImage(DeckType.beastbrothers.image, withWidthModifier: 20)
         beastbrothersIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -94,6 +95,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         beastbrothersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         dawnseekersIcon.addBorder()
+        dawnseekersIcon.alpha = 0
         dawnseekersIcon.backgroundColor = DeckType.dawnseekers.secondaryColor
         dawnseekersIcon.addImage(DeckType.dawnseekers.image, withWidthModifier: 20)
         dawnseekersIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +103,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         dawnseekersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         lifewardensIcon.addBorder()
+        lifewardensIcon.alpha = 0
         lifewardensIcon.backgroundColor = DeckType.lifewardens.secondaryColor
         lifewardensIcon.addImage(DeckType.lifewardens.image, withWidthModifier: 20)
         lifewardensIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -108,6 +111,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         lifewardensIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         waveguardsIcon.addBorder()
+        waveguardsIcon.alpha = 0
         waveguardsIcon.backgroundColor = DeckType.waveguards.secondaryColor
         waveguardsIcon.addImage(DeckType.waveguards.image, withWidthModifier: 20)
         waveguardsIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -399,7 +403,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 switch players.count {
                 case 2: return 3
                 case 3: return 4
-                case 4: return 5
+                case 4: return 4
                 default: return 0
                 }
             }

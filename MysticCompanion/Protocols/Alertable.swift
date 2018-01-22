@@ -15,6 +15,7 @@ enum Alert {
     case credentialInUse
     case credentialMismatch
     case deckTaken
+    case endGame
     case endOfGame
     case facebookError
     case emailAlreadyInUse
@@ -33,6 +34,7 @@ enum Alert {
     case purchaseError
     case purchaseFailed
     case purchasesRestored
+    case quitGame
     case resetPassword
     case restoreFailed
     case sendEmailError
@@ -49,6 +51,7 @@ enum Alert {
         case .credentialInUse: return Alert.firebaseError.title
         case .credentialMismatch: return Alert.firebaseError.title
         case .emailAlreadyInUse: return Alert.firebaseError.title
+        case .endGame: return "End Game?"
         case .endOfGame: return "End Of Game"
         case .facebookError: return "Facebook Error:"
         case .firebaseError: return "Firebase Error:"
@@ -61,6 +64,7 @@ enum Alert {
         case .purchaseComplete: return "Purchase Complete"
         case .purchaseFailed: return "Purchase Failed"
         case .purchasesRestored: return "Purchases Restored"
+        case .quitGame: return "Quit Game?"
         case .resetPassword: return Alert.firebaseError.title
         case .sendEmailError: return Alert.firebaseError.title
         case .spoil: return "Spoiled"
@@ -79,6 +83,7 @@ enum Alert {
         case .credentialMismatch: return "That account exists with a different credential. Please try again."
         case .deckTaken: return "That deck is already taken. Please choose a different one."
         case .emailAlreadyInUse: return "That email is already in use. Please try again."
+        case .endGame: return "Ate you sure you want to end the game early?"
         case .endOfGame: return "The game has concluded. Please enter the amount of victory points contained within your deck."
         case .facebookError: return "There was an unexpected error when attempting to sign in with Facebook. Please try again."
         case .firebaseLogout: return "There was an unexpected error logging out. Please try again."
@@ -95,6 +100,7 @@ enum Alert {
         case .purchaseError: return "Cannot currently complete your request. Please try again later."
         case .purchaseFailed: return "Please try again or contact support."
         case .purchasesRestored: return "Your purchases have been restored. Thank you."
+        case .quitGame: return "Are you sure you want to quit the game early?"
         case .resetPassword: return "You have entered an incorrent password 3 times. Would you like to reset your password?"
         case .restoreFailed: return "Your purchases failed to be restored. Please try again."
         case .sendEmailError: return "There was an error sending the email. Please try again."
@@ -110,9 +116,11 @@ enum Alert {
     
     var notificationType: NotificationType {
         switch self {
+        case .endGame: return .warning
         case .endOfGame: return .endOfGame
         case .purchaseComplete: return .success
         case .purchasesRestored: return .success
+        case .quitGame: return .warning
         case .victoryChange: return .warning
         case .yourTurn: return .turnChange
         default: return .error
@@ -121,6 +129,8 @@ enum Alert {
     
     var needsOptions: Bool {
         switch self {
+        case .endGame: return true
+        case .quitGame: return true
         case .resetPassword: return true
         case .spoil: return true
         case .unlockPremium: return true
@@ -200,14 +210,15 @@ extension Alertable where Self: UIViewController {
         let yesAction = UIAlertAction(title: "Yes", style: .destructive) { (action) in
             self.dismissAlert()
             
-            if alertController.title == "Spoiled" {
-                if let gameVC = self as? GameVC {
+            if let gameVC = self as? GameVC {
+                switch alert {
+                case .endGame, .quitGame: gameVC.endGame()
+                case .spoil:
                     gameVC.userHasSpoiled = true
+                    gameVC.animateTrackersOut()
+                case .unlockPremium: self.performSegue(withIdentifier: "showSettings", sender: nil)
+                default: break
                 }
-            }
-            
-            if alertController.title == "Unlock Premium" {
-                self.performSegue(withIdentifier: "showSettings", sender: nil)
             }
             
             if alert == .resetPassword {

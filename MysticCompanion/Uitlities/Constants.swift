@@ -114,14 +114,14 @@ var PREMIUM_PURCHASED = false
 //TODO: Needs fixed for iPhone X ?
 var topLayoutConstant: CGFloat {
     switch UIDevice.current.modelName {
-    case "iPhoneX" : return 88
+    case "iPhone X" : return 44
     default: return 20
     }
 }
 
 var bottomLayoutConstant: CGFloat {
     switch UIDevice.current.modelName {
-    case "iPhoneX": return -34
+    case "iPhone X": return -34
     default: return 0
     }
 }

@@ -124,7 +124,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         view.addSubview(victoryTracker)
         view.addSubview(wildTracker)
         
-        decayTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 50).isActive = true
+        decayTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 40).isActive = true
         decayTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         decayTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         decayTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
@@ -134,12 +134,12 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         manaTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         manaTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        growthTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 50).isActive = true
+        growthTracker.topAnchor.constraint(equalTo: playerPanel.bottomAnchor, constant: 40).isActive = true
         growthTracker.leftAnchor.constraint(equalTo: manaTracker.rightAnchor, constant: 10).isActive = true
         growthTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         growthTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        animalTracker.topAnchor.constraint(equalTo: growthTracker.bottomAnchor, constant: 30).isActive = true
+        animalTracker.topAnchor.constraint(equalTo: growthTracker.bottomAnchor, constant: 10).isActive = true
         animalTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         animalTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         animalTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
@@ -149,17 +149,17 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         victoryTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         victoryTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        forestTracker.topAnchor.constraint(equalTo: decayTracker.bottomAnchor, constant: 30).isActive = true
+        forestTracker.topAnchor.constraint(equalTo: decayTracker.bottomAnchor, constant: 10).isActive = true
         forestTracker.leftAnchor.constraint(equalTo: victoryTracker.rightAnchor, constant: 10).isActive = true
         forestTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         forestTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        skyTracker.topAnchor.constraint(equalTo: animalTracker.bottomAnchor, constant: 20).isActive = true
+        skyTracker.topAnchor.constraint(equalTo: animalTracker.bottomAnchor, constant: 10).isActive = true
         skyTracker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50).isActive = true
         skyTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         skyTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         
-        wildTracker.topAnchor.constraint(equalTo: forestTracker.bottomAnchor, constant: 20).isActive = true
+        wildTracker.topAnchor.constraint(equalTo: forestTracker.bottomAnchor, constant: 10).isActive = true
         wildTracker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
         wildTracker.widthAnchor.constraint(equalToConstant: trackerWidth).isActive = true
         wildTracker.heightAnchor.constraint(equalToConstant: trackerWidth).isActive = true
@@ -196,13 +196,13 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
         let quitGame = KCFloatingActionButtonItem()
         quitGame.setButtonOfType(.quitGame)
         quitGame.handler = { item in
-            self.endGame()
+            self.showAlert(.quitGame)
         }
         
         let endGame = KCFloatingActionButtonItem()
         endGame.setButtonOfType(.endGame)
         endGame.handler = { item in
-            self.endGame()
+            self.showAlert(.endGame)
         }
         
         menuButton.addItem(item: settings)
@@ -231,7 +231,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
             
             adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
             adBanner.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomLayoutConstant).isActive = true
         }
     }
     

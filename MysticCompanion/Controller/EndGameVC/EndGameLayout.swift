@@ -113,7 +113,7 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
             
             view.addSubview(adBanner)
             
-            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomLayoutConstant).isActive = true
             adBanner.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
             adBanner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
             adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true

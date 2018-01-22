@@ -56,7 +56,7 @@ class EndGamePlayersCell: UITableViewCell {
 
         let playerUsernameLabel = UILabel()
         playerUsernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
-        playerUsernameLabel.textAlignment = .center
+        playerUsernameLabel.textAlignment = .left
         playerUsernameLabel.text = username
         playerUsernameLabel.sizeToFit()
         playerUsernameLabel.tag = 3030
@@ -64,7 +64,7 @@ class EndGamePlayersCell: UITableViewCell {
 
         let currentVictoryLabel = UILabel()
         currentVictoryLabel.font = UIFont(name: fontFamily, size: 15)
-        currentVictoryLabel.textAlignment = .center
+        currentVictoryLabel.textAlignment = .right
         currentVictoryLabel.text = "\(currentVP + boxVP)"
         currentVictoryLabel.sizeToFit()
         currentVictoryLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -77,26 +77,25 @@ class EndGamePlayersCell: UITableViewCell {
         self.addSubview(playerView)
         playerView.addBlurEffect()
         playerView.addSubview(playerIcon)
-        playerView.addSubview(playerUsernameLabel)
         playerView.addSubview(currentVictoryLabel)
+        playerView.addSubview(playerUsernameLabel)
 
         playerView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
         playerView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
         playerView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
         playerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
         
-        playerIcon.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-        playerIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        playerIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        playerIcon.heightAnchor.constraint(equalToConstant: 23).isActive = true
+        playerIcon.widthAnchor.constraint(equalToConstant: 23).isActive = true
         playerIcon.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
+        playerIcon.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
         
-        playerUsernameLabel.topAnchor.constraint(equalTo: playerIcon.bottomAnchor, constant: 5).isActive = true
-        playerUsernameLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
-        playerUsernameLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
-        
-        currentVictoryLabel.topAnchor.constraint(equalTo: playerUsernameLabel.bottomAnchor, constant: 5).isActive = true
-        currentVictoryLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
+        currentVictoryLabel.centerYAnchor.constraint(equalTo: playerIcon.centerYAnchor).isActive = true
         currentVictoryLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
+        
+        playerUsernameLabel.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
+        playerUsernameLabel.leftAnchor.constraint(equalTo: playerIcon.rightAnchor, constant: 5).isActive = true
+        playerUsernameLabel.rightAnchor.constraint(equalTo: currentVictoryLabel.leftAnchor, constant: -5).isActive = true
         
         if username == Player.instance.username {
             if shouldDisplayStepper {
@@ -133,7 +132,7 @@ class EndGamePlayersCell: UITableViewCell {
                 finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
             } else {
                 let waitingOnPlayerLabel = UILabel()
-                waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
+                waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
                 waitingOnPlayerLabel.textAlignment = .center
                 waitingOnPlayerLabel.text = "Waiting on \(username)..."
                 waitingOnPlayerLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -9,9 +9,10 @@
 import UIKit
 import KCFloatingActionButton
 import GoogleMobileAds
+import MapKit
+
 import Firebase
 import FirebaseAuth
-import MapKit
 import StoreKit
 import CoreData
 
@@ -59,12 +60,11 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     var coreDataGames = [Game]()
     
     override func viewDidLoad() {
+        print("HOME: viewDidLoad()")
         super.viewDidLoad()
         currentUserID = FIRAuth.auth()?.currentUser?.uid
         PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
-        askForRating()
-        checkTheme()
         layoutView()
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthStatus()
@@ -72,6 +72,8 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         beginConnectionTest()
         convertCoreDataGamesIntoFirebaseEntries()
         autoStartGame(userIsHosting: userIsHostingGame)
+        askForRating()
+        checkTheme()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,17 +82,19 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
             Player.instance.reinitialize()
             reinitializeView()
         }
+        
+        currentUserID = FIRAuth.auth()?.currentUser?.uid
+        if currentUserID == nil {
+            gameLobby.removeFromSuperview()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        currentUserID = FIRAuth.auth()?.currentUser?.uid
-        
         checkTheme()
         layoutMenuButton()
         layoutBannerAds()
         checkUsername(forKey: currentUserID)
         beginConnectionTest()
-        autoStartGame(userIsHosting: userIsHostingGame)
     }
     
     func setPlayerIcon(withDeck deck: DeckType) {

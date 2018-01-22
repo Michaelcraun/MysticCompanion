@@ -85,8 +85,14 @@ extension LoginVC {
             showAlert(.facebookError)
             return
         } else {
-            let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-            login(withCredential: credential)
+            if FBSDKAccessToken.current() != nil && FBSDKAccessToken.current().tokenString != nil {
+                if let token = FBSDKAccessToken.current().tokenString {
+                    let credential = FIRFacebookAuthProvider.credential(withAccessToken: token)
+                    login(withCredential: credential)
+                }
+            } else {
+                showAlert(.facebookError)
+            }
         }
     }
     
@@ -94,7 +100,6 @@ extension LoginVC {
         let firebaseAuth = FIRAuth.auth()
         do {
             try firebaseAuth?.signOut()
-            dismiss(animated: true, completion: nil)
         } catch {
             showAlert(.firebaseLogout)
         }

@@ -128,7 +128,7 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
             if MFMailComposeViewController.canSendMail() {
                 let composeVC = MFMailComposeViewController()
                 composeVC.mailComposeDelegate = self
-                composeVC.setToRecipients(["vapemeistersupport@craunicproductions.com"])
+                composeVC.setToRecipients(["support@craunicproductions.com"])
                 composeVC.setSubject("MysticCompanion Support")
                 
                 self.present(composeVC, animated: true, completion: nil)

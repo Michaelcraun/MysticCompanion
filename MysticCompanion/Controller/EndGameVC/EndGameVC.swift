@@ -48,6 +48,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+//        generateTestData()
         setupGameAndObserve()
         layoutView()
         beginConnectionTest()
