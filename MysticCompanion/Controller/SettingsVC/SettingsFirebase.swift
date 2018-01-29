@@ -12,6 +12,7 @@ import FirebaseAuth
 
 extension SettingsVC {
     func observeDataForGamesPlayed() {
+        var gamesPlayed = [Dictionary<String,AnyObject>]()
         GameHandler.instance.REF_DATA.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dataSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for data in dataSnapshot {
@@ -20,10 +21,11 @@ extension SettingsVC {
                     guard let playerUsername = player["username"] as? String else { return }
                     if playerUsername == Player.instance.username {
                         guard let previousGame = data.value as? Dictionary<String,AnyObject> else { return }
-                        self.previousGames.append(previousGame)
+                        gamesPlayed.append(previousGame)
                     }
                 }
             }
+            self.previousGames = gamesPlayed
         })
     }
     

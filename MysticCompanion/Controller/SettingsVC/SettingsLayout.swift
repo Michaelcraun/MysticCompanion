@@ -12,7 +12,7 @@ import Firebase
 import StoreKit
 import MessageUI
 
-extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate, UITableViewDelegate {
+extension SettingsVC {
     func layoutView() {
         layoutBackgroundImage()
         layoutTopBanner()
@@ -230,7 +230,9 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         
         blurEffectView.contentView.addSubview(themeSelector)
     }
-    
+}
+
+extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if previousGames.count > 0 {
             return previousGames.count
@@ -260,10 +262,6 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         return [share]
     }
     
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true, completion: nil)
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if previousGames.count > 0 {
             var cellHeight: CGFloat = 0
@@ -274,5 +272,11 @@ extension SettingsVC: UITableViewDataSource, MFMailComposeViewControllerDelegate
         } else {
             return UITableViewAutomaticDimension
         }
+    }
+}
+
+extension SettingsVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
