@@ -12,7 +12,7 @@ import GoogleMobileAds
 import MapKit
 import GMStepper
 
-extension HomeVC: UITableViewDataSource, UITableViewDelegate {
+extension HomeVC {
     func layoutView() {
         layoutBackgroundImage()
         layoutPlayerIcon()
@@ -182,7 +182,18 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
+        let statistics = KCFloatingActionButtonItem()
+        statistics.setButtonOfType(.statistics)
+        statistics.handler = { item in
+            if self.currentUserID == nil {
+                self.performSegue(withIdentifier: "showFirebaseLogin", sender: nil)
+            } else {
+                self.observeUserStatisticsForUser(Player.instance.username)
+            }
+        }
+        
         menuButton.addItem(item: settings)
+        menuButton.addItem(item: statistics)
         menuButton.addItem(item: startGame)
         menuButton.addItem(item: joinGame)
         
@@ -296,8 +307,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             adBanner.removeFromSuperview()
         } else {
             //MARK: Initialize banner ads
-//            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
-            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
+            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
+//            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
             adBanner.backgroundColor = .white
             adBanner.rootViewController = self
             adBanner.load(GADRequest())
@@ -352,8 +363,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             self.view.frame.origin.x -= screenWidth
         }
     }
-    
-    //MARK: Game Lobby Table setup
+}
+
+extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if userIsHostingGame {
             switch players.count {
@@ -410,17 +422,27 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             if indexPath.row == startGameIndex {
                 GameHandler.instance.updateFirebaseDBGame(key: currentUserID!, gameData: ["gameStarted" : true])
                 performSegue(withIdentifier: "startGame", sender: nil)
+            } else {
+                guard let cell = tableView.cellForRow(at: indexPath) as? GameLobbyCell else { return }
+                let user = cell.user
+                let username = user["username"] as? String ?? ""
+                self.observeUserStatisticsForUser(username)
             }
         } else {
-            let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
-                                                          "deck" : Player.instance.deck.rawValue as AnyObject,
-                                                          "finished" : false as AnyObject,
-                                                          "victoryPoints" : 0 as AnyObject,
-                                                          "userHasQuitGame" : false as AnyObject,
-                                                          "boxVictory" : 0 as AnyObject]
-            GameHandler.instance.game = nearbyGames[indexPath.row]
-            updateGame(withUserData: userData)
-            observeGameForStart()
+            guard let cell = tableView.cellForRow(at: indexPath) as? GameLobbyCell else { return }
+            if let username = cell.user["username"] as? String {
+                self.observeUserStatisticsForUser(username)
+            } else {
+                let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
+                                                              "deck" : Player.instance.deck.rawValue as AnyObject,
+                                                              "finished" : false as AnyObject,
+                                                              "victoryPoints" : 0 as AnyObject,
+                                                              "userHasQuitGame" : false as AnyObject,
+                                                              "boxVictory" : 0 as AnyObject]
+                GameHandler.instance.game = nearbyGames[indexPath.row]
+                updateGame(withUserData: userData)
+                observeGameForStart()
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

@@ -108,7 +108,7 @@ enum DeckType: String {
 let ad = UIApplication.shared.delegate as! AppDelegate
 let context = ad.persistentContainer.viewContext
 
-var PREMIUM_PURCHASED = false
+var PREMIUM_PURCHASED = true
 
 //MARK: Layout Constraint Variables
 //TODO: Needs fixed for iPhone X ?

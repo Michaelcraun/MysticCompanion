@@ -63,7 +63,7 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
         print("HOME: viewDidLoad()")
         super.viewDidLoad()
         currentUserID = FIRAuth.auth()?.currentUser?.uid
-        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
+//        PREMIUM_PURCHASED = defaults.bool(forKey: "premium")
         
         layoutView()
         locationManager.requestWhenInUseAuthorization()
@@ -218,3 +218,17 @@ class HomeVC: UIViewController, Alertable, Connection, NSFetchedResultsControlle
     }
 }
 
+extension HomeVC: CLLocationManagerDelegate {
+    func checkLocationAuthStatus() {
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAuthStatus()
+    }
+}

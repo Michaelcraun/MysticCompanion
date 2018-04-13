@@ -11,7 +11,6 @@ import GMStepper
 import GoogleMobileAds
 
 class GameVC: UIViewController, Alertable, Connection {
-    
     //MARK: UI Variables
     let playerPanel = UIView()
     let gameVPLabel = UILabel()
@@ -31,11 +30,9 @@ class GameVC: UIViewController, Alertable, Connection {
     //MARK: Game Variables
     var isEndOfGameTurn = false
     var userHasQuitGame = false
-    var userHasSpoiled = false
     var endingPlayerUsername = ""
     var currentVP = 0
     var vpFromTurn = 0
-    
     var vpGoal = 13 {
         didSet {
             gameVPLabel.text = "Victory Point Pool: \(victoryTaken)/\(vpGoal)"
@@ -69,6 +66,15 @@ class GameVC: UIViewController, Alertable, Connection {
         }
     }
     
+    var userHasSpoiled = false {
+        didSet {
+            if currentPlayer == Player.instance.username {
+                endPlayerTurn()
+            }
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,9 +93,7 @@ class GameVC: UIViewController, Alertable, Connection {
     }
     
     func setupPlayerTurn() {
-        if isEndOfGameTurn {
-            performSegue(withIdentifier: "showEndGame", sender: nil)
-        }
+        if isEndOfGameTurn { performSegue(withIdentifier: "showEndGame", sender: nil) }
     
         userHasSpoiled = false
         manaTracker.currentStepper.value = Double(Player.instance.manaConstant)
@@ -106,7 +110,7 @@ class GameVC: UIViewController, Alertable, Connection {
         skyTracker.constantStepper.value = Double(Player.instance.skyConstant)
         wildTracker.currentStepper.value = Double(Player.instance.wildConstant)
         wildTracker.constantStepper.value = Double(Player.instance.wildConstant)
-        victoryTracker.currentStepper.value = Double(Player.instance.currentVP + Player.instance.boxVP)
+        victoryTracker.currentStepper.value = 0
         
         currentVP = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
         
@@ -126,7 +130,7 @@ class GameVC: UIViewController, Alertable, Connection {
             Player.instance.forestConstant = Int(forestTracker.constantStepper.value)
             Player.instance.skyConstant = Int(skyTracker.constantStepper.value)
             Player.instance.wildConstant = Int(wildTracker.constantStepper.value)
-            Player.instance.currentVP = Int(victoryTracker.currentStepper.value)
+            Player.instance.currentVP += Int(victoryTracker.currentStepper.value)
             
             let currentMana = Int(manaTracker.currentStepper.value)
             let vpAtEndOfTurn = Int(victoryTracker.currentStepper.value) + Player.instance.boxVP
@@ -165,9 +169,7 @@ class GameVC: UIViewController, Alertable, Connection {
         let currentDecay = decayTracker.currentStepper.value
         let currentGrowth = growthTracker.currentStepper.value
         
-        if currentDecay - 3 > currentGrowth && !userHasSpoiled {
-            showAlert(.spoil)
-        }
+        if currentDecay - 3 > currentGrowth && !userHasSpoiled { showAlert(.spoil) }
         sender.reset()
     }
     

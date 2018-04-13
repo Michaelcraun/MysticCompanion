@@ -9,6 +9,9 @@
 import UIKit
 
 class GameLobbyCell: UITableViewCell {
+    var user = [String : AnyObject]()
+    var game = [String : AnyObject]()
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = .clear
@@ -41,6 +44,7 @@ class GameLobbyCell: UITableViewCell {
 
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
         clearCell()
+        self.user = user
         
         guard let username = user["username"] as? String else { return }
         guard let deck = user["deck"] as? String else { return }

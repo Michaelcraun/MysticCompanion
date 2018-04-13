@@ -27,10 +27,11 @@
 		9B1FA9CA200BAED60052FB7C /* SlideInPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C7200BAED20052FB7C /* SlideInPresentationAnimator.swift */; };
 		9B1FA9CB200BAED60052FB7C /* SlideInPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C8200BAED30052FB7C /* SlideInPresentationController.swift */; };
 		9B1FA9CC200BAED60052FB7C /* SlideInPresentationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1FA9C9200BAED60052FB7C /* SlideInPresentationManager.swift */; };
+		9B21EB2C207FA20600E2C7BD /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B21EB2B207FA20600E2C7BD /* StatisticsView.swift */; };
+		9B21EB2E207FA63F00E2C7BD /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B21EB2D207FA63F00E2C7BD /* StatisticsCell.swift */; };
 		9B73B64B1FD8B8C9007E7ECA /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */; };
 		9B73B64E1FD8BAE2007E7ECA /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */; };
 		9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */; };
-		9B73B6541FD8E6F5007E7ECA /* HomeMapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */; };
 		9B73B6581FDAB368007E7ECA /* GameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6571FDAB368007E7ECA /* GameLayout.swift */; };
 		9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B73B6591FDAB668007E7ECA /* TrackerView.swift */; };
 		9B966D3D1FDD8ECA0083192B /* PlayersTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */; };
@@ -82,10 +83,11 @@
 		9B1FA9C7200BAED20052FB7C /* SlideInPresentationAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationAnimator.swift; sourceTree = "<group>"; };
 		9B1FA9C8200BAED30052FB7C /* SlideInPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationController.swift; sourceTree = "<group>"; };
 		9B1FA9C9200BAED60052FB7C /* SlideInPresentationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideInPresentationManager.swift; sourceTree = "<group>"; };
+		9B21EB2B207FA20600E2C7BD /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		9B21EB2D207FA63F00E2C7BD /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
 		9B73B64A1FD8B8C9007E7ECA /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
 		9B73B64D1FD8BAE2007E7ECA /* Alertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		9B73B6511FD8D0E8007E7ECA /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMapKit.swift; sourceTree = "<group>"; };
 		9B73B6571FDAB368007E7ECA /* GameLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLayout.swift; sourceTree = "<group>"; };
 		9B73B6591FDAB668007E7ECA /* TrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerView.swift; sourceTree = "<group>"; };
 		9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersTableCell.swift; sourceTree = "<group>"; };
@@ -298,7 +300,6 @@
 			children = (
 				9BC7BFEB1FCC6506005741CD /* HomeVC.swift */,
 				9BC7C0061FCC6F6C005741CD /* HomeLayout.swift */,
-				9B73B6531FD8E6F5007E7ECA /* HomeMapKit.swift */,
 				9BC7C0081FCC7534005741CD /* HomeFirebase.swift */,
 			);
 			path = HomeVC;
@@ -312,6 +313,7 @@
 				9B966D3C1FDD8ECA0083192B /* PlayersTableCell.swift */,
 				9B0D320F1FCE5632006F7805 /* PreviousGameCell.swift */,
 				9BFCBE361FF6BE5E00A2627B /* PreviousGamePlayersCell.swift */,
+				9B21EB2D207FA63F00E2C7BD /* StatisticsCell.swift */,
 				9BC7C0031FCC6EFC005741CD /* Style */,
 			);
 			path = View;
@@ -321,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				9BC7C0041FCC6F1B005741CD /* CircleView.swift */,
+				9B21EB2B207FA20600E2C7BD /* StatisticsView.swift */,
 				9B73B6591FDAB668007E7ECA /* TrackerView.swift */,
 			);
 			path = Style;
@@ -478,6 +481,7 @@
 				9BC7C0091FCC7534005741CD /* HomeFirebase.swift in Sources */,
 				9B0D32041FCE0C74006F7805 /* EndGameVC.swift in Sources */,
 				9B966D3D1FDD8ECA0083192B /* PlayersTableCell.swift in Sources */,
+				9B21EB2C207FA20600E2C7BD /* StatisticsView.swift in Sources */,
 				9BC7BFEC1FCC6506005741CD /* HomeVC.swift in Sources */,
 				9BFCBE351FF6767A00A2627B /* SettingsFirebase.swift in Sources */,
 				9BC7BFEA1FCC6506005741CD /* AppDelegate.swift in Sources */,
@@ -485,6 +489,7 @@
 				9B1FA9CB200BAED60052FB7C /* SlideInPresentationController.swift in Sources */,
 				9B0D32151FD023A1006F7805 /* GameHandler.swift in Sources */,
 				9B0D31FE1FCDEAEE006F7805 /* LoginLayout.swift in Sources */,
+				9B21EB2E207FA63F00E2C7BD /* StatisticsCell.swift in Sources */,
 				9B1FA9CA200BAED60052FB7C /* SlideInPresentationAnimator.swift in Sources */,
 				9BC7C00C1FCCA2A4005741CD /* Constants.swift in Sources */,
 				9BCA0F352006633000A00CFF /* Connection.swift in Sources */,
@@ -505,7 +510,6 @@
 				9B167B481FE170B900183733 /* EndGameLayout.swift in Sources */,
 				9B966D3F1FDD90D40083192B /* GameFirebase.swift in Sources */,
 				9B167B4C1FE173C900183733 /* EndGameFirebase.swift in Sources */,
-				9B73B6541FD8E6F5007E7ECA /* HomeMapKit.swift in Sources */,
 				9B0D32131FD02384006F7805 /* Player.swift in Sources */,
 				9B73B6521FD8D0E8007E7ECA /* UIViewExtension.swift in Sources */,
 				9B73B65A1FDAB668007E7ECA /* TrackerView.swift in Sources */,

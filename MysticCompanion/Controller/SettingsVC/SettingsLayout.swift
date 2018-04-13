@@ -244,34 +244,36 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "previousGameCell") as! PreviousGameCell
         if previousGames.count > 0 {
-            cell.layoutGame(game: previousGames[indexPath.row])
+            let gameToDisplay = previousGames[indexPath.row]
+            let playersArray = gameToDisplay["players"] as? [[String : AnyObject]] ?? []
+            let winnersArray = gameToDisplay["winners"] as? [String] ?? []
+            cell.layoutGame(withPlayers: playersArray, andWinners: winnersArray)
         } else {
             cell.layoutEmptyCell()
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
-            let gameToShare = self.previousGames[indexPath.row]
-            guard let winners = gameToShare["winners"] as? [String] else { return }
-            
-            self.shareGame(withWinners: winners)
-        }
-        
-        return [share]
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if previousGames.count > 0 {
-            var cellHeight: CGFloat = 0
-            if let playersArray = previousGames[indexPath.row]["players"] as? [Dictionary<String,AnyObject>] {
-                cellHeight = CGFloat(playersArray.count) * 27.33 + CGFloat((playersArray.count) * 5)
-            }
+            var cellHeight: CGFloat = 10
+            let gameToDisplay = previousGames[indexPath.row]
+            let playersArray = gameToDisplay["players"] as? [[String : AnyObject]] ?? []
+            for _ in playersArray { cellHeight += 27.33 }
             return cellHeight
         } else {
             return UITableViewAutomaticDimension
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let share = UITableViewRowAction(style: .normal, title: "Share") { (action, index) in
+            let gameToShare = self.previousGames[indexPath.row]
+            guard let winners = gameToShare["winners"] as? [String] else { return }
+            self.shareGame(withWinners: winners)
+        }
+        
+        return [share]
     }
 }
 

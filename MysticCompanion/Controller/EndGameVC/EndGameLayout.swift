@@ -11,7 +11,7 @@ import KCFloatingActionButton
 import GMStepper
 import GoogleMobileAds
 
-extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
+extension EndGameVC {
     func layoutView() {
         layoutBackground()
         layoutPlayersTable()
@@ -104,8 +104,8 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     
     func layoutAds() {
         if !PREMIUM_PURCHASED {
-//            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
-            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
+            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
+//            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
             adBanner.backgroundColor = .white
             adBanner.rootViewController = self
             adBanner.load(GADRequest())
@@ -119,7 +119,9 @@ extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
             adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
     }
-    
+}
+
+extension EndGameVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return players.count
     }

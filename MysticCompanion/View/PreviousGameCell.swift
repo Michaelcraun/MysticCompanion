@@ -27,14 +27,11 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         playersTable.delegate = self
     }
     
-    func layoutGame(game: Dictionary<String,AnyObject>) {
+    func layoutGame(withPlayers players: [[String : AnyObject]], andWinners winners: [String]) {
         clearCell()
         self.addBlurEffect()
         
-        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        guard let winners = game["winners"] as? [String] else { return }
-        
-         self.playersArray = playersArray
+        self.playersArray = players
         self.winners = winners
         
         playersTable.backgroundColor = .clear
@@ -49,6 +46,8 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         playersTable.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
         playersTable.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
         playersTable.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        
+        self.updateConstraints()
     }
     
     func layoutEmptyCell() {
@@ -75,7 +74,8 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "previousGamePlayersCell") as! PreviousGamePlayersCell
-        cell.layoutCell(forPlayer: playersArray[indexPath.row], withWinners: winners)
+        let playerToDisplay = playersArray[indexPath.row]
+        cell.layoutCell(forPlayer: playerToDisplay, withWinners: winners)
         return cell
     }
     

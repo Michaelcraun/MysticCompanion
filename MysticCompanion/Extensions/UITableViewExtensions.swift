@@ -28,5 +28,7 @@ extension UITableViewCell {
         for subview in self.subviews {
             subview.removeFromSuperview()
         }
+        
+        self.updateConstraints()
     }
 }

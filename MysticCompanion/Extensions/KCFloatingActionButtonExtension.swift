@@ -49,6 +49,7 @@ extension KCFloatingActionButtonItem {
         case share
         case standardVP
         case startGame
+        case statistics
         
         var title: String {
             switch self {
@@ -74,6 +75,7 @@ extension KCFloatingActionButtonItem {
             case .share: return "Share"
             case .standardVP: return "Standard"
             case .startGame: return "Start Game"
+            case .statistics: return "Statistics"
             }
         }
         
@@ -92,8 +94,9 @@ extension KCFloatingActionButtonItem {
             case .standardVP: return UIColor(red: 116/255, green: 189/255, blue: 187/255, alpha: 1)
             case .done: return theme.color
             //MARK: HomeVC
-            case .startGame: return theme.color
-            case .joinGame: return theme.color1
+            case .statistics: return theme.color
+            case .startGame: return theme.color1
+            case .joinGame: return theme.color2
             //MARK: SettingsVC
             case .logout: return theme.color
             case .contactSupport: return theme.color1

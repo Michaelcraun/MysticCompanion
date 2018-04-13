@@ -40,10 +40,13 @@ class SettingsVC: UIViewController, Connection {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        observeDataForGamesPlayed()
         layoutView()
         beginConnectionTest()
         checkCanMakePayments()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        observeDataForGamesPlayed()
     }
     
     func setTheme(_ theme: SystemColor) {

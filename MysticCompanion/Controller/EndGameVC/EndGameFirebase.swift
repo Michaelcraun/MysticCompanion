@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 
 extension EndGameVC {
     func setupGameAndObserve() {

@@ -11,6 +11,7 @@ import MapKit
 
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 
 let DB_BASE = FIRDatabase.database().reference()
 

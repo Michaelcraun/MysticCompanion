@@ -11,6 +11,7 @@ import MapKit
 
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 
 extension HomeVC {
     func checkUsername(forKey key: String?) {
@@ -160,7 +161,18 @@ extension HomeVC {
                         }
                         
                         if isInGame {
-                            self.showAlert(.userExistsInGame)
+                            let alertController = UIAlertController(title: "View Statistics", message: nil, preferredStyle: .actionSheet)
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+                            for player in playersArray {
+                                let username = player["username"] as? String ?? ""
+                                let playerAction = UIAlertAction(title: "\(username)", style: .default, handler: { (action) in
+                                    self.observeUserStatisticsForUser(username)
+                                })
+                                alertController.addAction(playerAction)
+                            }
+                            alertController.addAction(cancelAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
                         } else if deckTaken {
                             self.showAlert(.deckTaken)
                         } else {
@@ -234,6 +246,45 @@ extension HomeVC {
             }
             defaults.set(true, forKey: "coreDataHasBeenConverted")
         }
+    }
+    
+    func observeUserStatisticsForUser(_ username: String) {
+        GameHandler.instance.REF_USER.observeSingleEvent(of: .value) { (snapshot) in
+            guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
+            for user in userSnapshot {
+                let fetchedUsername = user.childSnapshot(forPath: "username").value as? String ?? ""
+                if fetchedUsername == username {
+                    let gamesPlayed = user.childSnapshot(forPath: "gamesPlayed").value as? Int ?? 0
+                    let gamesLost = user.childSnapshot(forPath: "gamesLost").value as? Int ?? 0
+                    let gamesWon = user.childSnapshot(forPath: "gamesWon").value as? Int ?? 0
+                    let mostManaGainedInOneTurn = user.childSnapshot(forPath: "mostManaGainedInOneTurn").value as? Int ?? 0
+                    let mostVPGainedInOneGame = user.childSnapshot(forPath: "mostVPGainedInOneGame").value as? Int ?? 0
+                    let mostVPGainedInOneTurn = user.childSnapshot(forPath: "mostVPGainedInOneTurn").value as? Int ?? 0
+                    let winPercentage = self.calculateWinPercentage(gamesPlayed: gamesPlayed, gamesWon: gamesWon)
+                    
+                    let userStatistics: [String : AnyObject] = ["username" : fetchedUsername as AnyObject,
+                                                                "winPercentage" : winPercentage as AnyObject,
+                                                                "gamesPlayed" : gamesPlayed as AnyObject,
+                                                                "gamesLost" : gamesLost as AnyObject,
+                                                                "gamesWon" : gamesWon as AnyObject,
+                                                                "mostManaGainedInOneTurn" : mostManaGainedInOneTurn as AnyObject,
+                                                                "mostVPGainedInOneGame" : mostVPGainedInOneGame as AnyObject,
+                                                                "mostVPGainedInOneTurn" : mostVPGainedInOneTurn as AnyObject]
+                    
+                    let statisticsView = StatisticsView()
+                    statisticsView.layoutWithStatistics(userStatistics)
+                    self.view.addSubview(statisticsView)
+                }
+            }
+        }
+    }
+    
+    private func calculateWinPercentage(gamesPlayed: Int, gamesWon: Int) -> Double {
+        if gamesPlayed > 0 {
+            let winPercentage = Double(gamesWon) / Double(gamesPlayed) * 100
+            return winPercentage
+        }
+        return 0.0
     }
     
     func getDeckTypeFromCoreDataGame(forColor color: String) -> String {
