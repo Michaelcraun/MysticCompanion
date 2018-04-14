@@ -14,7 +14,9 @@ class PlayersTableCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func layoutCell(forPlayer player: Dictionary<String,AnyObject>) {
+    /// Configures the cell for a specific player
+    /// - parameter player: A Dictionary value that contains the speicified player's data
+    func layoutCell(forPlayer player: [String : AnyObject]) {
         clearCell()
         
         guard let deck = player["deck"] as? String else { return }
@@ -32,7 +34,6 @@ class PlayersTableCell: UITableViewCell {
         }
         
         let deckIcon = CircleView()
-        deckIcon.addBorder()
         deckIcon.backgroundColor = deckType?.color
         deckIcon.translatesAutoresizingMaskIntoConstraints = false
         

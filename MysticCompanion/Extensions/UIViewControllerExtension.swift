@@ -9,6 +9,8 @@
 import UIKit
 
 extension UIViewController {
+    /// Presents or dismisses a dim screen with an acitivity indicator
+    /// - parameter status: A Boolean value determining whether the loadingView should be displayed or removed
     func shouldPresentLoadingView(_ status: Bool) {
         var fadeView: UIView?
         
@@ -41,6 +43,7 @@ extension UIViewController {
         }
     }
     
+    /// Checks UserDefaults for the user's selected theme
     func checkTheme() {
         let defaults = UserDefaults.standard
         let userTheme = defaults.string(forKey: "theme")
@@ -53,6 +56,9 @@ extension UIViewController {
         }
     }
     
+    /// Presents the sharing controller to allow the user to share a selected game
+    /// - parameter winnersArray: An Array of type String that contains the usernames of the player's of the selected
+    /// game
     func shareGame(withWinners winnersArray: [String]) {
         var isWinner: Bool {
             var _isWinner = false

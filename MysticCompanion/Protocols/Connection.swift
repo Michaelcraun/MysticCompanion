@@ -57,6 +57,8 @@ extension NSObject: Utilities {
 protocol Connection {  }
 
 extension Connection where Self: UIViewController {
+    /// Begins testing the device's connection to the internet. If no connection is found, displays a banner to the
+    /// user, notifying the user of this issue.
     func beginConnectionTest() {
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (_) in
             if self.currentConnectionStatus == .notReachable {
@@ -67,7 +69,10 @@ extension Connection where Self: UIViewController {
         }
     }
     
-    func displayNoConnectionView(_ shouldDisplay: Bool) {
+    /// Displays or removes the no connection view
+    /// - parameter shouldDisplay: A Boolean value determining if the no connection view should be displayed or
+    /// removed from the view
+    private func displayNoConnectionView(_ shouldDisplay: Bool) {
         var isDisplayed: Bool {
             var _isDisplayed = false
             for subview in self.view.subviews {

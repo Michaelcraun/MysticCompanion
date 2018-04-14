@@ -15,6 +15,9 @@ class StatisticsCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
+    /// Configures a cell for a user's specific statistic
+    /// - parameter statistic: The specified statistic to be displayed
+    /// - parameter value: The user's value associated with the specified statistic
     func layoutCellForStatistic(_ statistic: String, withValue value: AnyObject?) {
         let cellView: UIView = {
             let view = UIView()

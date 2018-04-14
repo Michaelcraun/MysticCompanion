@@ -22,6 +22,12 @@ class EndGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
+    /// Configures the cell for a given player
+    /// - parameter player: A Dictionary representing the player and all of it's values
+    /// - parameter shouldDisplayStepper: A Boolean value determining if the player's cell should display a stepper for
+    /// input of deck victory (should be true only if cell's player is the current player and hasn't already submitted
+    /// the victory contained within their deck)
+    /// - parameter winners: An Array of type String that contains the username's of the winners of the game
     func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool, withWinners winners: [String]) {
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
@@ -49,8 +55,7 @@ class EndGamePlayersCell: UITableViewCell {
         playerView.translatesAutoresizingMaskIntoConstraints = false
         
         let playerIcon = CircleView()
-        playerIcon.addBorder()
-        playerIcon.addImage(deckImage, withWidthModifier: 10)
+        playerIcon.addImage(deckImage, withSizeModifier: 10)
         playerIcon.backgroundColor = deckType?.color
         playerIcon.translatesAutoresizingMaskIntoConstraints = false
 

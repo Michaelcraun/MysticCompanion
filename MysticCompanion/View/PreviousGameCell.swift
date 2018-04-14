@@ -8,8 +8,7 @@
 
 import UIKit
 
-class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDelegate {
-    
+class PreviousGameCell: UITableViewCell {
     let playersTable = UITableView()
     var playersArray = [Dictionary<String,AnyObject>]()
     var winners = [String]()
@@ -27,6 +26,9 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         playersTable.delegate = self
     }
     
+    /// Configures the cell to display the results of a previous game
+    /// - parameter players: An Array of Dictionary values containing the specified game
+    /// - parameter winners: An Array of String values contaning the usernames of the winner(s) of the specified game
     func layoutGame(withPlayers players: [[String : AnyObject]], andWinners winners: [String]) {
         clearCell()
         self.addBlurEffect()
@@ -50,6 +52,7 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         self.updateConstraints()
     }
     
+    /// Configures the cell to display to the user that no games were found on Firebase
     func layoutEmptyCell() {
         clearCell()
         addBlurEffect()
@@ -67,7 +70,12 @@ class PreviousGameCell: UITableViewCell, UITableViewDataSource, UITableViewDeleg
         noGamesLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
         noGamesLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
     }
-    
+}
+
+//------------------------------------------
+// MARK: - TableView DataSource and Delegate
+//------------------------------------------
+extension PreviousGameCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return playersArray.count
     }

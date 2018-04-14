@@ -10,6 +10,7 @@ import UIKit
 import GMStepper
 
 class TrackerView: UIView {
+    /// An enumeration of tracker types used in the setup of trackers on the GameVC
     enum TrackerType {
         case animal
         case decay
@@ -20,6 +21,7 @@ class TrackerView: UIView {
         case victory
         case wild
         
+        /// The UIImage associated with the TrackerType
         var icon: UIImage {
             switch self {
             case .animal: return #imageLiteral(resourceName: "animal")
@@ -33,6 +35,7 @@ class TrackerView: UIView {
             }
         }
         
+        /// The primary color associated with the TrackerType
         var primaryColor: UIColor {
             switch self {
             case .animal: return UIColor(red: 120/255, green: 89/255, blue: 59/255, alpha: 0.5)
@@ -46,6 +49,7 @@ class TrackerView: UIView {
             }
         }
         
+        /// The secondary color associated with the TrackerType
         var secondaryColor: UIColor {
             switch self {
             case .animal: return UIColor(red: 158/255, green: 127/255, blue: 96/255, alpha: 0.5)
@@ -78,8 +82,14 @@ class TrackerView: UIView {
         layoutTracker()
     }
     
+    /// The initializer for trackers
+    /// - parameter type: The specific TrackerType associated with the tracker
     func initTrackerOfType(_ type: TrackerType) { self.type = type }
     
+    /// Configures the specified tracker to display the following:
+    /// - The type of tracker it is (via the icon at the top and bottom)
+    /// - A GMStepper for the current value of the tracker
+    /// - A GMStepper for the constant vaule of the tracker (if the tracker isn't the VP tracker)
     func layoutTracker() {
         let trackerWidth = self.frame.width
         let iconWidth = trackerWidth / 4
@@ -90,13 +100,11 @@ class TrackerView: UIView {
             }
         }
         
-        iconView.addBorder()
-        iconView.addImage(type.icon, withWidthModifier: 10)
+        iconView.addImage(type.icon, withSizeModifier: 10)
         iconView.backgroundColor = type.secondaryColor
         iconView.translatesAutoresizingMaskIntoConstraints = false
         
-        iconView2.addBorder()
-        iconView2.addImage(type.icon, withWidthModifier: 10)
+        iconView2.addImage(type.icon, withSizeModifier: 10)
         iconView2.backgroundColor = type.secondaryColor
         iconView2.transform = iconView2.transform.rotated(by: .pi/1)
         iconView2.translatesAutoresizingMaskIntoConstraints = false

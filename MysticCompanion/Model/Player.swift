@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PlayerDelegate {
+protocol PlayerProtocol {
     var username: String { get set }
     var deck: DeckType { get set }
     var manaConstant: Int { get set }
@@ -22,7 +22,8 @@ protocol PlayerDelegate {
     var boxVP: Int { get set }
 }
 
-class Player: PlayerDelegate {
+/// A Singleton that holds all of the current user's information
+class Player: PlayerProtocol {
     static let instance = Player()
     
     var username: String = ""
@@ -37,6 +38,7 @@ class Player: PlayerDelegate {
     var currentVP: Int = 0
     var boxVP: Int = 0
     
+    /// Resets the Player Singleton (should be called when the user quits the game)
     func reinitialize() {
         manaConstant = 0
         decayConstant = 0

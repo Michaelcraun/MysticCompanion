@@ -16,6 +16,8 @@ class StatisticsView: UIView {
         super.layoutSubviews()
     }
     
+    /// Configures the StatisticsView with a specific user's statistics
+    /// - parameter statistics: The specified user's statistics
     func layoutWithStatistics(_ statistics: [String : AnyObject]) {
         self.statistics = statistics
         
@@ -89,6 +91,10 @@ class StatisticsView: UIView {
         setFrame()
     }
     
+    /// Sets the frame of the StatisticsView so it follows these criteria:
+    /// - The width is 20 points less than the screen's size
+    /// - The height is 40 points less than the screen's size
+    /// - The view is centered on the screen
     private func setFrame() {
         let widthMargin: CGFloat = 20.0
         let screenWidth = UIScreen.main.bounds.width
@@ -103,12 +109,16 @@ class StatisticsView: UIView {
 }
 
 extension StatisticsView {
+    /// Fades the StatiticsView out and removes it from it's superview
     @objc func dismissStatisticsView(_ sender: UIButton) {
         print("LAYOUT: Done pressed...")
         self.fadeAlphaOut()
     }
 }
 
+//------------------------------------------
+// MARK: - TableView DataSource and Delegate
+//------------------------------------------
 extension StatisticsView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 7

@@ -10,13 +10,14 @@ import UIKit
 
 class GameLobbyCell: UITableViewCell {
     var user = [String : AnyObject]()
-    var game = [String : AnyObject]()
     
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = .clear
     }
     
+    /// Configures the cell to display a waiting message (for when user's are waiting on the actions of other users)
+    /// - parameter message: The message to be displayed to the user
     func layoutWaitingCell(withMessage message: String) {
         clearCell()
         
@@ -42,6 +43,8 @@ class GameLobbyCell: UITableViewCell {
         spinner.startAnimating()
     }
 
+    /// Configures the cell for the host to display a user that has joined the game
+    /// - parameter user: A Dictionary value that represents a specific user
     func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
         clearCell()
         self.user = user
@@ -66,8 +69,7 @@ class GameLobbyCell: UITableViewCell {
         playerStack.translatesAutoresizingMaskIntoConstraints = false
         
         let deckIcon = CircleView()
-        deckIcon.addBorder()
-        deckIcon.addImage((deckType?.image)!, withWidthModifier: 10)
+        deckIcon.addImage((deckType?.image)!, withSizeModifier: 10)
         deckIcon.backgroundColor = deckType?.color
         deckIcon.translatesAutoresizingMaskIntoConstraints = false
         
@@ -88,6 +90,7 @@ class GameLobbyCell: UITableViewCell {
         deckIcon.widthAnchor.constraint(equalTo: deckIcon.heightAnchor).isActive = true
     }
     
+    /// Configures a cell to display the option to start the game to the host of the game
     func layoutStartGameCell() {
         clearCell()
         
@@ -105,6 +108,8 @@ class GameLobbyCell: UITableViewCell {
         startLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 5).isActive = true
     }
     
+    /// Configures a cell to display a nearby, joinable game
+    /// - parameter game: A Dictionary value containing the specified game's data
     func layoutCellForGuest(withGame game: Dictionary<String,Any>) {
         clearCell()
         
@@ -171,6 +176,10 @@ class GameLobbyCell: UITableViewCell {
         deckStack.heightAnchor.constraint(equalTo: gameHostLabel.heightAnchor).isActive = true
     }
     
+    /// Configures a stackView to display the deck choices for a game (displays taken decks as a dim circle and
+    /// available decks as a bright circle)
+    /// - parameter playersArray: An Array of Dictionary values representing the player's currently in the game (used
+    /// to display the available deck choices)
     func configureDeckChoicesStackView(withPlayers playersArray: [Dictionary<String,AnyObject>]) -> UIStackView {
         let deckStack = UIStackView()
         deckStack.alignment = .fill
@@ -224,22 +233,18 @@ class GameLobbyCell: UITableViewCell {
         }
         
         let beastbrothers = CircleView()
-        beastbrothers.addBorder()
         beastbrothers.backgroundColor = beastbrothersColor
         beastbrothers.translatesAutoresizingMaskIntoConstraints = false
         
         let dawnseekers = CircleView()
-        dawnseekers.addBorder()
         dawnseekers.backgroundColor = dawnseekersColor
         dawnseekers.translatesAutoresizingMaskIntoConstraints = false
         
         let lifewardens = CircleView()
-        lifewardens.addBorder()
         lifewardens.backgroundColor = lifewardensColor
         lifewardens.translatesAutoresizingMaskIntoConstraints = false
         
         let waveguards = CircleView()
-        waveguards.addBorder()
         waveguards.backgroundColor = waveguardsColor
         waveguards.translatesAutoresizingMaskIntoConstraints = false
         

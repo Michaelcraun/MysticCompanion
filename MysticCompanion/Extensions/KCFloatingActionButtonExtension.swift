@@ -9,6 +9,8 @@
 import KCFloatingActionButton
 
 extension KCFloatingActionButton {
+    /// Sets the KCFloatingActionButton.paddingY, depenedent on if the view displays ads or not
+    /// - parameter viewHasAds: A Boolean that determines if the view has ads or not
     func setPaddingY(viewHasAds: Bool) {
         var yPadding: CGFloat {
             let buttonBottomMargin: CGFloat = -10
@@ -26,6 +28,7 @@ extension KCFloatingActionButton {
 }
 
 extension KCFloatingActionButtonItem {
+    /// An enumeration of KCFloatingActionButton button types
     enum ButtonType {
         case cancel
         case changeTheme
@@ -51,6 +54,7 @@ extension KCFloatingActionButtonItem {
         case startGame
         case statistics
         
+        /// The title of the KCFloatingActionButton to be displayed
         var title: String {
             switch self {
             case .cancel: return "Cancel"
@@ -79,6 +83,7 @@ extension KCFloatingActionButtonItem {
             }
         }
         
+        /// The color of the KCFloatingActionButton to be displayed
         var color: UIColor {
             switch self {
             case .cancel: return UIColor(red: 255 / 255, green: 81 / 255, blue: 72 / 255, alpha: 1)
@@ -113,6 +118,7 @@ extension KCFloatingActionButtonItem {
             }
         }
         
+        /// The icon of the KCFloatingActionButton to be displayed, if any
         var icon: UIImage? {
             switch self {
             case .cancel: return #imageLiteral(resourceName: "cancelIcon")
@@ -135,6 +141,8 @@ extension KCFloatingActionButtonItem {
         }
     }
     
+    /// Sets the KCFloatingActionButton's ButtonType
+    /// - parameter type: The ButtonType of the KCFloatingActionButton to be displayed
     func setButtonOfType(_ type: ButtonType) {
         self.title = type.title
         self.buttonColor = type.color

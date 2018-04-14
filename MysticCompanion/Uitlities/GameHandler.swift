@@ -15,10 +15,11 @@ import FirebaseDatabase
 
 let DB_BASE = FIRDatabase.database().reference()
 
+/// The GameHandler Singleton that handles communication between Firebase and the app
 class GameHandler {
     static let instance = GameHandler()
     
-    //MARK: Firebase Variables
+    //MARK: - Firebase Variables
     private var _REF_BASE = DB_BASE
     private var _REF_USER = DB_BASE.child("user")
     private var _REF_GAME = DB_BASE.child("game")
@@ -31,11 +32,16 @@ class GameHandler {
     var game = [String : AnyObject]()
     var userEmail = ""
     
-    //MARK: Firebase user functions
+    //MARK: - Firebase user functions
+    /// Creates and/or updates a specific on Firebase
+    /// - parameter uid: The unique identifier specific to an individual user
+    /// - parameter userData: A Dictionary that contains the data with which to update the specified user
     func createFirebaseDBUser(uid: String, userData: Dictionary<String,Any>) {
         REF_USER.child(uid).updateChildValues(userData)
     }
     
+    /// Sends a request to the user to reset their password
+    /// - returns: A Boolean value determining if the request encountered an error or not
     func resetPassword() -> Bool {
         var hasError = false
         FIRAuth.auth()?.sendPasswordReset(withEmail: userEmail, completion: { (error) in
@@ -43,20 +49,29 @@ class GameHandler {
                 hasError = true
             }
         })
-        
         return hasError
     }
     
-    //MARK: Firebase game functions
+    //MARK: - Firebase game functions
+    /// Creates and/or updates a specific game on Firebase
+    /// - parameter key: The unique identifier specific to an individual game
+    /// - parameter gameData: A Dictionary that contains the data with which to update the specified game
     func updateFirebaseDBGame(key: String, gameData: Dictionary<String,Any>) {
         REF_GAME.child(key).updateChildValues(gameData)
     }
     
+    /// Removes all games with a specific key from Firebase
+    /// - parameter key: The unique identifier specific to an individual game
     func clearCurrentGamesFromFirebaseDB(forKey key: String) {
         REF_GAME.child(key).removeValue()
     }
     
-    //MARK: Firebase data functions
+    //MARK: - Firebase data functions
+    /// Creates a data entry for a specific game to store on Firebase
+    /// - parameter key: The unique identifier specific to an individual game
+    /// - parameter playersArray: An Array of Dictionary values representing the players in the specified game
+    /// - parameter winners: An Array of String values representing the winners in the specified game
+    /// - parameter date: The Date value representing the day and time the game was played
     func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinners winners: [String], andDateString date: String?) {
         var gameKeyAddendum: String {
             if date == nil {
@@ -88,8 +103,9 @@ class GameHandler {
         REF_DATA.child(gameKey).updateChildValues(gameData)
     }
     
-    //MARK: Allows for differentiating between games played
-    func generateDateAddendum() -> String {
+    /// Allows for differentiating between games played when storing game data on Firebase
+    /// - returns: A String representing the date the game was played
+    private func generateDateAddendum() -> String {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short

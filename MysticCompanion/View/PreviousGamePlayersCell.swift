@@ -14,7 +14,10 @@ class PreviousGamePlayersCell: UITableViewCell {
         self.backgroundColor = .clear
     }
     
-    func layoutCell(forPlayer player: Dictionary<String,AnyObject>, withWinners winners: [String]) {
+    /// Configures the cell for a specific player from a previous game
+    /// - parameter player: A Dictionary containing the specified player's data
+    /// - parameter winners: An Array of String values that contains the winner(s) of a specified game
+    func layoutCell(forPlayer player: [String : AnyObject], withWinners winners: [String]) {
         clearCell()
         
         guard let username = player["username"] as? String else { return }
@@ -31,8 +34,7 @@ class PreviousGamePlayersCell: UITableViewCell {
         }
         
         let deckView = CircleView()
-        deckView.addBorder()
-        deckView.addImage((deckType?.image)!, withWidthModifier: 6)
+        deckView.addImage((deckType?.image)!, withSizeModifier: 6)
         deckView.backgroundColor = deckType?.color
         deckView.translatesAutoresizingMaskIntoConstraints = false
         

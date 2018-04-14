@@ -9,6 +9,8 @@
 import UIKit
 
 extension UITableView {
+    /// Animates the tableView's alpha to 0, then reloads the tableView's data, and finally animates the tableView's
+    /// alpha to 1
     func animate() {
         UIView.animate(withDuration: 0.5, animations: {
             self.alpha = 0
@@ -24,6 +26,7 @@ extension UITableView {
 }
 
 extension UITableViewCell {
+    /// Clears the cell of all subviews within the cell
     func clearCell() {
         for subview in self.subviews {
             subview.removeFromSuperview()

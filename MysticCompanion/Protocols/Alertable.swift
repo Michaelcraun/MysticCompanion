@@ -10,6 +10,7 @@ import UIKit
 import AudioToolbox.AudioServices
 import FirebaseAuth
 
+/// An enumeration of alert types
 enum Alert {
     case coreDataError
     case credentialInUse
@@ -46,6 +47,7 @@ enum Alert {
     case wrongPassword
     case yourTurn
     
+    /// The title of the alert displayed to the user
     var title: String {
         switch self {
         case .credentialInUse: return Alert.firebaseError.title
@@ -76,6 +78,7 @@ enum Alert {
         }
     }
     
+    /// The message of the alert displayed to the user
     var message: String {
         switch self {
         case .coreDataError: return "There was an error retreiving data from your device. Please try again."
@@ -114,6 +117,7 @@ enum Alert {
         }
     }
     
+    /// The NotificationType associated with the alert (used for adding haptics/vibrations)
     var notificationType: NotificationType {
         switch self {
         case .endGame: return .warning
@@ -127,6 +131,7 @@ enum Alert {
         }
     }
     
+    /// A Boolean value determining if the alert displayed to the user needs to display Yes and No options
     var needsOptions: Bool {
         switch self {
         case .endGame: return true
@@ -138,6 +143,7 @@ enum Alert {
         }
     }
     
+    /// A Boolean value determining if the alert displayed to the user needs to have input fields
     var needsTextFields: Bool {
         switch self {
         case .victoryChange: return true
@@ -146,12 +152,14 @@ enum Alert {
     }
 }
 
+/// An enumeration of available "vibration" devices
 enum NotificationDevice {
     case haptic
     case vibrate
     case none
 }
 
+/// An enumeration of types of notifications
 enum NotificationType {
     case endOfGame
     case error
@@ -163,6 +171,8 @@ enum NotificationType {
 protocol Alertable {  }
 
 extension Alertable where Self: UIViewController {
+    /// Displays an alert to the user, dependent upon the alert type
+    /// - parameter alert: The type of alert to be displayed to the user
     func showAlert(_ alert: Alert) {
         var defaultActionTitle: String {
             switch alert.needsOptions {
@@ -253,7 +263,8 @@ extension Alertable where Self: UIViewController {
         present(alertController, animated: false, completion: nil)
     }
     
-    func dismissAlert() {
+    /// Dismisses the displayed alert
+    private func dismissAlert() {
         for subview in self.view.subviews {
             if subview.tag == 1001 {
                 subview.fadeAlphaOut()
@@ -261,7 +272,9 @@ extension Alertable where Self: UIViewController {
         }
     }
     
-    func addVibration(withNotificationType type: NotificationType) {
+    /// Adds haptics to the displayed alert, if available and necessary
+    /// - parameter type: The NotificationType of the displayed alert
+    private func addVibration(withNotificationType type: NotificationType) {
         var notificationDevice: NotificationDevice {
             switch UIDevice.current.modelName {
             case "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X": return .haptic
