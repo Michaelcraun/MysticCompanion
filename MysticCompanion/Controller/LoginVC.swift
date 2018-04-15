@@ -51,7 +51,9 @@ class LoginVC: UIViewController, UITextFieldDelegate, Connection, GIDSignInDeleg
     }
 }
 
-//MARK: UITextFieldDelegate
+//----------------------------
+// MARK: - UITextFieldDelegate
+//----------------------------
 extension LoginVC {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == usernameField {
@@ -66,7 +68,9 @@ extension LoginVC {
     }
 }
 
-//MARK: Google Sign-in
+//-----------------------
+// MARK: - Google Sign-in
+//-----------------------
 extension LoginVC {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let _ = error {
@@ -80,7 +84,9 @@ extension LoginVC {
     }
 }
 
-//MARK: Facebook Login
+//-----------------------
+// MARK: - Facebook Login
+//-----------------------
 extension LoginVC {
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let _ = error {
@@ -112,6 +118,7 @@ extension LoginVC {
 // MARK: - Layout
 //---------------
 extension LoginVC {
+    /// The central point for layout of LoginVC
     func layoutView() {
         layoutBackgroundImage()
         layoutLogo()
@@ -120,6 +127,7 @@ extension LoginVC {
         layoutMenuButton()
     }
     
+    /// Configures background image for HomeVC
     func layoutBackgroundImage() {
         backgroundImage.image = #imageLiteral(resourceName: "tutorialBG")
         backgroundImage.contentMode = .scaleAspectFill
@@ -134,6 +142,7 @@ extension LoginVC {
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    /// Configures stack view containing logo
     func layoutLogo() {
         logoStack.alignment = .fill
         logoStack.axis = .horizontal
@@ -162,6 +171,7 @@ extension LoginVC {
         logoStack.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
+    /// Configures the login form
     func layoutUserForm() {
         usernameField.delegate = self
         usernameField.backgroundColor = theme.color1
@@ -212,6 +222,7 @@ extension LoginVC {
         passwordField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
     }
     
+    /// Configures the social media buttons
     func layoutSocialMediaLoginButtons() {
         facebookLogin.readPermissions = ["public_profile", "email"]
         facebookLogin.translatesAutoresizingMaskIntoConstraints = false
@@ -231,6 +242,7 @@ extension LoginVC {
         googleLogin.heightAnchor.constraint(equalToConstant: 28).isActive = true
     }
     
+    /// Configures the menu button for HomeVC
     func layoutMenuButton() {
         settingsButton.setMenuButtonColor()
         settingsButton.setPaddingY(viewHasAds: false)
@@ -259,15 +271,46 @@ extension LoginVC {
 // MARK: - Firebase
 //-----------------
 extension LoginVC: Alertable {
+    /// Checks if the usernameField, emailField, and passwordField aren't empty, then logs the user in via Firebase
     func loginWithFirebase() {
-        if usernameField.text != "" && emailField.text != "" && passwordField.text != "" {
-            view.endEditing(true)
-            guard let username = usernameField.text, let email = emailField.text, let password = passwordField.text else { return }
-            
-            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
-                if error == nil {
-                    guard let user = user else { return }
-                    let userData: Dictionary<String,Any> = ["provider" : user.providerID,
+        view.endEditing(true)
+        guard let username = usernameField.text, username != "", let email = emailField.text, email != "", let password = passwordField.text, password != "" else {
+            showAlert(.invalidLogin)
+            return
+        }
+        
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+            if error == nil {
+                guard let user = user else { return }
+                let userData: [String : Any] = ["provider" : user.providerID,
+                                                        "username" : username]
+                GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+                self.defaults.set(username, forKey: "username")
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
+                switch errorCode {
+                case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
+                case .errorCodeWrongPassword:
+                    self.wrongPasswordCount += 1
+                    if self.wrongPasswordCount >= 3 {
+                        GameHandler.instance.userEmail = email
+                        self.showAlert(.resetPassword)
+                    } else {
+                        self.showAlert(.wrongPassword)
+                    }
+                case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
+                case .errorCodeUserNotFound:
+                    FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+                        if error != nil {
+                            guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
+                            switch errorCode {
+                            case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
+                            default: self.showAlert(.firebaseError)
+                            }
+                        } else {
+                            guard let user = user else { return }
+                            let userData: [String : Any] = ["provider" : user.providerID,
                                                             "username" : username,
                                                             "mostManaGainedInOneTurn" : 0,
                                                             "mostVPGainedInOneTurn" : 0,
@@ -275,55 +318,20 @@ extension LoginVC: Alertable {
                                                             "gamesWon" : 0,
                                                             "gamesLost" : 0,
                                                             "mostVPGainedInOneGame" : 0]
-                    GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
-                    self.defaults.set(username, forKey: "username")
-                    self.dismiss(animated: true, completion: nil)
-                } else {
-                    guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
-                    switch errorCode {
-                    case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
-                    case .errorCodeWrongPassword:
-                        self.wrongPasswordCount += 1
-                        if self.wrongPasswordCount >= 3 {
-                            GameHandler.instance.userEmail = email
-                            self.showAlert(.resetPassword)
-                        } else {
-                            self.showAlert(.wrongPassword)
+                            GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
+                            FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: nil)
+                            self.defaults.set(username, forKey: "username")
+                            self.dismiss(animated: true, completion: nil)
                         }
-                    case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
-                    case .errorCodeUserNotFound:
-                        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
-                            if error != nil {
-                                guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
-                                switch errorCode {
-                                case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
-                                default: self.showAlert(.firebaseError)
-                                }
-                            } else {
-                                guard let user = user else { return }
-                                let userData: Dictionary<String,Any> = ["provider" : user.providerID,
-                                                                        "username" : username,
-                                                                        "mostManaGainedInOneTurn" : 0,
-                                                                        "mostVPGainedInOneTurn" : 0,
-                                                                        "gamesPlayed" : 0,
-                                                                        "gamesWon" : 0,
-                                                                        "gamesLost" : 0,
-                                                                        "mostVPGainedInOneGame" : 0]
-                                GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
-                                FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: nil)
-                                self.defaults.set(username, forKey: "username")
-                                self.dismiss(animated: true, completion: nil)
-                            }
-                        })
-                    default: self.showAlert(.firebaseError)
-                    }
+                    })
+                default: self.showAlert(.firebaseError)
                 }
-            })
-        } else {
-            showAlert(.invalidLogin)
-        }
+            }
+        })
     }
     
+    /// Logs the user in via the selected credential
+    /// - parameter credential: The credential specified by the user
     func login(withCredential credential: FIRAuthCredential) {
         FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
             if let error = error {
@@ -339,14 +347,14 @@ extension LoginVC: Alertable {
             }
             
             guard let user = user else { return }
-            let userData: Dictionary<String,Any> = ["provider" : credential.provider,
-                                                    "username" : user.displayName as Any,
-                                                    "mostManaGainedInOneTurn" : 0,
-                                                    "mostVPGainedInOneTurn" : 0,
-                                                    "gamesPlayed" : 0,
-                                                    "gamesWon" : 0,
-                                                    "gamesLost" : 0,
-                                                    "mostVPGainedInOneGame" : 0]
+            let userData: [String : Any] = ["provider" : credential.provider,
+                                            "username" : user.displayName as Any,
+                                            "mostManaGainedInOneTurn" : 0,
+                                            "mostVPGainedInOneTurn" : 0,
+                                            "gamesPlayed" : 0,
+                                            "gamesWon" : 0,
+                                            "gamesLost" : 0,
+                                            "mostVPGainedInOneGame" : 0]
             GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
             self.defaults.set(user.displayName, forKey: "username")
             self.dismiss(animated: true, completion: nil)

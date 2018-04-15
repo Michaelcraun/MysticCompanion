@@ -18,8 +18,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class SettingsVC: UIViewController, Connection {
-
-    //MARK: UI Variables
+    //MARK: - UI Variables
     let backgroundImage = UIImageView()
     let currentVersion = UILabel()
     let upgradeDetails = UILabel()
@@ -28,7 +27,7 @@ class SettingsVC: UIViewController, Connection {
     let menuButton = KCFloatingActionButton()
     var purchaseButtonsAreEnabled = false
     
-    //MARK: Firebase Variables
+    //MARK: - Firebase Variables
     var currentUserID: String?
     var previousGames = [Dictionary<String,AnyObject>]() {
         willSet {
@@ -36,10 +35,10 @@ class SettingsVC: UIViewController, Connection {
         }
     }
     
-    //MARK: Data Variables
+    //MARK: - Data Variables
     let defaults = UserDefaults.standard
     
-    //MARK: StoreKit Variables
+    //MARK: - StoreKit Variables
     var productPurchasing = SKProduct()
     var productList = [SKProduct]()
     
@@ -55,6 +54,8 @@ class SettingsVC: UIViewController, Connection {
         observeDataForGamesPlayed()
     }
     
+    /// Sets the users theme to the selected theme the user selected
+    /// - parameter theme: The theme selected by the user
     func setTheme(_ theme: SystemColor) {
         for subview in view.subviews {
             if subview.tag == 1001 {
@@ -74,6 +75,7 @@ class SettingsVC: UIViewController, Connection {
 // MARK: - Layout
 //---------------
 extension SettingsVC {
+    /// The central point for layout on SettingsVC
     func layoutView() {
         layoutBackgroundImage()
         layoutTopBanner()
@@ -87,6 +89,7 @@ extension SettingsVC {
         layoutSettingsButton()
     }
     
+    /// Configures the background image for SettingsVC
     func layoutBackgroundImage() {
         backgroundImage.image = #imageLiteral(resourceName: "settingsBG")
         backgroundImage.contentMode = .scaleAspectFill
@@ -101,6 +104,7 @@ extension SettingsVC {
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    /// Configures the top banner for SettingsVC
     func layoutTopBanner() {
         bannerView.backgroundColor = UIColor(red: 255 / 255, green: 81 / 255, blue: 72 / 255, alpha: 1)
         bannerView.translatesAutoresizingMaskIntoConstraints = false
@@ -124,6 +128,7 @@ extension SettingsVC {
         pageTitleLabel.rightAnchor.constraint(equalTo: bannerView.rightAnchor).isActive = true
     }
     
+    /// Configures upgrade labels if user has not purchased premium
     func layoutUpgradeLabels() {
         currentVersion.font = UIFont(name: fontFamily, size: 15)
         currentVersion.numberOfLines = 0
@@ -149,6 +154,7 @@ extension SettingsVC {
         upgradeDetails.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
     }
     
+    /// Configures previous games table if user has purchased premium
     func layoutPreviousGamesTable() {
         previousGamesTable.dataSource = self
         previousGamesTable.delegate = self
@@ -166,6 +172,7 @@ extension SettingsVC {
         previousGamesTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
     }
     
+    /// Configures the menu button for SettingsVC
     func layoutSettingsButton() {
         menuButton.setMenuButtonColor()
         menuButton.paddingY = 20
@@ -237,6 +244,7 @@ extension SettingsVC {
         view.addSubview(menuButton)
     }
     
+    /// Configures the theme selection view
     func layoutThemeSelection() {
         var blurEffectView = UIVisualEffectView()
         
@@ -293,6 +301,9 @@ extension SettingsVC {
     }
 }
 
+//------------------------------------------
+// MARK: - TableView DataSource and Delegate
+//------------------------------------------
 extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if previousGames.count > 0 {
@@ -338,6 +349,9 @@ extension SettingsVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+//----------------------
+// MARK: - Mail Delegate
+//----------------------
 extension SettingsVC: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
@@ -348,6 +362,7 @@ extension SettingsVC: MFMailComposeViewControllerDelegate {
 // MARK: - Firebase
 //-----------------
 extension SettingsVC {
+    /// Observes the game directory for games the user has played
     func observeDataForGamesPlayed() {
         var gamesPlayed = [Dictionary<String,AnyObject>]()
         GameHandler.instance.REF_DATA.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -366,6 +381,7 @@ extension SettingsVC {
         })
     }
     
+    /// Logs the user out when logout button is pressed
     func logout() {
         let firebaseAuth = FIRAuth.auth()
         do {
@@ -381,6 +397,9 @@ extension SettingsVC {
 // MARK: - StoreKit
 //-----------------
 extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+    /// Begins the purchasing of a specific product
+    /// - parameter productID: A String value containing the product identifier associated with the product being
+    /// purchased
     func buyProduct(productID: String) {
         for product in productList {
             let productToCheck = product.productIdentifier
@@ -396,6 +415,7 @@ extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransaction
         }
     }
     
+    /// Checks if the user can make payments and displays an alert to the user if in-app purchases have been disabled
     func checkCanMakePayments() {
         if (SKPaymentQueue.canMakePayments()) {
             let productIDs: NSSet = NSSet(objects: Products.premiumUpgrade.productIdentifier)

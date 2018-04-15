@@ -242,6 +242,7 @@ extension HomeVC: CLLocationManagerDelegate {
 // MARK: - Layout
 //---------------
 extension HomeVC {
+    /// The central point for HomeVC layout
     func layoutView() {
         layoutBackgroundImage()
         layoutPlayerIcon()
@@ -252,6 +253,7 @@ extension HomeVC {
         animateViewForStart()
     }
     
+    /// Reinitializes HomeVC
     func reinitializeView() {
         for subview in view.subviews {
             subview.removeFromSuperview()
@@ -260,6 +262,7 @@ extension HomeVC {
         needsInitialized = false
     }
     
+    /// Configures the background image for HomeVC
     func layoutBackgroundImage() {
         backgroundImage.image = #imageLiteral(resourceName: "homeBG")
         backgroundImage.contentMode = .scaleAspectFill
@@ -274,6 +277,7 @@ extension HomeVC {
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    /// Configures the player icon (the one at the top of the screen)
     func layoutPlayerIcon() {
         playerIcon.backgroundColor = DeckType.beastbrothers.color
         playerIcon.addImage(DeckType.beastbrothers.image, withSizeModifier: 20)
@@ -287,6 +291,7 @@ extension HomeVC {
         playerIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
+    /// Configures the username label
     func layoutPlayerName() {
         playerName.textColor = .darkText
         playerName.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
@@ -299,6 +304,7 @@ extension HomeVC {
         playerName.topAnchor.constraint(equalTo: playerIcon.bottomAnchor, constant: 20).isActive = true
     }
     
+    /// Configures the stack view that contains the user's deck options
     func layoutDeckChoices() {
         var previousDeck: DeckType {
             var deckType: DeckType = .beastbrothers
@@ -363,6 +369,7 @@ extension HomeVC {
         setPlayerIcon(withDeck: previousDeck)
     }
     
+    /// Configures the menu button for the HomeVC
     func layoutMenuButton() {
         menuButton.setMenuButtonColor()
         menuButton.setPaddingY(viewHasAds: true)
@@ -424,6 +431,7 @@ extension HomeVC {
         view.addSubview(menuButton)
     }
     
+    /// Configures new view for game setup when user hosts a game
     func layoutGameSetupView() {
         var blurEffectView = UIVisualEffectView()
         
@@ -473,6 +481,7 @@ extension HomeVC {
         blurEffectView.fadeAlphaTo(1, withDuration: 0.2)
     }
     
+    /// Configures the victory point selector when user hosts a game
     func layoutCustomVPSelector() {
         let vpStepper = GMStepper()
         vpStepper.buttonsBackgroundColor = theme.color
@@ -526,6 +535,7 @@ extension HomeVC {
         vpStepper.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
+    /// Configures banner ads if the user hasn't purchased premium
     func layoutBannerAds() {
         if PREMIUM_PURCHASED {
             adBanner.removeFromSuperview()
@@ -546,6 +556,7 @@ extension HomeVC {
         }
     }
     
+    /// Configures the game lobby view and the associated table
     func layoutGameLobby() {
         let gameLobbyBottomLayoutConstant = bottomLayoutConstant + adBuffer - 80
         
@@ -579,6 +590,7 @@ extension HomeVC {
         gameLobbyTable.bottomAnchor.constraint(equalTo: gameLobby.bottomAnchor, constant: -5).isActive = true
     }
     
+    /// Handles animating the view (slide in from left) when the app first loads and when the user quits the game
     func animateViewForStart() {
         let screenWidth = UIScreen.main.bounds.width
         view.frame.origin.x += screenWidth
@@ -589,6 +601,9 @@ extension HomeVC {
     }
 }
 
+//------------------------------------------
+// MARK: - TableView DataSource and Delegate
+//------------------------------------------
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if userIsHostingGame {
@@ -680,6 +695,8 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
 // MARK: - Firebase
 //-----------------
 extension HomeVC {
+    /// Checks Firebase for the current user's username
+    /// - parameter key: An optional String value representing the user's ID, if any
     func checkUsername(forKey key: String?) {
         if let defaultsUsername = defaults.string(forKey: "username") {
             Player.instance.username = defaultsUsername
@@ -702,6 +719,8 @@ extension HomeVC {
         }
     }
     
+    /// Generates a random ID for a user, if the user isn't logged in to Firebase
+    /// - returns: A String value that is 14 characters long and begins with "user"
     func generateID() -> String {
         var userID = "user"
         let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -716,8 +735,7 @@ extension HomeVC {
         return userID
     }
     
-    //MARK: Firebase observers for user -- observes game directory for games that haven't
-    //started and are within 5 meters of the user
+    /// Observes game directory for games that haven't started yet and are within 30 meters of the current user
     func observeForNearbyGames() {
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
             let userLocation = self.locationManager.location
@@ -744,7 +762,7 @@ extension HomeVC {
         })
     }
     
-    //MARK: Firebase observer for user -- observes for the host starting the game
+    /// Observes for the host starting the game the user has joined
     func observeGameForStart() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.REF_GAME.observe(.value, with: { (snapshot) in
@@ -762,7 +780,9 @@ extension HomeVC {
         })
     }
     
-    //MARK: Firebase observer for host
+    /// Configures a game within the game directory for the host and begins observing the game for new players
+    /// - parameter winCondition: The win condition specified by the host of the game
+    /// - parameter goal: The victory point goal specified by the host of the game
     func hostGameAndObserve(withWinCondition condition: String, andVPGoal goal: Int) {
         let userLocation = self.locationManager.location
         winCondition = condition
@@ -798,7 +818,9 @@ extension HomeVC {
         self.layoutGameLobby()
     }
     
-    func updateGame(withUserData userData: Dictionary<String,AnyObject>) {
+    /// Updates the current game with a new player's data
+    /// - parameter userData: A Dictionary containing the new player's data
+    func updateGame(withUserData userData: [String : AnyObject]) {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let userUsername = userData["username"] as? String else { return }
         guard let userDeck = userData["deck"] as? String else { return }
@@ -857,6 +879,8 @@ extension HomeVC {
         })
     }
     
+    /// Fetches a specific user's game statistics and presents them to the current user
+    /// - parameter username: A String value representing the selected user's username
     func observeUserStatisticsForUser(_ username: String) {
         GameHandler.instance.REF_USER.observeSingleEvent(of: .value) { (snapshot) in
             guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
@@ -888,34 +912,16 @@ extension HomeVC {
         }
     }
     
+    /// Calculates and a specific user's win percentage, according the the games the user has played and the games the
+    /// user has won
+    /// - parameter gamesPlayed: An Int value representing the amount of games the user has played
+    /// - parameter gamesWon: An Int value representing the amount of games the user has won
     private func calculateWinPercentage(gamesPlayed: Int, gamesWon: Int) -> Double {
         if gamesPlayed > 0 {
             let winPercentage = Double(gamesWon) / Double(gamesPlayed) * 100
             return winPercentage
         }
         return 0.0
-    }
-    
-    func getDeckTypeFromCoreDataGame(forColor color: String) -> String {
-        var playerDeck: String {
-            switch color {
-            case "red": return "beastbrothers"
-            case "yellow": return "dawnseekers"
-            case "green": return "lifewardens"
-            case "blue": return "waveguards"
-            default: return ""
-            }
-        }
-        
-        return playerDeck
-    }
-    
-    func createPlayerFromCoreDataGame(_ username: String, withDeckColor color: String, andVictory victory: Int16) -> Dictionary<String,AnyObject> {
-        let player: Dictionary<String,AnyObject> = ["username"         : username as AnyObject,
-                                                    "deck"             : getDeckTypeFromCoreDataGame(forColor: color) as AnyObject,
-                                                    "victoryPoints"    : victory as AnyObject]
-        
-        return player
     }
 }
 

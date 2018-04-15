@@ -223,6 +223,7 @@ class GameVC: UIViewController, Alertable, Connection {
 // MARK: - Layout
 //---------------
 extension GameVC {
+    /// The central point for layout of GameVC
     private func layoutView() {
         layoutBackground()
         layoutPlayersPanel()
@@ -231,6 +232,7 @@ extension GameVC {
         layoutBannerAds()
     }
     
+    /// Configures the background image
     private func layoutBackground() {
         let backgroundImage = UIImageView()
         backgroundImage.image = #imageLiteral(resourceName: "gameBG")
@@ -246,6 +248,7 @@ extension GameVC {
         backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    ///Configures the players panel and table
     private func layoutPlayersPanel() {
         let panelHeight = CGFloat(players.count) * 27.5 + 16.5
         
@@ -288,6 +291,7 @@ extension GameVC {
         playersTable.bottomAnchor.constraint(equalTo: playerPanel.bottomAnchor).isActive = true
     }
     
+    /// Configures the user's trackers
     private func layoutTrackers() {
         let screenWidth = view.frame.width
         let trackerWidth = (screenWidth - 40) / 3
@@ -378,6 +382,7 @@ extension GameVC {
         trackersArray = [manaTracker, decayTracker, growthTracker, animalTracker, forestTracker, skyTracker, victoryTracker, wildTracker]
     }
     
+    /// Configures the GameVC menu button
     private func layoutMenuButton() {
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
@@ -428,6 +433,7 @@ extension GameVC {
         view.addSubview(menuButton)
     }
     
+    /// Configures banner ads, if premium hasn't been purchased
     private func layoutBannerAds() {
         if !PREMIUM_PURCHASED {
             //MARK: Initialize banner ads
@@ -470,6 +476,7 @@ extension GameVC: UITableViewDataSource, UITableViewDelegate {
 // MARK: - Firebase
 //-----------------
 extension GameVC {
+    /// Configures game of Firebase and begins observing
     private func setupGameAndObserve() {
         GameHandler.instance.REF_GAME.removeAllObservers()
         if let players = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
@@ -524,8 +531,10 @@ extension GameVC {
         })
     }
     
-    private func passTurn(withUserData userData: Dictionary<String,AnyObject>) {
-        var newPlayersArray = [Dictionary<String,AnyObject>]()
+    /// Passes the current user's turn on Firebase
+    /// - parameter userData: A Dictionary containing the user's data
+    private func passTurn(withUserData userData: [String : AnyObject]) {
+        var newPlayersArray = [[String : AnyObject]]()
         var playerToAppend = [String : AnyObject]()
         var newCurrentPlayer = [String : AnyObject]()
         
@@ -534,7 +543,7 @@ extension GameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [[String : AnyObject]] else { return }
                     
                     for player in playersArray {
                         guard let playerUsername = player["username"] as? String else { return }
@@ -555,14 +564,17 @@ extension GameVC {
         })
     }
     
+    /// Updates the current user's mana and VP turn statistics on Firebase
+    /// - parameter mana: The Int value to compare to what's on Firebase
+    /// - parameter victory: The Int value to compare to what's on Firebase
     private func updateFBUserStatistics(withMana mana: Int, andVictory victory: Int) {
-        var userData = Dictionary<String,AnyObject>()
+        var userData = [String : AnyObject]()
         
         GameHandler.instance.REF_USER.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for user in userSnapshot {
                 if user.key == FIRAuth.auth()?.currentUser?.uid {
-                    if let firebaseUser = user.value as? Dictionary<String,AnyObject> { userData = firebaseUser }
+                    if let firebaseUser = user.value as? [String : AnyObject] { userData = firebaseUser }
                     guard let mostManaGainedInOneTurn = userData["mostManaGainedInOneTurn"] as? Int else { return }
                     guard let mostVPGainedInOneTurn = userData["mostVPGainedInOneTurn"] as? Int else { return }
                     if mana > mostManaGainedInOneTurn { userData["mostManaGainedInOneTurn"] = mana as AnyObject }
