@@ -120,55 +120,39 @@ extension LoginVC {
 extension LoginVC {
     /// The central point for layout of LoginVC
     func layoutView() {
-        layoutBackgroundImage()
+        setBackgroundImage(#imageLiteral(resourceName: "loginBG"))
         layoutLogo()
         layoutUserForm()
         layoutSocialMediaLoginButtons()
         layoutMenuButton()
     }
     
-    /// Configures background image for HomeVC
-    func layoutBackgroundImage() {
-        backgroundImage.image = #imageLiteral(resourceName: "tutorialBG")
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.alpha = 0.5
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(backgroundImage)
-        
-        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
     /// Configures stack view containing logo
     func layoutLogo() {
-        logoStack.alignment = .fill
-        logoStack.axis = .horizontal
-        logoStack.distribution = .fillProportionally
-        logoStack.spacing = 10
-        logoStack.translatesAutoresizingMaskIntoConstraints = false
         
         let mysticView = UIImageView()
         mysticView.image = #imageLiteral(resourceName: "mystic")
         mysticView.contentMode = .scaleAspectFit
-        mysticView.translatesAutoresizingMaskIntoConstraints = false
+        mysticView.anchorTo()
         
         let companionView = UIImageView()
         companionView.image = #imageLiteral(resourceName: "companion")
         companionView.contentMode = .scaleAspectFit
-        companionView.translatesAutoresizingMaskIntoConstraints = false
+        mysticView.anchorTo()
         
         logoStack.addArrangedSubview(mysticView)
         logoStack.addArrangedSubview(companionView)
+        logoStack.alignment = .fill
+        logoStack.axis = .horizontal
+        logoStack.distribution = .fillProportionally
+        logoStack.spacing = 10
         
-        view.addSubview(logoStack)
-        
-        logoStack.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
-        logoStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        logoStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        logoStack.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        logoStack.anchorTo(view,
+                           top: view.topAnchor,
+                           leading: view.leadingAnchor,
+                           trailing: view.trailingAnchor,
+                           padding: .init(top: topLayoutConstant, left: 10, bottom: 0, right: 10),
+                           size: .init(width: 0, height: 50))
     }
     
     /// Configures the login form
@@ -180,7 +164,6 @@ extension LoginVC {
         usernameField.placeholder = "username"
         usernameField.autocapitalizationType = .none
         usernameField.clipsToBounds = true
-        usernameField.translatesAutoresizingMaskIntoConstraints = false
         
         emailField.delegate = self
         emailField.backgroundColor = theme.color1
@@ -190,7 +173,6 @@ extension LoginVC {
         emailField.autocapitalizationType = .none
         emailField.autocorrectionType = .no
         emailField.clipsToBounds = true
-        emailField.translatesAutoresizingMaskIntoConstraints = false
         
         passwordField.delegate = self
         passwordField.backgroundColor = theme.color1
@@ -200,46 +182,45 @@ extension LoginVC {
         passwordField.autocapitalizationType = .none
         passwordField.isSecureTextEntry = true
         passwordField.clipsToBounds = true
-        passwordField.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(usernameField)
-        view.addSubview(emailField)
-        view.addSubview(passwordField)
+        usernameField.anchorTo(view,
+                               top: logoStack.bottomAnchor,
+                               leading: view.leadingAnchor,
+                               trailing: view.trailingAnchor,
+                               padding: .init(top: 30, left: 20, bottom: 0, right: 20),
+                               size: .init(width: 0, height: 30))
         
-        usernameField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        usernameField.topAnchor.constraint(equalTo: logoStack.bottomAnchor, constant: 10).isActive = true
-        usernameField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        usernameField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        emailField.anchorTo(view,
+                            top: usernameField.bottomAnchor,
+                            leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
+                            padding: .init(top: 30, left: 20, bottom: 0, right: 20),
+                            size: .init(width: 0, height: 30))
         
-        emailField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        emailField.topAnchor.constraint(equalTo: usernameField.bottomAnchor).isActive = true
-        emailField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        emailField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        
-        passwordField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor).isActive = true
-        passwordField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        passwordField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        passwordField.anchorTo(view,
+                               top: emailField.bottomAnchor,
+                               leading: view.leadingAnchor,
+                               trailing: view.trailingAnchor,
+                               padding: .init(top: 30, left: 20, bottom: 0, right: 20),
+                               size: .init(width: 0, height: 30))
     }
     
     /// Configures the social media buttons
     func layoutSocialMediaLoginButtons() {
         facebookLogin.readPermissions = ["public_profile", "email"]
-        facebookLogin.translatesAutoresizingMaskIntoConstraints = false
         
-        googleLogin.translatesAutoresizingMaskIntoConstraints = false
+        facebookLogin.anchorTo(view,
+                               top: passwordField.bottomAnchor,
+                               leading: view.leadingAnchor,
+                               trailing: view.trailingAnchor,
+                               padding: .init(top: 10, left: 20, bottom: 0, right: 20))
         
-        view.addSubview(facebookLogin)
-        view.addSubview(googleLogin)
-        
-        facebookLogin.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10).isActive = true
-        facebookLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        facebookLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        
-        googleLogin.topAnchor.constraint(equalTo: facebookLogin.bottomAnchor, constant: 10).isActive = true
-        googleLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        googleLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        googleLogin.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        googleLogin.anchorTo(view,
+                             top: facebookLogin.bottomAnchor,
+                             leading: view.leadingAnchor,
+                             trailing: view.trailingAnchor,
+                             padding: .init(top: 10, left: 20, bottom: 0, right: 20),
+                             size: .init(width: 0, height: 28))
     }
     
     /// Configures the menu button for HomeVC
@@ -262,8 +243,7 @@ extension LoginVC {
         
         settingsButton.addItem(item: cancel)
         settingsButton.addItem(item: register)
-        
-        view.addSubview(settingsButton)
+        settingsButton.anchorTo(view)
     }
 }
 

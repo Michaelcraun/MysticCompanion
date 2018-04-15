@@ -15,11 +15,12 @@ let fontFamily = "Georgia"
 var theme: SystemColor = .pastelGreen
 /// An enumeration of colors that make up the user's selected theme
 enum SystemColor: String {
-    case drabGray
-    case pastelBlue
-    case pastelGreen
-    case pastelPurple
-    case pastelYellow
+    case drabGray =     "Drab Gray"
+    case pastelBlue =   "Pastel Blue"
+    case pastelGreen =  "Pastel Green"
+    case pastelPurple = "Pastel Purple"
+    case pastelYellow = "Pastel Yellow"
+    static let allThemes: [SystemColor] = [.drabGray, .pastelBlue, .pastelGreen, .pastelPurple, .pastelYellow]
     
     var color: UIColor {
         switch self {

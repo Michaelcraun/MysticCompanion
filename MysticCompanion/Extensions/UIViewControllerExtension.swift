@@ -84,4 +84,16 @@ extension UIViewController {
         
         self.present(activityVC, animated: true, completion: nil)
     }
+    
+    func setBackgroundImage(_ image: UIImage?) {
+        let backgroundImageView: UIImageView = {
+            let imageView = UIImageView()
+            imageView.alpha = 0.5
+            imageView.contentMode = .scaleAspectFill
+            imageView.image = image
+            return imageView
+        }()
+        
+        backgroundImageView.fillTo(self.view)
+    }
 }

@@ -20,6 +20,7 @@ class TrackerView: UIView {
         case sky
         case victory
         case wild
+        static let allTrackerTypes: [TrackerType] = [.animal, .decay, .forest, .growth, .mana, .sky, .victory, .wild]
         
         /// The UIImage associated with the TrackerType
         var icon: UIImage {

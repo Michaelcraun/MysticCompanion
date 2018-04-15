@@ -88,26 +88,10 @@ class EndGameVC: UIViewController, Alertable, Connection {
 extension EndGameVC {
     /// The central point of layout methods
     private func layoutView() {
-        layoutBackground()
+        setBackgroundImage(#imageLiteral(resourceName: "endGameBG"))
         layoutPlayersTable()
         layoutMenuButton(gameState: gameState)
         layoutAds()
-    }
-    
-    /// Configures the background image
-    private func layoutBackground() {
-        let backgroundImage = UIImageView()
-        backgroundImage.image = #imageLiteral(resourceName: "endGameBG")
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.alpha = 0.5
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(backgroundImage)
-        
-        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     /// Configures the players table
@@ -120,8 +104,6 @@ extension EndGameVC {
         playersTable.backgroundColor = .clear
         playersTable.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(playersTable)
-        
         var tableBottomBuffer: CGFloat {
             switch PREMIUM_PURCHASED {
             case true: return menuButton.frame.height + 30
@@ -129,10 +111,11 @@ extension EndGameVC {
             }
         }
         
-        playersTable.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
-        playersTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        playersTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        playersTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tableBottomBuffer).isActive = true
+        playersTable.anchorTo(view, top: view.topAnchor,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              padding: .init(top: topLayoutConstant, left: 10, bottom: -tableBottomBuffer, right: -10))
         
         playersTable.animate()
     }
@@ -178,25 +161,23 @@ extension EndGameVC {
             menuButton.addItem(item: share)
         }
         
-        view.addSubview(menuButton)
+        menuButton.anchorTo(view)
     }
     
     /// If user hasn't purchased premium, configures ads and constrains the banner to the bottom of the screen
     private func layoutAds() {
         if !PREMIUM_PURCHASED {
             adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
-            //            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
+//            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
             adBanner.backgroundColor = .white
             adBanner.rootViewController = self
             adBanner.load(GADRequest())
-            adBanner.translatesAutoresizingMaskIntoConstraints = false
-            
-            view.addSubview(adBanner)
-            
-            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomLayoutConstant).isActive = true
-            adBanner.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-            adBanner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-            adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            adBanner.anchorTo(view,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              padding: .init(top: 0, left: 0, bottom: bottomLayoutConstant, right: 0),
+                              size: .init(width: 0, height: 50))
         }
     }
 }

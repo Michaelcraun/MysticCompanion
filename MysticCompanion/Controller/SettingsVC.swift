@@ -20,9 +20,9 @@ import FirebaseDatabase
 class SettingsVC: UIViewController, Connection {
     //MARK: - UI Variables
     let backgroundImage = UIImageView()
+    let bannerView = UIView()
     let currentVersion = UILabel()
     let upgradeDetails = UILabel()
-    let bannerView = UIView()
     let previousGamesTable = UITableView()
     let menuButton = KCFloatingActionButton()
     var purchaseButtonsAreEnabled = false
@@ -77,7 +77,7 @@ class SettingsVC: UIViewController, Connection {
 extension SettingsVC {
     /// The central point for layout on SettingsVC
     func layoutView() {
-        layoutBackgroundImage()
+        setBackgroundImage(#imageLiteral(resourceName: "settingsBG"))
         layoutTopBanner()
         
         if PREMIUM_PURCHASED {
@@ -89,43 +89,24 @@ extension SettingsVC {
         layoutSettingsButton()
     }
     
-    /// Configures the background image for SettingsVC
-    func layoutBackgroundImage() {
-        backgroundImage.image = #imageLiteral(resourceName: "settingsBG")
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.alpha = 0.5
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(backgroundImage)
-        
-        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
     /// Configures the top banner for SettingsVC
     func layoutTopBanner() {
         bannerView.backgroundColor = UIColor(red: 255 / 255, green: 81 / 255, blue: 72 / 255, alpha: 1)
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.anchorTo(view,
+                            top: view.topAnchor,
+                            leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
+                            size: .init(width: 0, height: 50))
         
         let pageTitleLabel = UILabel()
         pageTitleLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 10)
         pageTitleLabel.text = "SETTINGS"
         pageTitleLabel.textAlignment = .center
-        pageTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(bannerView)
-        bannerView.addSubview(pageTitleLabel)
-        
-        bannerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        bannerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        bannerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        bannerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        pageTitleLabel.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: -5).isActive = true
-        pageTitleLabel.leftAnchor.constraint(equalTo: bannerView.leftAnchor).isActive = true
-        pageTitleLabel.rightAnchor.constraint(equalTo: bannerView.rightAnchor).isActive = true
+        pageTitleLabel.anchorTo(bannerView,
+                                bottom: bannerView.bottomAnchor,
+                                leading: bannerView.leadingAnchor,
+                                trailing: bannerView.trailingAnchor,
+                                padding: .init(top: 0, left: 0, bottom: 5, right: 0))
     }
     
     /// Configures upgrade labels if user has not purchased premium
@@ -134,24 +115,21 @@ extension SettingsVC {
         currentVersion.numberOfLines = 0
         currentVersion.textAlignment = .center
         currentVersion.text = "You have not purchased the premium edition of MysticCompanion..."
-        currentVersion.translatesAutoresizingMaskIntoConstraints = false
+        currentVersion.anchorTo(view,
+                                top: bannerView.bottomAnchor,
+                                leading: view.leadingAnchor,
+                                trailing: view.trailingAnchor,
+                                padding: .init(top: 10, left: 20, bottom: 0, right: 20))
         
         upgradeDetails.font = UIFont(name: fontFamily, size: 15)
         upgradeDetails.numberOfLines = 0
         upgradeDetails.textAlignment = .center
         upgradeDetails.text = "After upgrading to the premium version, you'll be able to set a custom amount of victory points for your games and you'll be able to track your games. Please consider upgrading!"
-        upgradeDetails.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(currentVersion)
-        view.addSubview(upgradeDetails)
-        
-        currentVersion.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 10).isActive = true
-        currentVersion.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        currentVersion.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        
-        upgradeDetails.topAnchor.constraint(equalTo: currentVersion.bottomAnchor, constant: 10).isActive = true
-        upgradeDetails.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        upgradeDetails.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        upgradeDetails.anchorTo(view,
+                                top: currentVersion.bottomAnchor,
+                                leading: view.leadingAnchor,
+                                trailing: view.trailingAnchor,
+                                padding: .init(top: 10, left: 20, bottom: 0, right: 20))
     }
     
     /// Configures previous games table if user has purchased premium
@@ -162,14 +140,12 @@ extension SettingsVC {
         previousGamesTable.backgroundColor = .clear
         previousGamesTable.allowsSelection = false
         previousGamesTable.register(PreviousGameCell.self, forCellReuseIdentifier: "previousGameCell")
-        previousGamesTable.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(previousGamesTable)
-        
-        previousGamesTable.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 10).isActive = true
-        previousGamesTable.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        previousGamesTable.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        previousGamesTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        previousGamesTable.anchorTo(view,
+                                    top: bannerView.bottomAnchor,
+                                    bottom: view.bottomAnchor,
+                                    leading: view.leadingAnchor,
+                                    trailing: view.trailingAnchor,
+                                    padding: .init(top: 10, left: 20, bottom: 20, right: 20))
     }
     
     /// Configures the menu button for SettingsVC
@@ -241,7 +217,7 @@ extension SettingsVC {
         menuButton.addItem(item: changeTheme)
         menuButton.addItem(item: purchase)
         menuButton.addItem(item: restore)
-        view.addSubview(menuButton)
+        menuButton.anchorTo(view)
     }
     
     /// Configures the theme selection view
@@ -261,43 +237,18 @@ extension SettingsVC {
         themeSelector.setPaddingY(viewHasAds: false)
         themeSelector.setMenuButtonColor()
         
-        let drabGray = KCFloatingActionButtonItem()
-        drabGray.setButtonOfType(.drabGray)
-        drabGray.handler = { item in
-            self.setTheme(.drabGray)
+        for theme in SystemColor.allThemes {
+            let themeItem = KCFloatingActionButtonItem()
+            themeItem.buttonColor = theme.color
+            themeItem.title = theme.rawValue
+            themeItem.handler = { item in
+                self.setTheme(theme)
+            }
+            
+            themeSelector.addItem(item: themeItem)
         }
         
-        let pastelBlue = KCFloatingActionButtonItem()
-        pastelBlue.setButtonOfType(.pastelBlue)
-        pastelBlue.handler = { item in
-            self.setTheme(.pastelBlue)
-        }
-        
-        let pastelGreen = KCFloatingActionButtonItem()
-        pastelGreen.setButtonOfType(.pastelGreen)
-        pastelGreen.handler = { item in
-            self.setTheme(.pastelGreen)
-        }
-        
-        let pastelPurple = KCFloatingActionButtonItem()
-        pastelPurple.setButtonOfType(.pastelPurple)
-        pastelPurple.handler = { item in
-            self.setTheme(.pastelPurple)
-        }
-        
-        let pastelYellow = KCFloatingActionButtonItem()
-        pastelYellow.setButtonOfType(.pastelYellow)
-        pastelYellow.handler = { item in
-            self.setTheme(.pastelYellow)
-        }
-        
-        themeSelector.addItem(item: drabGray)
-        themeSelector.addItem(item: pastelBlue)
-        themeSelector.addItem(item: pastelGreen)
-        themeSelector.addItem(item: pastelPurple)
-        themeSelector.addItem(item: pastelYellow)
-        
-        blurEffectView.contentView.addSubview(themeSelector)
+        themeSelector.anchorTo(blurEffectView.contentView)
     }
 }
 

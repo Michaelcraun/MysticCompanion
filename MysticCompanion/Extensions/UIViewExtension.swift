@@ -65,3 +65,38 @@ extension UIView {
         self.addSubview(blurEffectView)
     }
 }
+
+//-----------------------
+// MARK: - Layout Methods
+//-----------------------
+extension UIView {
+    func fillTo(_ view: UIView, padding: UIEdgeInsets = .zero) {
+        view.addSubview(self)
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: view.topAnchor, constant: padding.top).isActive = true
+        self.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding.bottom).isActive = true
+        self.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -padding.left).isActive = true
+        self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding.right).isActive = true
+    }
+    
+    func anchorTo(_ view: UIView? = nil,
+                  top: NSLayoutYAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil,
+                  leading: NSLayoutXAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil,
+                  centerX: NSLayoutXAxisAnchor? = nil, centerY: NSLayoutYAxisAnchor? = nil,
+                  padding: UIEdgeInsets = .zero, size: CGSize = .zero) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        if let view = view { view.addSubview(self) }
+        if let top = top { topAnchor.constraint(equalTo: top, constant: padding.top).isActive = true }
+        if let leading = leading { leadingAnchor.constraint(equalTo: leading, constant: padding.left).isActive = true }
+        if let trailing = trailing { trailingAnchor.constraint(equalTo: trailing, constant: -padding.right).isActive = true }
+        if let bottom = bottom { bottomAnchor.constraint(equalTo: bottom, constant: -padding.bottom).isActive = true }
+        
+        if let centerX = centerX { centerXAnchor.constraint(equalTo: centerX).isActive = true }
+        if let centerY = centerY { centerYAnchor.constraint(equalTo: centerY).isActive = true }
+        
+        if size.width != 0 { widthAnchor.constraint(equalToConstant: size.width).isActive = true }
+        if size.height != 0 { heightAnchor.constraint(equalToConstant: size.height).isActive = true }
+    }
+}

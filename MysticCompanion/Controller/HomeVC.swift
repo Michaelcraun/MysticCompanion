@@ -244,7 +244,7 @@ extension HomeVC: CLLocationManagerDelegate {
 extension HomeVC {
     /// The central point for HomeVC layout
     func layoutView() {
-        layoutBackgroundImage()
+        setBackgroundImage(#imageLiteral(resourceName: "homeBG"))
         layoutPlayerIcon()
         layoutPlayerName()
         layoutDeckChoices()
@@ -262,46 +262,27 @@ extension HomeVC {
         needsInitialized = false
     }
     
-    /// Configures the background image for HomeVC
-    func layoutBackgroundImage() {
-        backgroundImage.image = #imageLiteral(resourceName: "homeBG")
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.alpha = 0.5
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(backgroundImage)
-        
-        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
     /// Configures the player icon (the one at the top of the screen)
     func layoutPlayerIcon() {
         playerIcon.backgroundColor = DeckType.beastbrothers.color
         playerIcon.addImage(DeckType.beastbrothers.image, withSizeModifier: 20)
-        playerIcon.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(playerIcon)
-        
-        playerIcon.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        playerIcon.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        playerIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutConstant).isActive = true
-        playerIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        playerIcon.anchorTo(view,
+                            top: view.topAnchor,
+                            centerX: view.centerXAnchor,
+                            padding: .init(top: topLayoutConstant, left: 0, bottom: 0, right: 0),
+                            size: .init(width: 100, height: 100))
     }
     
     /// Configures the username label
     func layoutPlayerName() {
         playerName.textColor = .darkText
         playerName.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
-        playerName.translatesAutoresizingMaskIntoConstraints = false
         playerName.text = "playerName"
         
-        view.addSubview(playerName)
-        
-        playerName.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        playerName.topAnchor.constraint(equalTo: playerIcon.bottomAnchor, constant: 20).isActive = true
+        playerName.anchorTo(view,
+                            top: playerIcon.bottomAnchor,
+                            centerX: view.centerXAnchor,
+                            padding: .init(top: 20, left: 0, bottom: 0, right: 0))
     }
     
     /// Configures the stack view that contains the user's deck options
@@ -323,30 +304,22 @@ extension HomeVC {
         beastbrothersIcon.alpha = 0
         beastbrothersIcon.backgroundColor = DeckType.beastbrothers.color
         beastbrothersIcon.addImage(DeckType.beastbrothers.image, withSizeModifier: 20)
-        beastbrothersIcon.translatesAutoresizingMaskIntoConstraints = false
-        beastbrothersIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        beastbrothersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        beastbrothersIcon.anchorTo(size: .init(width: 50, height: 50))
         
         dawnseekersIcon.alpha = 0
         dawnseekersIcon.backgroundColor = DeckType.dawnseekers.secondaryColor
         dawnseekersIcon.addImage(DeckType.dawnseekers.image, withSizeModifier: 20)
-        dawnseekersIcon.translatesAutoresizingMaskIntoConstraints = false
-        dawnseekersIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        dawnseekersIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        dawnseekersIcon.anchorTo(size: .init(width: 50, height: 50))
         
         lifewardensIcon.alpha = 0
         lifewardensIcon.backgroundColor = DeckType.lifewardens.secondaryColor
         lifewardensIcon.addImage(DeckType.lifewardens.image, withSizeModifier: 20)
-        lifewardensIcon.translatesAutoresizingMaskIntoConstraints = false
-        lifewardensIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        lifewardensIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        lifewardensIcon.anchorTo(size: .init(width: 50, height: 50))
         
         waveguardsIcon.alpha = 0
         waveguardsIcon.backgroundColor = DeckType.waveguards.secondaryColor
         waveguardsIcon.addImage(DeckType.waveguards.image, withSizeModifier: 20)
-        waveguardsIcon.translatesAutoresizingMaskIntoConstraints = false
-        waveguardsIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        waveguardsIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        waveguardsIcon.anchorTo(size: .init(width: 50, height: 50))
         
         deckChoicesStackView.axis = UILayoutConstraintAxis.horizontal
         deckChoicesStackView.distribution = .equalSpacing
@@ -356,14 +329,11 @@ extension HomeVC {
         deckChoicesStackView.addArrangedSubview(dawnseekersIcon)
         deckChoicesStackView.addArrangedSubview(lifewardensIcon)
         deckChoicesStackView.addArrangedSubview(waveguardsIcon)
-        deckChoicesStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(deckChoicesStackView)
-        
-        deckChoicesStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        deckChoicesStackView.topAnchor.constraint(equalTo: playerName.bottomAnchor, constant: 10).isActive = true
-        deckChoicesStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        deckChoicesStackView.widthAnchor.constraint(equalToConstant: 230).isActive = true
+        deckChoicesStackView.anchorTo(view,
+                                      top: playerName.bottomAnchor,
+                                      centerX: view.centerXAnchor,
+                                      padding: .init(top: 10, left: 0, bottom: 0, right: 0),
+                                      size: .init(width: 230, height: 50))
         
         Player.instance.deck = previousDeck
         setPlayerIcon(withDeck: previousDeck)
@@ -427,8 +397,7 @@ extension HomeVC {
         menuButton.addItem(item: statistics)
         menuButton.addItem(item: startGame)
         menuButton.addItem(item: joinGame)
-        
-        view.addSubview(menuButton)
+        menuButton.anchorTo(view)
     }
     
     /// Configures new view for game setup when user hosts a game
@@ -476,8 +445,8 @@ extension HomeVC {
         vpSelector.addItem(item: cancel)
         vpSelector.addItem(item: standard)
         vpSelector.addItem(item: custom)
+        vpSelector.anchorTo(blurEffectView.contentView)
         
-        blurEffectView.contentView.addSubview(vpSelector)
         blurEffectView.fadeAlphaTo(1, withDuration: 0.2)
     }
     
@@ -525,14 +494,11 @@ extension HomeVC {
         
         menuButton.addItem(item: cancel)
         menuButton.addItem(item: done)
-        
-        view.addSubview(vpStepper)
-        view.addSubview(menuButton)
-        
-        vpStepper.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        vpStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        vpStepper.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        vpStepper.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        menuButton.anchorTo(view)
+        vpStepper.anchorTo(view,
+                           centerX: view.centerXAnchor,
+                           centerY: view.centerYAnchor,
+                           size: .init(width: 150, height: 50))
     }
     
     /// Configures banner ads if the user hasn't purchased premium
@@ -546,19 +512,18 @@ extension HomeVC {
             adBanner.backgroundColor = .white
             adBanner.rootViewController = self
             adBanner.load(GADRequest())
-            adBanner.translatesAutoresizingMaskIntoConstraints = false
-            
-            view.addSubview(adBanner)
-            
-            adBanner.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            adBanner.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            adBanner.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomLayoutConstant).isActive = true
+            adBanner.anchorTo(view,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              padding: .init(top: 0, left: 0, bottom: bottomLayoutConstant, right: 0),
+                              size: .init(width: 0, height: 50))
         }
     }
     
     /// Configures the game lobby view and the associated table
     func layoutGameLobby() {
-        let gameLobbyBottomLayoutConstant = bottomLayoutConstant + adBuffer - 80
+        let gameLobbyBottomLayoutConstant = bottomLayoutConstant + adBuffer + 80
         
         gameLobby = UIView()
         gameLobby.backgroundColor = .clear
@@ -576,18 +541,13 @@ extension HomeVC {
         gameLobbyTable.translatesAutoresizingMaskIntoConstraints = false
         
         gameLobby.addBlurEffect()
-        gameLobby.addSubview(gameLobbyTable)
-        view.addSubview(gameLobby)
-        
-        gameLobby.topAnchor.constraint(equalTo: deckChoicesStackView.bottomAnchor, constant: 20).isActive = true
-        gameLobby.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        gameLobby.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        gameLobby.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: gameLobbyBottomLayoutConstant).isActive = true
-        
-        gameLobbyTable.topAnchor.constraint(equalTo: gameLobby.topAnchor, constant: 5).isActive = true
-        gameLobbyTable.leftAnchor.constraint(equalTo: gameLobby.leftAnchor, constant: 5).isActive = true
-        gameLobbyTable.rightAnchor.constraint(equalTo: gameLobby.rightAnchor, constant: -5).isActive = true
-        gameLobbyTable.bottomAnchor.constraint(equalTo: gameLobby.bottomAnchor, constant: -5).isActive = true
+        gameLobby.anchorTo(view,
+                           top: deckChoicesStackView.bottomAnchor,
+                           bottom: view.bottomAnchor,
+                           leading: view.leadingAnchor,
+                           trailing: view.trailingAnchor,
+                           padding: .init(top: 20, left: 20, bottom: gameLobbyBottomLayoutConstant, right: 20))
+        gameLobbyTable.fillTo(gameLobby, padding: .init(top: 5, left: 5, bottom: 5, right: 5))
     }
     
     /// Handles animating the view (slide in from left) when the app first loads and when the user quits the game
