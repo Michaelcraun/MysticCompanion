@@ -8,6 +8,8 @@
 
 import UIKit
 
+extension UIViewController: Alertable, Connection {  }
+
 extension UIViewController {
     /// Presents or dismisses a dim screen with an acitivity indicator
     /// - parameter status: A Boolean value determining whether the loadingView should be displayed or removed

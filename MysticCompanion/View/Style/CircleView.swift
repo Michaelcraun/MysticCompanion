@@ -25,16 +25,12 @@ class CircleView: UIView {
     /// modifier) to the CircleView
     /// - parameter image: The UIImage assigned to the CircleView
     /// - parameter sizeMod: A CGFloat value representing the size to which the image is modified by
-    func addImage(_ image: UIImage, withSizeModifier sizeMod: CGFloat) {
+    func addImage(_ image: UIImage, withSize size: CGFloat) {
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(imageView)
-        
-        imageView.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -sizeMod).isActive = true
-        imageView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -sizeMod).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        imageView.anchorTo(self,
+                           centerX: self.centerXAnchor,
+                           centerY: self.centerYAnchor,
+                           size: .init(width: size, height: size))
     }
 }

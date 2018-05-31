@@ -36,7 +36,7 @@ class GameHandler {
     /// Creates and/or updates a specific on Firebase
     /// - parameter uid: The unique identifier specific to an individual user
     /// - parameter userData: A Dictionary that contains the data with which to update the specified user
-    func createFirebaseDBUser(uid: String, userData: Dictionary<String,Any>) {
+    func createFirebaseDBUser(uid: String, userData: [String : Any]) {
         REF_USER.child(uid).updateChildValues(userData)
     }
     
@@ -56,7 +56,7 @@ class GameHandler {
     /// Creates and/or updates a specific game on Firebase
     /// - parameter key: The unique identifier specific to an individual game
     /// - parameter gameData: A Dictionary that contains the data with which to update the specified game
-    func updateFirebaseDBGame(key: String, gameData: Dictionary<String,Any>) {
+    func updateFirebaseDBGame(key: String, gameData: [String : Any]) {
         REF_GAME.child(key).updateChildValues(gameData)
     }
     
@@ -72,7 +72,7 @@ class GameHandler {
     /// - parameter playersArray: An Array of Dictionary values representing the players in the specified game
     /// - parameter winners: An Array of String values representing the winners in the specified game
     /// - parameter date: The Date value representing the day and time the game was played
-    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [Dictionary<String,AnyObject>], andWinners winners: [String], andDateString date: String?) {
+    func createFirebaseDBData(forGame key: String, withPlayers playersArray: [[String : AnyObject]], andWinners winners: [String], andDateString date: String?) {
         var gameKeyAddendum: String {
             if date == nil {
                 return generateDateAddendum()
@@ -81,7 +81,7 @@ class GameHandler {
             }
         }
         let gameKey = "\(gameKeyAddendum)-\(key)"
-        var newPlayersArray = [Dictionary<String,AnyObject>]()
+        var newPlayersArray = [[String : AnyObject]]()
         
         for player in playersArray {
             guard let username = player["username"] as? String else { return }
@@ -90,15 +90,15 @@ class GameHandler {
             guard let boxVictory = player["boxVictory"] as? Int else { return }
             let totalVictory = victoryPoints + boxVictory
             
-            let newPlayer: Dictionary<String,AnyObject> = ["username" : username as AnyObject,
-                                                           "deck" : deck as AnyObject,
-                                                           "victoryPoints" : totalVictory as AnyObject]
+            let newPlayer: [String : AnyObject] = ["username" : username as AnyObject,
+                                                   "deck" : deck as AnyObject,
+                                                   "victoryPoints" : totalVictory as AnyObject]
             
             newPlayersArray.append(newPlayer)
         }
         
-        let gameData: Dictionary<String,AnyObject> = ["players" : newPlayersArray as AnyObject,
-                                                      "winners" : winners as AnyObject]
+        let gameData: [String : AnyObject] = ["players" : newPlayersArray as AnyObject,
+                                              "winners" : winners as AnyObject]
         
         REF_DATA.child(gameKey).updateChildValues(gameData)
     }

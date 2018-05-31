@@ -24,28 +24,22 @@ class GameLobbyCell: UITableViewCell {
         let waitingForPlayersLabel = UILabel()
         waitingForPlayersLabel.font = UIFont(name: fontFamily, size: 15)
         waitingForPlayersLabel.text = message
-        waitingForPlayersLabel.translatesAutoresizingMaskIntoConstraints = false
+        waitingForPlayersLabel.anchorTo(self,
+                                        top: self.topAnchor,
+                                        centerX: self.centerXAnchor)
         
         let spinner = UIActivityIndicatorView()
         spinner.color = .black
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(waitingForPlayersLabel)
-        self.addSubview(spinner)
-        
-        waitingForPlayersLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        waitingForPlayersLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
-        spinner.topAnchor.constraint(equalTo: waitingForPlayersLabel.bottomAnchor).isActive = true
-        spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        spinner.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        
+        spinner.anchorTo(self,
+                         top: waitingForPlayersLabel.bottomAnchor,
+                         bottom: self.bottomAnchor,
+                         centerX: self.centerXAnchor)
         spinner.startAnimating()
     }
 
     /// Configures the cell for the host to display a user that has joined the game
     /// - parameter user: A Dictionary value that represents a specific user
-    func layoutCellForHost(withUser user: Dictionary<String,AnyObject>) {
+    func layoutCellForHost(withUser user: [String : AnyObject]) {
         clearCell()
         self.user = user
         
@@ -66,28 +60,25 @@ class GameLobbyCell: UITableViewCell {
         playerStack.axis = .horizontal
         playerStack.distribution = .equalSpacing
         playerStack.spacing = 5
-        playerStack.translatesAutoresizingMaskIntoConstraints = false
+        playerStack.anchorTo(self,
+                             top: self.topAnchor,
+                             bottom: self.bottomAnchor,
+                             centerX: self.centerXAnchor,
+                             padding: .init(top: 5, left: 0, bottom: 5, right: 0))
         
         let deckIcon = CircleView()
-        deckIcon.addImage((deckType?.image)!, withSizeModifier: 10)
+        deckIcon.addImage((deckType?.image)!, withSize: 20)
         deckIcon.backgroundColor = deckType?.color
-        deckIcon.translatesAutoresizingMaskIntoConstraints = false
+        deckIcon.anchorTo(size: .init(width: 30, height: 30))
         
         let usernameLabel = UILabel()
         usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
         usernameLabel.text = username
         usernameLabel.textAlignment = .center
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        deckIcon.anchorTo()
         
         playerStack.addArrangedSubview(deckIcon)
         playerStack.addArrangedSubview(usernameLabel)
-        self.addSubview(playerStack)
-        
-        playerStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        playerStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        playerStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
-        deckIcon.widthAnchor.constraint(equalTo: deckIcon.heightAnchor).isActive = true
     }
     
     /// Configures a cell to display the option to start the game to the host of the game
@@ -98,95 +89,84 @@ class GameLobbyCell: UITableViewCell {
         startLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
         startLabel.text = "Start Game!"
         startLabel.textAlignment = .center
-        startLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(startLabel)
-        
-        startLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        startLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 5).isActive = true
-        startLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        startLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 5).isActive = true
+        startLabel.fillTo(self, padding: .init(top: 5, left: 5, bottom: 5, right: 5))
     }
     
     /// Configures a cell to display a nearby, joinable game
     /// - parameter game: A Dictionary value containing the specified game's data
-    func layoutCellForGuest(withGame game: Dictionary<String,Any>) {
+    func layoutCellForGuest(withGame game: [String : Any]) {
         clearCell()
         
         guard let hostName = game["username"] as? String else { return }
         guard let winCondition = game["winCondition"] as? String else { return }
         guard let vpGoal = game["vpGoal"] as? Int else { return }
-        guard let playersArray = game["players"] as? [Dictionary<String,AnyObject>] else { return }
-        
-        let deckStack = configureDeckChoicesStackView(withPlayers: playersArray)
-        var winConditionString: String {
-            switch winCondition {
-            case "custom": return "custom (\(vpGoal))"
-            case "standard": return "standard"
-            default: return ""
-            }
-        }
+        guard let playersArray = game["players"] as? [[String : AnyObject]] else { return }
         
         let gameHostLabel = UILabel()
         gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
         gameHostLabel.text = hostName
-        gameHostLabel.translatesAutoresizingMaskIntoConstraints = false
+        gameHostLabel.anchorTo(self,
+                               top: self.topAnchor,
+                               leading: self.leadingAnchor,
+                               padding: .init(top: 5, left: 5, bottom: 0, right: 0))
+        
+        let deckStack = configureDeckChoicesStackView(withPlayers: playersArray)
+        deckStack.anchorTo(self,
+                           top: self.topAnchor,
+                           leading: gameHostLabel.trailingAnchor,
+                           padding: .init(top: 5, left: 5, bottom: 0, right: 0),
+                           size: .init(width: 85, height: 17.5))
         
         let winConditionLabel = UILabel()
         winConditionLabel.font = UIFont(name: fontFamily, size: 12)
         winConditionLabel.textAlignment = .right
-        winConditionLabel.text = winConditionString
-        winConditionLabel.translatesAutoresizingMaskIntoConstraints = false
+        winConditionLabel.text = {
+            var winConditionString: String {
+                switch winCondition {
+                case "custom": return "custom (\(vpGoal))"
+                case "standard": return "standard"
+                default: return ""
+                }
+            }
+            
+            return winConditionString
+        }()
+        winConditionLabel.anchorTo(self,
+                                   top: self.topAnchor,
+                                   trailing: self.trailingAnchor,
+                                   padding: .init(top: 5, left: 0, bottom: 0, right: 5))
         
         let playersLabel = UILabel()
-        var players: String = "" {
-            didSet {
-                playersLabel.text = players
-            }
-        }
         playersLabel.font = UIFont(name: fontFamily, size: 10)
         playersLabel.numberOfLines = 1
-        playersLabel.translatesAutoresizingMaskIntoConstraints = false
-        for i in 0..<playersArray.count {
-            if players == "" {
-                players = playersArray[i]["username"] as! String
-            } else {
-                players = "\(players), \(playersArray[i]["username"] as! String)"
+        playersLabel.text = {
+            var playersString = ""
+            for i in 0..<playersArray.count {
+                if playersString == "" {
+                    playersString = playersArray[i]["username"] as! String
+                } else {
+                    playersString = "\(playersString), \(playersArray[i]["username"] as! String)"
+                }
             }
-        }
-        
-        self.addSubview(gameHostLabel)
-        self.addSubview(winConditionLabel)
-        self.addSubview(playersLabel)
-        self.addSubview(deckStack)
-        
-        gameHostLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        gameHostLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        
-        winConditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        winConditionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        
-        playersLabel.topAnchor.constraint(equalTo: gameHostLabel.bottomAnchor, constant: 5).isActive = true
-        playersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        playersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        
-        deckStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        deckStack.leftAnchor.constraint(equalTo: gameHostLabel.rightAnchor, constant: 5).isActive = true
-        deckStack.widthAnchor.constraint(equalToConstant: 84.32).isActive = true
-        deckStack.heightAnchor.constraint(equalTo: gameHostLabel.heightAnchor).isActive = true
+            return playersString
+        }()
+        playersLabel.anchorTo(self,
+                              top: gameHostLabel.bottomAnchor,
+                              leading: self.leadingAnchor,
+                              trailing: self.trailingAnchor,
+                              padding: .init(top: 5, left: 5, bottom: 0, right: 5))
     }
     
     /// Configures a stackView to display the deck choices for a game (displays taken decks as a dim circle and
     /// available decks as a bright circle)
     /// - parameter playersArray: An Array of Dictionary values representing the player's currently in the game (used
     /// to display the available deck choices)
-    func configureDeckChoicesStackView(withPlayers playersArray: [Dictionary<String,AnyObject>]) -> UIStackView {
+    func configureDeckChoicesStackView(withPlayers playersArray: [[String : AnyObject]]) -> UIStackView {
         let deckStack = UIStackView()
         deckStack.alignment = .fill
         deckStack.axis = .horizontal
         deckStack.spacing = 5
         deckStack.distribution = .fillEqually
-        deckStack.translatesAutoresizingMaskIntoConstraints = false
         
         var beastbrothersTaken = false
         var dawnseekersTaken = false

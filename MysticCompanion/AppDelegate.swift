@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let homeVC = window?.rootViewController as? HomeVC else { return false }
                 homeVC.gameShouldAutoStart = true
                 homeVC.userIsHostingGame = userIsHostingGame
-                homeVC.checkUsername(forKey: FIRAuth.auth()?.currentUser?.uid)
+//                homeVC.firManager.checkUsername(forKey: FIRAuth.auth()?.currentUser?.uid)
                 homeVC.autoStartGame(userIsHosting: userIsHostingGame)
                 quickActionHandled = true
             }

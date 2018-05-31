@@ -28,7 +28,7 @@ class EndGamePlayersCell: UITableViewCell {
     /// input of deck victory (should be true only if cell's player is the current player and hasn't already submitted
     /// the victory contained within their deck)
     /// - parameter winners: An Array of type String that contains the username's of the winners of the game
-    func configureCell(forPlayer player: Dictionary<String,AnyObject>, shouldDisplayStepper: Bool, withWinners winners: [String]) {
+    func configureCell(forPlayer player: [String : AnyObject], shouldDisplayStepper: Bool, withWinners winners: [String]) {
         guard let username = player["username"] as? String else { return }
         guard let deck = player["deck"] as? String else { return }
         guard let currentVP = player["victoryPoints"] as? Int else { return }
@@ -48,16 +48,31 @@ class EndGamePlayersCell: UITableViewCell {
         clearCell()
 
         let playerView = UIView()
+        playerView.addBlurEffect()
         playerView.layer.cornerRadius = 10
         playerView.layer.borderColor = UIColor.black.cgColor
         playerView.layer.borderWidth = 2
         playerView.clipsToBounds = true
-        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.fillTo(self, padding: .init(top: 5, left: 5, bottom: 5, right: 5))
         
         let playerIcon = CircleView()
-        playerIcon.addImage(deckImage, withSizeModifier: 10)
+        playerIcon.addImage(deckImage, withSize: 10)
         playerIcon.backgroundColor = deckType?.color
-        playerIcon.translatesAutoresizingMaskIntoConstraints = false
+        playerIcon.anchorTo(playerView,
+                            top: playerView.topAnchor,
+                            leading: playerView.leadingAnchor,
+                            padding: .init(top: 5, left: 5, bottom: 0, right: 0),
+                            size: .init(width: 23, height: 23))
+        
+        let currentVictoryLabel = UILabel()
+        currentVictoryLabel.font = UIFont(name: fontFamily, size: 15)
+        currentVictoryLabel.textAlignment = .right
+        currentVictoryLabel.text = "\(currentVP + boxVP)"
+        currentVictoryLabel.sizeToFit()
+        currentVictoryLabel.anchorTo(playerView,
+                                     trailing: playerView.trailingAnchor,
+                                     centerY: playerIcon.centerYAnchor,
+                                     padding: .init(top: 0, left: 0, bottom: 0, right: 5))
 
         let playerUsernameLabel = UILabel()
         playerUsernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 20)
@@ -65,42 +80,15 @@ class EndGamePlayersCell: UITableViewCell {
         playerUsernameLabel.text = username
         playerUsernameLabel.sizeToFit()
         playerUsernameLabel.tag = 3030
-        playerUsernameLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        let currentVictoryLabel = UILabel()
-        currentVictoryLabel.font = UIFont(name: fontFamily, size: 15)
-        currentVictoryLabel.textAlignment = .right
-        currentVictoryLabel.text = "\(currentVP + boxVP)"
-        currentVictoryLabel.sizeToFit()
-        currentVictoryLabel.translatesAutoresizingMaskIntoConstraints = false
+        playerUsernameLabel.anchorTo(playerView,
+                                     top: playerView.topAnchor,
+                                     leading: playerIcon.trailingAnchor,
+                                     trailing: currentVictoryLabel.leadingAnchor,
+                                     padding: .init(top: 5, left: 5, bottom: 0, right: 5))
 
         let finishedImage = UIImageView()
         finishedImage.image = #imageLiteral(resourceName: "doneIcon")
         finishedImage.contentMode = .scaleAspectFit
-        finishedImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(playerView)
-        playerView.addBlurEffect()
-        playerView.addSubview(playerIcon)
-        playerView.addSubview(currentVictoryLabel)
-        playerView.addSubview(playerUsernameLabel)
-
-        playerView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        playerView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        playerView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        playerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        
-        playerIcon.heightAnchor.constraint(equalToConstant: 23).isActive = true
-        playerIcon.widthAnchor.constraint(equalToConstant: 23).isActive = true
-        playerIcon.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
-        playerIcon.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
-        
-        currentVictoryLabel.centerYAnchor.constraint(equalTo: playerIcon.centerYAnchor).isActive = true
-        currentVictoryLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
-        
-        playerUsernameLabel.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
-        playerUsernameLabel.leftAnchor.constraint(equalTo: playerIcon.rightAnchor, constant: 5).isActive = true
-        playerUsernameLabel.rightAnchor.constraint(equalTo: currentVictoryLabel.leftAnchor, constant: -5).isActive = true
         
         if username == Player.instance.username {
             if shouldDisplayStepper {
@@ -111,51 +99,43 @@ class EndGamePlayersCell: UITableViewCell {
                 deckVictoryStepper.labelBackgroundColor = theme.color4
                 deckVictoryStepper.maximumValue = 500
                 deckVictoryStepper.minimumValue = -500
-                deckVictoryStepper.translatesAutoresizingMaskIntoConstraints = false
-                
-                playerView.addSubview(deckVictoryStepper)
-                
-                deckVictoryStepper.heightAnchor.constraint(equalToConstant: 25).isActive = true
-                deckVictoryStepper.widthAnchor.constraint(equalToConstant: 150).isActive = true
-                deckVictoryStepper.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-                deckVictoryStepper.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+                deckVictoryStepper.anchorTo(playerView,
+                                            bottom: playerView.bottomAnchor,
+                                            centerX: playerView.centerXAnchor,
+                                            padding: .init(top: 0, left: 0, bottom: 5, right: 0),
+                                            size: .init(width: 150, height: 25))
             } else {
-                playerView.addSubview(finishedImage)
-                
-                finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
-                finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
-                finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-                finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+                finishedImage.anchorTo(playerView,
+                                       bottom: playerView.bottomAnchor,
+                                       centerX: playerView.centerXAnchor,
+                                       padding: .init(top: 0, left: 0, bottom: 5, right: 0),
+                                       size: .init(width: 50, height: 50))
             }
         } else {
             if finished {
-                playerView.addSubview(finishedImage)
-                
-                finishedImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
-                finishedImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
-                finishedImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-                finishedImage.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -5).isActive = true
+                finishedImage.anchorTo(playerView,
+                                       bottom: playerView.bottomAnchor,
+                                       centerX: playerView.centerXAnchor,
+                                       padding: .init(top: 0, left: 0, bottom: 5, right: 0),
+                                       size: .init(width: 50, height: 50))
             } else {
+                playerView.addBlurEffect()
+                
                 let waitingOnPlayerLabel = UILabel()
                 waitingOnPlayerLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
                 waitingOnPlayerLabel.textAlignment = .center
                 waitingOnPlayerLabel.text = "Waiting on \(username)..."
-                waitingOnPlayerLabel.translatesAutoresizingMaskIntoConstraints = false
+                waitingOnPlayerLabel.anchorTo(playerView,
+                                              top: playerView.topAnchor,
+                                              leading: playerView.leadingAnchor,
+                                              trailing: playerView.trailingAnchor,
+                                              padding: .init(top: 5, left: 5, bottom: 0, right: 5))
                 
                 let activityIndicator = UIActivityIndicatorView()
                 activityIndicator.color = .black
-                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-                
-                playerView.addBlurEffect()
-                playerView.addSubview(waitingOnPlayerLabel)
-                playerView.addSubview(activityIndicator)
-                
-                waitingOnPlayerLabel.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 5).isActive = true
-                waitingOnPlayerLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 5).isActive = true
-                waitingOnPlayerLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -5).isActive = true
-                
-                activityIndicator.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
-                activityIndicator.centerYAnchor.constraint(equalTo: playerView.centerYAnchor).isActive = true
+                activityIndicator.anchorTo(playerView,
+                                           centerX: playerView.centerXAnchor,
+                                           centerY: playerView.centerYAnchor)
                 activityIndicator.startAnimating()
             }
         }
@@ -165,14 +145,11 @@ class EndGamePlayersCell: UITableViewCell {
                 let winnerImage = UIImageView()
                 winnerImage.image = #imageLiteral(resourceName: "winner")
                 winnerImage.contentMode = .scaleAspectFit
-                winnerImage.translatesAutoresizingMaskIntoConstraints = false
-                
-                playerView.addSubview(winnerImage)
-                
-                winnerImage.heightAnchor.constraint(equalToConstant: self.frame.height / 3).isActive = true
-                winnerImage.widthAnchor.constraint(equalToConstant: self.frame.width).isActive = true
-                winnerImage.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: self.frame.height / 4).isActive = true
-                winnerImage.rightAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+                winnerImage.anchorTo(playerView,
+                                     top: playerView.topAnchor,
+                                     trailing: playerView.leadingAnchor,
+                                     padding: .init(top: 20, left: 0, bottom: 0, right: 0),
+                                     size: .init(width: self.frame.width, height: self.frame.height / 3))
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                     UIView.animate(withDuration: 0.5, animations: {

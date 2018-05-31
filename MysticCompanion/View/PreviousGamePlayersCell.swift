@@ -34,9 +34,24 @@ class PreviousGamePlayersCell: UITableViewCell {
         }
         
         let deckView = CircleView()
-        deckView.addImage((deckType?.image)!, withSizeModifier: 6)
+        deckView.addImage((deckType?.image)!, withSize: 6)
         deckView.backgroundColor = deckType?.color
-        deckView.translatesAutoresizingMaskIntoConstraints = false
+        deckView.anchorTo(self,
+                          top: self.topAnchor,
+                          bottom: self.bottomAnchor,
+                          leading: self.leadingAnchor,
+                          padding: .init(top: 2, left: 2, bottom: 2, right: 0),
+                          size: .init(width: deckView.frame.height, height: 0))
+        
+        let vpLabel = UILabel()
+        vpLabel.font = UIFont(name: fontFamily, size: 15)
+        vpLabel.text = "\(victoryPoints)"
+        vpLabel.numberOfLines = 1
+        vpLabel.sizeToFit()
+        vpLabel.anchorTo(self,
+                         top: self.topAnchor,
+                         trailing: self.trailingAnchor,
+                         size: .init(width: vpLabel.frame.width, height: vpLabel.frame.height))
         
         let usernameLabel = UILabel()
         for winner in winners {
@@ -49,29 +64,10 @@ class PreviousGamePlayersCell: UITableViewCell {
         }
         usernameLabel.text = username
         usernameLabel.numberOfLines = 1
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let vpLabel = UILabel()
-        vpLabel.font = UIFont(name: fontFamily, size: 15)
-        vpLabel.text = "\(victoryPoints)"
-        vpLabel.numberOfLines = 1
-        vpLabel.sizeToFit()
-        vpLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(vpLabel)
-        self.addSubview(deckView)
-        self.addSubview(usernameLabel)
-        
-        vpLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        vpLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        vpLabel.widthAnchor.constraint(equalToConstant: vpLabel.frame.width).isActive = true
-        
-        deckView.topAnchor.constraint(equalTo: self.topAnchor, constant: 2).isActive = true
-        deckView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 2).isActive = true
-        deckView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -2).isActive = true
-        deckView.widthAnchor.constraint(equalTo: deckView.heightAnchor).isActive = true
-        
-        usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        usernameLabel.leftAnchor.constraint(equalTo: deckView.rightAnchor, constant: 5).isActive = true
-        usernameLabel.rightAnchor.constraint(equalTo: vpLabel.leftAnchor, constant: -5).isActive = true
+        usernameLabel.anchorTo(self,
+                               top: self.topAnchor,
+                               leading: deckView.rightAnchor,
+                               trailing: vpLabel.leadingAnchor,
+                               padding: .init(top: 5, left: 5, bottom: 0, right: 5))
     }
 }

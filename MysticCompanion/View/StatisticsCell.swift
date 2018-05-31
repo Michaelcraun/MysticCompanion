@@ -45,29 +45,22 @@ class StatisticsCell: UITableViewCell {
                 return label
             }()
             
-            let viewElements = [descriptionLabel, valueLabel]
-            viewElements.forEach({ (element) in view.addSubview(element) })
+            valueLabel.anchorTo(view,
+                                top: view.topAnchor,
+                                bottom: view.bottomAnchor,
+                                trailing: view.trailingAnchor,
+                                padding: .init(top: 5, left: 5, bottom: 5, right: 5))
             
-            descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-            descriptionLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
-            descriptionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
-            descriptionLabel.trailingAnchor.constraint(equalTo: valueLabel.leadingAnchor, constant: -5).isActive = true
-            
-            valueLabel.translatesAutoresizingMaskIntoConstraints = false
-            valueLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
-            valueLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
-            valueLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
-            valueLabel.leadingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor, constant: 5).isActive = true
+            descriptionLabel.anchorTo(view,
+                                      top: view.topAnchor,
+                                      bottom: view.bottomAnchor,
+                                      leading: view.leadingAnchor,
+                                      trailing: valueLabel.leadingAnchor,
+                                      padding: .init(top: 5, left: 5, bottom: 5, right: 5))
             
             return view
         }()
         
-        self.addSubview(cellView)
-        cellView.translatesAutoresizingMaskIntoConstraints = false
-        cellView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        cellView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        cellView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        cellView.fillTo(self)
     }
 }

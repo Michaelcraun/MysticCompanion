@@ -101,53 +101,42 @@ class TrackerView: UIView {
             }
         }
         
-        iconView.addImage(type.icon, withSizeModifier: 10)
+        iconView.addImage(type.icon, withSize: iconWidth - 10)
         iconView.backgroundColor = type.secondaryColor
-        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.anchorTo(self,
+                          top: self.topAnchor,
+                          centerX: self.centerXAnchor,
+                          size: .init(width: iconWidth, height: iconWidth))
         
-        iconView2.addImage(type.icon, withSizeModifier: 10)
+        iconView2.addImage(type.icon, withSize: iconWidth - 10)
         iconView2.backgroundColor = type.secondaryColor
         iconView2.transform = iconView2.transform.rotated(by: .pi/1)
-        iconView2.translatesAutoresizingMaskIntoConstraints = false
+        iconView2.anchorTo(self,
+                           bottom: self.bottomAnchor,
+                           centerX: self.centerXAnchor,
+                           size: .init(width: iconWidth, height: iconWidth))
         
         currentStepper.buttonsBackgroundColor = type.secondaryColor
         currentStepper.labelBackgroundColor = type.primaryColor
         currentStepper.labelFont = UIFont(name: fontFamily, size: 15)!
         currentStepper.maximumValue = 500
-        currentStepper.translatesAutoresizingMaskIntoConstraints = false
+        currentStepper.anchorTo(self,
+                                top: iconView.bottomAnchor,
+                                leading: self.leadingAnchor,
+                                trailing: self.trailingAnchor,
+                                size: .init(width: 0, height: stepperSpace))
         
         constantStepper.buttonsBackgroundColor = type.secondaryColor
         constantStepper.labelBackgroundColor = type.primaryColor
         constantStepper.labelFont = UIFont(name: fontFamily, size: 15)!
         constantStepper.maximumValue = 500
-        constantStepper.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(iconView)
-        self.addSubview(iconView2)
-        self.addSubview(currentStepper)
-        
-        iconView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        iconView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        iconView.heightAnchor.constraint(equalToConstant: iconWidth).isActive = true
-        iconView.widthAnchor.constraint(equalToConstant: iconWidth).isActive = true
-        
-        iconView2.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        iconView2.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        iconView2.heightAnchor.constraint(equalToConstant: iconWidth).isActive = true
-        iconView2.widthAnchor.constraint(equalToConstant: iconWidth).isActive = true
-        
-        currentStepper.topAnchor.constraint(equalTo: iconView.bottomAnchor).isActive = true
-        currentStepper.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        currentStepper.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        currentStepper.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
         
         if type != .victory {
-            self.addSubview(constantStepper)
-            
-            constantStepper.topAnchor.constraint(equalTo: currentStepper.bottomAnchor).isActive = true
-            constantStepper.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-            constantStepper.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-            constantStepper.heightAnchor.constraint(equalToConstant: stepperSpace).isActive = true
+            constantStepper.anchorTo(self,
+                                     top: currentStepper.bottomAnchor,
+                                     leading: self.leadingAnchor,
+                                     trailing: self.trailingAnchor,
+                                     size: .init(width: 0, height: stepperSpace))
         }
     }
 }

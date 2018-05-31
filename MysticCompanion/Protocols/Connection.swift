@@ -97,18 +97,16 @@ extension Connection where Self: UIViewController {
         
         if shouldDisplay {
             if !isDisplayed {
-                noConnectionView.addSubview(noConnectionLabel)
-                self.view.addSubview(noConnectionView)
+                noConnectionLabel.anchorTo(noConnectionView,
+                                           bottom: noConnectionView.bottomAnchor,
+                                           leading: noConnectionView.leadingAnchor,
+                                           trailing: noConnectionView.trailingAnchor)
                 
-                //TODO: Doesn't acount for iPhone X layout
-                noConnectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-                noConnectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-                noConnectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-                noConnectionView.heightAnchor.constraint(equalToConstant: topBannerHeight).isActive = true
-                
-                noConnectionLabel.leftAnchor.constraint(equalTo: noConnectionView.leftAnchor).isActive = true
-                noConnectionLabel.rightAnchor.constraint(equalTo: noConnectionView.rightAnchor).isActive = true
-                noConnectionLabel.bottomAnchor.constraint(equalTo: noConnectionView.bottomAnchor).isActive = true
+                noConnectionView.anchorTo(self.view,
+                                          top: self.view.topAnchor,
+                                          leading: self.view.leadingAnchor,
+                                          trailing: self.view.trailingAnchor,
+                                          size: .init(width: 0, height: topBannerHeight))
                 
                 noConnectionView.fadeAlphaTo(1, withDuration: 0.2)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
@@ -116,7 +114,7 @@ extension Connection where Self: UIViewController {
                     UIView.animate(withDuration: 0.2, animations: {
                         noConnectionView.frame.size.height = 20
                         noConnectionView.heightAnchor.constraint(equalToConstant: topBannerHeight).isActive = false
-                        noConnectionView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+                        noConnectionView.anchorTo(size: .init(width: 0, height: 20))
                     })
                 })
             }

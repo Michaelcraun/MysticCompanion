@@ -16,7 +16,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import GoogleMobileAds
 
-class GameVC: UIViewController, Alertable, Connection {
+class GameVC: UIViewController {
     //MARK: - UI Variables
     let playerPanel = UIView()
     let gameVPLabel = UILabel()
@@ -54,7 +54,7 @@ class GameVC: UIViewController, Alertable, Connection {
         }
     }
     
-    var players = [Dictionary<String,AnyObject>]() {
+    var players = [[String : AnyObject]]() {
         willSet {
             playersTable.animate()
         }
@@ -147,11 +147,11 @@ class GameVC: UIViewController, Alertable, Connection {
             updateFBUserStatistics(withMana: currentMana, andVictory: vpFromTurn)
         }
         
-        let userData: Dictionary<String,AnyObject> = ["username" : Player.instance.username as AnyObject,
-                                                      "deck" : Player.instance.deck.rawValue as AnyObject,
-                                                      "finished" : false as AnyObject,
-                                                      "victoryPoints" : Player.instance.currentVP as AnyObject,
-                                                      "boxVictory" : Player.instance.boxVP as AnyObject]
+        let userData: [String : AnyObject] = ["username" : Player.instance.username as AnyObject,
+                                              "deck" : Player.instance.deck.rawValue as AnyObject,
+                                              "finished" : false as AnyObject,
+                                              "victoryPoints" : Player.instance.currentVP as AnyObject,
+                                              "boxVictory" : Player.instance.boxVP as AnyObject]
         passTurn(withUserData: userData)
         animateTrackersOut()
     }
@@ -309,7 +309,7 @@ extension GameVC {
         forestTracker.initTrackerOfType(.forest)
         forestTracker.anchorTo(view,
                                top: decayTracker.bottomAnchor,
-                               leading: victoryTracker.rightAnchor,
+                               leading: victoryTracker.trailingAnchor,
                                padding: .init(top: 10, left: 10, bottom: 0, right: 0))
         
         skyTracker.initTrackerOfType(.sky)
@@ -336,7 +336,7 @@ extension GameVC {
     private func layoutMenuButton() {
         let menuButton = KCFloatingActionButton()
         menuButton.setMenuButtonColor()
-        menuButton.setPaddingY(viewHasAds: true)
+        menuButton.setPaddingY(viewHasAds: !PREMIUM_PURCHASED)
         menuButton.items = []
         
         let settings = KCFloatingActionButtonItem()
@@ -427,7 +427,7 @@ extension GameVC {
     /// Configures game of Firebase and begins observing
     private func setupGameAndObserve() {
         GameHandler.instance.REF_GAME.removeAllObservers()
-        if let players = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] { self.players = players }
+        if let players = GameHandler.instance.game["players"] as? [[String : AnyObject]] { self.players = players }
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let winCondition = GameHandler.instance.game["winCondition"] as? String else { return }
         switch winCondition {
@@ -445,8 +445,8 @@ extension GameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    guard let gameDict = game.value as? Dictionary<String,AnyObject> else { return }
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    guard let gameDict = game.value as? [String : AnyObject] else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [[String : AnyObject]] else { return }
                     guard let currentPlayer = game.childSnapshot(forPath: "currentPlayer").value as? String else { return }
                     guard let vpGoal = game.childSnapshot(forPath: "vpGoal").value as? Int else { return }
                     

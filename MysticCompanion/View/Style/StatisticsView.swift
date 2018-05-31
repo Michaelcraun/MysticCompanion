@@ -60,34 +60,30 @@ class StatisticsView: UIView {
             let viewElements = [playerLabel, statisticsTable, doneButton]
             viewElements.forEach({ (element) in view.addSubview(element) })
             
-            playerLabel.translatesAutoresizingMaskIntoConstraints = false
-            playerLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-            playerLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
-            playerLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
-            playerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
+            playerLabel.anchorTo(view,
+                                 top: view.topAnchor,
+                                 leading: view.leadingAnchor,
+                                 trailing: view.trailingAnchor,
+                                 padding: .init(top: 5, left: 5, bottom: 0, right: 5),
+                                 size: .init(width: 0, height: 25))
             
-            statisticsTable.translatesAutoresizingMaskIntoConstraints = false
-            statisticsTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
-            statisticsTable.topAnchor.constraint(equalTo: playerLabel.bottomAnchor, constant: 5).isActive = true
-            statisticsTable.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -5).isActive = true
-            statisticsTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
+            statisticsTable.anchorTo(view,
+                                     top: playerLabel.bottomAnchor,
+                                     bottom: doneButton.topAnchor,
+                                     leading: view.leadingAnchor,
+                                     trailing: view.trailingAnchor,
+                                     padding: .init(top: 5, left: 5, bottom: 5, right: 5))
             
-            doneButton.translatesAutoresizingMaskIntoConstraints = false
-            doneButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
-            doneButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            doneButton.anchorTo(view,
+                                bottom: view.bottomAnchor,
+                                leading: view.leadingAnchor,
+                                trailing: view.trailingAnchor,
+                                size: .init(width: 0, height: 25))
             
             return view
         }()
         
-        self.addSubview(statisticsView)
-        statisticsView.translatesAutoresizingMaskIntoConstraints = false
-        statisticsView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        statisticsView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        statisticsView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5).isActive = true
-        statisticsView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
-        
+        statisticsView.fillTo(self, padding: .init(top: 5, left: 5, bottom: 5, right: 5))
         setFrame()
     }
     
@@ -100,7 +96,7 @@ class StatisticsView: UIView {
         let screenWidth = UIScreen.main.bounds.width
         let viewWidth = screenWidth - widthMargin
         
-        let heightMargin: CGFloat = 40.0
+        let heightMargin: CGFloat = 50.0 + adBuffer
         let screenHeight = UIScreen.main.bounds.height
         let viewHeight = screenHeight - heightMargin
         

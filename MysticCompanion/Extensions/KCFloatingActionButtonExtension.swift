@@ -15,7 +15,7 @@ extension KCFloatingActionButton {
         var yPadding: CGFloat {
             let buttonBottomMargin: CGFloat = -10
             switch viewHasAds {
-            case true: return bottomLayoutConstant + adBuffer + buttonBottomMargin
+            case true: return bottomLayoutConstant - adBuffer + buttonBottomMargin
             case false: return bottomLayoutConstant + buttonBottomMargin
             }
         }

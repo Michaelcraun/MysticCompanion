@@ -117,7 +117,7 @@ let ad = UIApplication.shared.delegate as! AppDelegate
 let context = ad.persistentContainer.viewContext
 
 /// A Boolean value determining if the user has purchased premium
-var PREMIUM_PURCHASED = true
+var PREMIUM_PURCHASED = false
 
 /// A CGFloat value representing the y value of the top safe edge of the screen
 var topLayoutConstant: CGFloat {
@@ -130,7 +130,7 @@ var topLayoutConstant: CGFloat {
 /// A CGFloat value representing the y value of the bottom safe edge of the screen
 var bottomLayoutConstant: CGFloat {
     switch UIDevice.current.modelName {
-    case "iPhone X": return -34
+    case "iPhone X": return 34
     default: return 0
     }
 }
@@ -139,7 +139,7 @@ var bottomLayoutConstant: CGFloat {
 var adBuffer: CGFloat {
     switch PREMIUM_PURCHASED {
     case true: return 0
-    case false: return -50
+    case false: return 50
     }
 }
 

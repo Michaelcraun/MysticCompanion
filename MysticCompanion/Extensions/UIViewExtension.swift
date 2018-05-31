@@ -70,16 +70,29 @@ extension UIView {
 // MARK: - Layout Methods
 //-----------------------
 extension UIView {
+    /// Adds self to the specified view, constraining self the the view's edges, with a given padding
+    /// - parameter view: The specified view to constrain self to
+    /// - parameter padding: The specified padding to give the view
     func fillTo(_ view: UIView, padding: UIEdgeInsets = .zero) {
         view.addSubview(self)
         
         self.translatesAutoresizingMaskIntoConstraints = false
         self.topAnchor.constraint(equalTo: view.topAnchor, constant: padding.top).isActive = true
-        self.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding.bottom).isActive = true
-        self.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -padding.left).isActive = true
+        self.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -padding.bottom).isActive = true
+        self.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding.left).isActive = true
         self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding.right).isActive = true
     }
     
+    /// Adds self to the specified view, if a view is specified, and applies the rest of the constraints, if specified
+    /// - parameter view: The specified view to add self to
+    /// - parameter top: The NSLyaoutYAxisAnchor to constrain self's topAnchor to
+    /// - parameter bottom: The NSLayoutYAxisAnchor to constrain self's bottomAnchor to
+    /// - parameter leading: The NSLayoutXAxisAnchor to constrain self's leadingAnchor to
+    /// - parameter trailing: The NSLayoutXAxisAnchor to constrain self's trailingAnchor to
+    /// - parameter centerX: The NSLayoutXAxisAnchor to constrain self's centerXAnchor to
+    /// - parameter centerY: The NSLayoutYAxisAnchor to constrain self's centerYAnchor to
+    /// - parameter padding: A UIEdgeInsets value that determines the constant of self's top, leading, bottom, and trailing constraints
+    /// - parameter size: A CGSize value used to constrain self's width and height
     func anchorTo(_ view: UIView? = nil,
                   top: NSLayoutYAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil,
                   leading: NSLayoutXAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil,

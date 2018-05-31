@@ -19,7 +19,7 @@ import FBSDKLoginKit
 import GoogleSignIn
 import TwitterKit
 
-class LoginVC: UIViewController, UITextFieldDelegate, Connection, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
+class LoginVC: UIViewController, UITextFieldDelegate, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
     
     let backgroundImage = UIImageView()
     let logoStack = UIStackView()
@@ -250,7 +250,7 @@ extension LoginVC {
 //-----------------
 // MARK: - Firebase
 //-----------------
-extension LoginVC: Alertable {
+extension LoginVC {
     /// Checks if the usernameField, emailField, and passwordField aren't empty, then logs the user in via Firebase
     func loginWithFirebase() {
         view.endEditing(true)

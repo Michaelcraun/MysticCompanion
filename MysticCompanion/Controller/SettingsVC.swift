@@ -8,7 +8,6 @@
 
 import CoreData
 import MessageUI
-import StoreKit
 import UIKit
 
 import KCFloatingActionButton
@@ -17,7 +16,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
-class SettingsVC: UIViewController, Connection {
+class SettingsVC: UIViewController {
     //MARK: - UI Variables
     let backgroundImage = UIImageView()
     let bannerView = UIView()
@@ -29,7 +28,7 @@ class SettingsVC: UIViewController, Connection {
     
     //MARK: - Firebase Variables
     var currentUserID: String?
-    var previousGames = [Dictionary<String,AnyObject>]() {
+    var previousGames = [[String : AnyObject]]() {
         willSet {
             previousGamesTable.animate()
         }
@@ -37,20 +36,22 @@ class SettingsVC: UIViewController, Connection {
     
     //MARK: - Data Variables
     let defaults = UserDefaults.standard
-    
-    //MARK: - StoreKit Variables
-    var productPurchasing = SKProduct()
-    var productList = [SKProduct]()
+    let firManager = FirebaseManager()
+    let skManager = StoreKitManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         layoutView()
         beginConnectionTest()
-        checkCanMakePayments()
+        skManager.checkCanMakePayments()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        firManager.delegate = self
+        skManager.delegate = self
+        skManager.productIdentifiers = [Products.premiumUpgrade.rawValue]
+        
         observeDataForGamesPlayed()
     }
     
@@ -169,16 +170,10 @@ extension SettingsVC {
         let contactSupport = KCFloatingActionButtonItem()
         contactSupport.setButtonOfType(.contactSupport)
         contactSupport.handler = { item in
-            if MFMailComposeViewController.canSendMail() {
-                let composeVC = MFMailComposeViewController()
-                composeVC.mailComposeDelegate = self
-                composeVC.setToRecipients(["support@craunicproductions.com"])
-                composeVC.setSubject("MysticCompanion Support")
-                
-                self.present(composeVC, animated: true, completion: nil)
-            } else {
-                self.showAlert(.mailError)
-            }
+            let mailManager = MailManager()
+            mailManager.delegate = self
+            mailManager.checkCanSendMail()
+            mailManager.sendSupportMail()
         }
         
         let changeTheme = KCFloatingActionButtonItem()
@@ -191,8 +186,7 @@ extension SettingsVC {
         purchase.setButtonOfType(.purchase)
         purchase.handler = { item in
             if self.purchaseButtonsAreEnabled {
-                self.shouldPresentLoadingView(true)
-                self.buyProduct(productID: Products.premiumUpgrade.productIdentifier)
+                self.skManager.buyProduct(Products.premiumUpgrade.rawValue)
             } else {
                 self.showAlert(.purchaseError)
             }
@@ -202,10 +196,7 @@ extension SettingsVC {
         restore.setButtonOfType(.restore)
         restore.handler = { item in
             if self.purchaseButtonsAreEnabled {
-                NetworkIndicator.networkOperationStarted()
-                self.shouldPresentLoadingView(true)
-                SKPaymentQueue.default().add(self)
-                SKPaymentQueue.default().restoreCompletedTransactions()
+                self.skManager.restoreProducts()
             } else {
                 self.showAlert(.purchaseError)
             }
@@ -315,15 +306,15 @@ extension SettingsVC: MFMailComposeViewControllerDelegate {
 extension SettingsVC {
     /// Observes the game directory for games the user has played
     func observeDataForGamesPlayed() {
-        var gamesPlayed = [Dictionary<String,AnyObject>]()
+        var gamesPlayed = [[String : AnyObject]]()
         GameHandler.instance.REF_DATA.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dataSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for data in dataSnapshot {
-                guard let dataPlayersArray = data.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                guard let dataPlayersArray = data.childSnapshot(forPath: "players").value as? [[String : AnyObject]] else { return }
                 for player in dataPlayersArray {
                     guard let playerUsername = player["username"] as? String else { return }
                     if playerUsername == Player.instance.username {
-                        guard let previousGame = data.value as? Dictionary<String,AnyObject> else { return }
+                        guard let previousGame = data.value as? [String : AnyObject] else { return }
                         gamesPlayed.append(previousGame)
                     }
                 }
@@ -341,109 +332,5 @@ extension SettingsVC {
         } catch {
             showAlert(.firebaseLogout)
         }
-    }
-}
-
-//-----------------
-// MARK: - StoreKit
-//-----------------
-extension SettingsVC: Alertable, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-    /// Begins the purchasing of a specific product
-    /// - parameter productID: A String value containing the product identifier associated with the product being
-    /// purchased
-    func buyProduct(productID: String) {
-        for product in productList {
-            let productToCheck = product.productIdentifier
-            if productToCheck == productID {
-                productPurchasing = product
-                
-                NetworkIndicator.networkOperationStarted()
-                
-                let pay = SKPayment(product: productPurchasing)
-                SKPaymentQueue.default().add(self)
-                SKPaymentQueue.default().add(pay)
-            }
-        }
-    }
-    
-    /// Checks if the user can make payments and displays an alert to the user if in-app purchases have been disabled
-    func checkCanMakePayments() {
-        if (SKPaymentQueue.canMakePayments()) {
-            let productIDs: NSSet = NSSet(objects: Products.premiumUpgrade.productIdentifier)
-            let request: SKProductsRequest = SKProductsRequest(productIdentifiers: productIDs as! Set<String>)
-            request.delegate = self
-            request.start()
-        } else {
-            showAlert(.iapDisabled)
-        }
-    }
-    
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        NetworkIndicator.networkOperationStarted()
-        
-        let myProducts = response.products
-        for product in myProducts {
-            productList.append(product)
-        }
-        
-        purchaseButtonsAreEnabled = true
-        NetworkIndicator.networkOperationFinished()
-    }
-    
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        for transaction in queue.transactions {
-            let t: SKPaymentTransaction = transaction
-            let productID = t.payment.productIdentifier
-            switch productID {
-            case Products.premiumUpgrade.productIdentifier:
-                let defaults = UserDefaults.standard
-                PREMIUM_PURCHASED = true
-                defaults.set(PREMIUM_PURCHASED, forKey: "premium")
-                layoutView()
-            default: break
-            }
-        }
-        showAlert(.purchasesRestored)
-        NetworkIndicator.networkOperationFinished()
-        shouldPresentLoadingView(false)
-    }
-    
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        showAlert(.restoreFailed)
-        NetworkIndicator.networkOperationFinished()
-        shouldPresentLoadingView(false)
-    }
-    
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        NetworkIndicator.networkOperationStarted()
-        
-        for transaction: AnyObject in transactions {
-            let trans = transaction as! SKPaymentTransaction
-            switch trans.transactionState {
-            case .purchased:
-                let productID = productPurchasing.productIdentifier
-                switch productID {
-                case Products.premiumUpgrade.productIdentifier:
-                    let defaults = UserDefaults.standard
-                    PREMIUM_PURCHASED = true
-                    defaults.set(PREMIUM_PURCHASED, forKey: "premium")
-                default: break
-                }
-                shouldPresentLoadingView(false)
-                //                showAlert(.purchaseComplete)
-                queue.finishTransaction(trans)
-            case .failed:
-                shouldPresentLoadingView(false)
-                //                showAlert(.purchaseFailed)
-                queue.finishTransaction(trans)
-            default: break
-            }
-        }
-        
-        NetworkIndicator.networkOperationFinished()
-    }
-    
-    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
-        shouldPresentLoadingView(false)
     }
 }

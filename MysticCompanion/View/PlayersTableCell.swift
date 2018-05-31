@@ -35,37 +35,33 @@ class PlayersTableCell: UITableViewCell {
         
         let deckIcon = CircleView()
         deckIcon.backgroundColor = deckType?.color
-        deckIcon.translatesAutoresizingMaskIntoConstraints = false
-        
-        let usernameLabel = UILabel()
-        usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
-        usernameLabel.text = username
-        usernameLabel.numberOfLines = 1
-        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        deckIcon.anchorTo(self,
+                          top: self.topAnchor,
+                          bottom: self.bottomAnchor,
+                          leading: self.leadingAnchor,
+                          padding: .init(top: 5, left: 5, bottom: 5, right: 0),
+                          size: .init(width: 17.5, height: 17.5))
         
         let vpLabel = UILabel()
         vpLabel.font = UIFont(name: fontFamily, size: 15)
         vpLabel.text = "\(playerVP + playerBoxVP)"
         vpLabel.numberOfLines = 1
         vpLabel.sizeToFit()
-        vpLabel.translatesAutoresizingMaskIntoConstraints = false
+        vpLabel.anchorTo(self,
+                         top: self.topAnchor,
+                         bottom: self.bottomAnchor,
+                         trailing: self.trailingAnchor,
+                         padding: .init(top: 5, left: 0, bottom: 5, right: 5))
         
-        self.addSubview(deckIcon)
-        self.addSubview(vpLabel)
-        self.addSubview(usernameLabel)
-        
-        deckIcon.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        deckIcon.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        deckIcon.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        deckIcon.widthAnchor.constraint(equalTo: deckIcon.heightAnchor).isActive = true
-        
-        vpLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        vpLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        vpLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        
-        usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        usernameLabel.leftAnchor.constraint(equalTo: deckIcon.rightAnchor, constant: 5).isActive = true
-        usernameLabel.rightAnchor.constraint(equalTo: vpLabel.leftAnchor, constant: -5).isActive = true
-        usernameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        let usernameLabel = UILabel()
+        usernameLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)
+        usernameLabel.text = username
+        usernameLabel.numberOfLines = 1
+        usernameLabel.anchorTo(self,
+                               top: self.topAnchor,
+                               bottom: self.bottomAnchor,
+                               leading: deckIcon.trailingAnchor,
+                               trailing: vpLabel.leadingAnchor,
+                               padding: .init(top: 5, left: 5, bottom: 5, right: 5))
     }
 }

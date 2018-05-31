@@ -10,7 +10,7 @@ import UIKit
 
 class PreviousGameCell: UITableViewCell {
     let playersTable = UITableView()
-    var playersArray = [Dictionary<String,AnyObject>]()
+    var playersArray = [[String : AnyObject]]()
     var winners = [String]()
     
     override func layoutSubviews() {
@@ -40,15 +40,7 @@ class PreviousGameCell: UITableViewCell {
         playersTable.separatorStyle = .none
         playersTable.allowsSelection = false
         playersTable.register(PreviousGamePlayersCell.self, forCellReuseIdentifier: "previousGamePlayersCell")
-        playersTable.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(playersTable)
-        
-        playersTable.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
-        playersTable.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5).isActive = true
-        playersTable.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        playersTable.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        
+        playersTable.fillTo(self, padding: .init(top: 5, left: 5, bottom: 5, right: 5))
         self.updateConstraints()
     }
     
@@ -56,19 +48,17 @@ class PreviousGameCell: UITableViewCell {
     func layoutEmptyCell() {
         clearCell()
         addBlurEffect()
+        self.backgroundColor = theme.color
         
         let noGamesLabel = UILabel()
         noGamesLabel.font = UIFont(name: fontFamily, size: 20)
         noGamesLabel.textAlignment = .center
         noGamesLabel.text = "No Games Found"
-        noGamesLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.backgroundColor = theme.color
-        self.addSubview(noGamesLabel)
-        
-        noGamesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        noGamesLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
-        noGamesLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
+        noGamesLabel.anchorTo(self,
+                              leading: self.leadingAnchor,
+                              trailing: self.trailingAnchor,
+                              centerY: self.centerYAnchor,
+                              padding: .init(top: 0, left: 20, bottom: 0, right: 20))
     }
 }
 

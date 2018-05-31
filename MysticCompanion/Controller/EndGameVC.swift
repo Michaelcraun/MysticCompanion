@@ -16,7 +16,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import GoogleMobileAds
 
-class EndGameVC: UIViewController, Alertable, Connection {
+class EndGameVC: UIViewController {
     //MARK: - Game Variables
     enum GameState {
         case vpNeeded
@@ -34,7 +34,7 @@ class EndGameVC: UIViewController, Alertable, Connection {
     }
     
     //MARK: - Firebase Variables
-    var players = [Dictionary<String,AnyObject>]() {
+    var players = [[String : AnyObject]]() {
         didSet {
             playersTable.animate()
         }
@@ -96,26 +96,20 @@ extension EndGameVC {
     
     /// Configures the players table
     private func layoutPlayersTable() {
+        let tableBottomBuffer = bottomLayoutConstant + adBuffer
+        
         playersTable.dataSource = self
         playersTable.delegate = self
         playersTable.allowsSelection = false
         playersTable.register(EndGamePlayersCell.self, forCellReuseIdentifier: "endGamePlayersCell")
         playersTable.separatorStyle = .none
         playersTable.backgroundColor = .clear
-        playersTable.translatesAutoresizingMaskIntoConstraints = false
-        
-        var tableBottomBuffer: CGFloat {
-            switch PREMIUM_PURCHASED {
-            case true: return menuButton.frame.height + 30
-            case false: return adBanner.frame.height + menuButton.frame.height + 40
-            }
-        }
-        
-        playersTable.anchorTo(view, top: view.topAnchor,
+        playersTable.anchorTo(view,
+                              top: view.topAnchor,
                               bottom: view.bottomAnchor,
                               leading: view.leadingAnchor,
                               trailing: view.trailingAnchor,
-                              padding: .init(top: topLayoutConstant, left: 10, bottom: -tableBottomBuffer, right: -10))
+                              padding: .init(top: topLayoutConstant, left: 10, bottom: tableBottomBuffer, right: 10))
         
         playersTable.animate()
     }
@@ -209,7 +203,7 @@ extension EndGameVC {
     private func setupGameAndObserve() {
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         guard let hostUsername = GameHandler.instance.game["username"] as? String else { return }
-        guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+        guard let playersArray = GameHandler.instance.game["players"] as? [[String : AnyObject]] else { return }
         var finishedPlayerCount = 0
         var winningVP = 0
         var winnersArray = [String]() {
@@ -223,7 +217,7 @@ extension EndGameVC {
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [[String : AnyObject]] else { return }
                     finishedPlayerCount = 0
                     
                     for player in playersArray {
@@ -248,13 +242,13 @@ extension EndGameVC {
                             }
                         }
                         
-                        guard let gameData = game.value as? Dictionary<String,AnyObject> else { return }
+                        guard let gameData = game.value as? [String : AnyObject] else { return }
                         GameHandler.instance.game = gameData
                         
                         self.updateFBUserStatistics(withPlayers: playersArray, andWinners: winnersArray)
                         if hostUsername == Player.instance.username {
                             guard let currentUID = FIRAuth.auth()?.currentUser?.uid else { return }
-                            guard let playersArray = GameHandler.instance.game["players"] as? [Dictionary<String,AnyObject>] else { return }
+                            guard let playersArray = GameHandler.instance.game["players"] as? [[String : AnyObject]] else { return }
                             
                             GameHandler.instance.clearCurrentGamesFromFirebaseDB(forKey: currentUID)
                             GameHandler.instance.createFirebaseDBData(forGame: currentUID, withPlayers: playersArray, andWinners: winnersArray, andDateString: nil)
@@ -269,13 +263,13 @@ extension EndGameVC {
     /// - parameter user: A String value representing the user's username
     /// - parameter deckVP: An Int value representing the user's victory points contained within their deck
     private func updateUser(_ user: String, withDeckVP deckVP: Int) {
-        var newPlayersArray = [Dictionary<String,AnyObject>]()
+        var newPlayersArray = [[String : AnyObject]]()
         guard let gameKey = GameHandler.instance.game["game"] as? String else { return }
         GameHandler.instance.REF_GAME.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let gameSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] else { return }
             for game in gameSnapshot {
                 if game.key == gameKey {
-                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [Dictionary<String,AnyObject>] else { return }
+                    guard let playersArray = game.childSnapshot(forPath: "players").value as? [[String : AnyObject]] else { return }
                     for player in playersArray {
                         guard let firebasePlayerUsername = player["username"] as? String else { return }
                         if firebasePlayerUsername == Player.instance.username {
@@ -299,7 +293,7 @@ extension EndGameVC {
     /// - parameter player: An Array of Dictionary values containing the game's players' data
     /// - parameter winners: An Array of String values containing the usernames of the winner(s) of the game
     private func updateFBUserStatistics(withPlayers players: [[String : AnyObject]], andWinners winners: [String]) {
-        var userData = Dictionary<String,AnyObject>()
+        var userData = [String : AnyObject]()
         var gamesPlayed = 0
         var gamesWon = 0
         var gamesLost = 0
