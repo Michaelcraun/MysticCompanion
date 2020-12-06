@@ -10,8 +10,8 @@ import Foundation
 import MapKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
+    private var manager = CLLocationManager()
     var delegate: UIViewController!
-    var manager = CLLocationManager()
     var currentLocation: CLLocation?
     
     override init() {
@@ -20,12 +20,16 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         checkLocationAuthStatus()
     }
     
-    func checkLocationAuthStatus() {
+    private func checkLocationAuthStatus() {
+        print("CLOUD: Checking location auth status...")
+        manager.delegate = self
+        manager.requestWhenInUseAuthorization()
+        
         if CLLocationManager.locationServicesEnabled() {
             manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             manager.startUpdatingLocation()
         } else {
-            manager.requestWhenInUseAuthorization()
+            checkLocationAuthStatus()
         }
     }
     

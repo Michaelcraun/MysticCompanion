@@ -29,7 +29,11 @@ class GameHandler {
     var REF_USER: FIRDatabaseReference { return _REF_USER }
     var REF_GAME: FIRDatabaseReference { return _REF_GAME }
     var REF_DATA: FIRDatabaseReference { return _REF_DATA }
-    var game = [String : AnyObject]()
+    var game = [String : Any]() {
+        didSet {
+            print("GAME: currentGame: \(game.debugDescription)")
+        }
+    }
     var userEmail = ""
     
     //MARK: - Firebase user functions

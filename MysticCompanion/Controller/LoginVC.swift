@@ -20,7 +20,6 @@ import GoogleSignIn
 import TwitterKit
 
 class LoginVC: UIViewController, UITextFieldDelegate, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
-    
     let backgroundImage = UIImageView()
     let logoStack = UIStackView()
     let usernameField = KaedeTextField()
@@ -30,8 +29,9 @@ class LoginVC: UIViewController, UITextFieldDelegate, GIDSignInDelegate, GIDSign
     var googleLogin = GIDSignInButton()
     let settingsButton = KCFloatingActionButton()
     
+    let firManager = FirebaseManager()
+    
     let defaults = UserDefaults.standard
-    var wrongPasswordCount = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +45,8 @@ class LoginVC: UIViewController, UITextFieldDelegate, GIDSignInDelegate, GIDSign
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        firManager.delegate = self
+        
         checkTheme()
         layoutMenuButton()
         beginConnectionTest()
@@ -61,7 +63,7 @@ extension LoginVC {
         } else if textField == emailField {
             passwordField.becomeFirstResponder()
         } else if textField == passwordField {
-            loginWithFirebase()
+            verifyCredentials()
         }
         
         return true
@@ -80,7 +82,7 @@ extension LoginVC {
         
         guard let authentication = user.authentication else { return }
         let credential = FIRGoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
-        login(withCredential: credential)
+        firManager.login(withCredential: credential)
     }
 }
 
@@ -96,7 +98,7 @@ extension LoginVC {
             if FBSDKAccessToken.current() != nil && FBSDKAccessToken.current().tokenString != nil {
                 if let token = FBSDKAccessToken.current().tokenString {
                     let credential = FIRFacebookAuthProvider.credential(withAccessToken: token)
-                    login(withCredential: credential)
+                    firManager.login(withCredential: credential)
                 }
             } else {
                 showAlert(.facebookError)
@@ -238,106 +240,23 @@ extension LoginVC {
         let register = KCFloatingActionButtonItem()
         register.setButtonOfType(.registerLogin)
         register.handler = { item in
-            self.loginWithFirebase()
+            self.verifyCredentials()
         }
         
         settingsButton.addItem(item: cancel)
         settingsButton.addItem(item: register)
         settingsButton.anchorTo(view)
     }
-}
-
-//-----------------
-// MARK: - Firebase
-//-----------------
-extension LoginVC {
-    /// Checks if the usernameField, emailField, and passwordField aren't empty, then logs the user in via Firebase
-    func loginWithFirebase() {
-        view.endEditing(true)
-        guard let username = usernameField.text, username != "", let email = emailField.text, email != "", let password = passwordField.text, password != "" else {
-            showAlert(.invalidLogin)
-            return
+    
+    private func verifyCredentials() {
+        self.view.endEditing(true)
+        guard let username = self.usernameField.text, username != "",
+            let email = self.emailField.text, email != "",
+            let password = self.passwordField.text, password != "" else {
+                self.showAlert(.invalidLogin)
+                return
         }
         
-        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
-            if error == nil {
-                guard let user = user else { return }
-                let userData: [String : Any] = ["provider" : user.providerID,
-                                                        "username" : username]
-                GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
-                self.defaults.set(username, forKey: "username")
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
-                switch errorCode {
-                case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
-                case .errorCodeWrongPassword:
-                    self.wrongPasswordCount += 1
-                    if self.wrongPasswordCount >= 3 {
-                        GameHandler.instance.userEmail = email
-                        self.showAlert(.resetPassword)
-                    } else {
-                        self.showAlert(.wrongPassword)
-                    }
-                case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
-                case .errorCodeUserNotFound:
-                    FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
-                        if error != nil {
-                            guard let errorCode = FIRAuthErrorCode(rawValue: error!._code) else { return }
-                            switch errorCode {
-                            case .errorCodeInvalidEmail: self.showAlert(.invalidEmail)
-                            default: self.showAlert(.firebaseError)
-                            }
-                        } else {
-                            guard let user = user else { return }
-                            let userData: [String : Any] = ["provider" : user.providerID,
-                                                            "username" : username,
-                                                            "mostManaGainedInOneTurn" : 0,
-                                                            "mostVPGainedInOneTurn" : 0,
-                                                            "gamesPlayed" : 0,
-                                                            "gamesWon" : 0,
-                                                            "gamesLost" : 0,
-                                                            "mostVPGainedInOneGame" : 0]
-                            GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
-                            FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: nil)
-                            self.defaults.set(username, forKey: "username")
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    })
-                default: self.showAlert(.firebaseError)
-                }
-            }
-        })
-    }
-    
-    /// Logs the user in via the selected credential
-    /// - parameter credential: The credential specified by the user
-    func login(withCredential credential: FIRAuthCredential) {
-        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
-            if let error = error {
-                guard let errorCode = FIRAuthErrorCode(rawValue: error._code) else { return }
-                switch errorCode {
-                case .errorCodeCredentialAlreadyInUse: self.showAlert(.credentialInUse)
-                case .errorCodeAccountExistsWithDifferentCredential: self.showAlert(.credentialMismatch)
-                case .errorCodeInvalidCredential: self.showAlert(.invalidCredential)
-                case .errorCodeEmailAlreadyInUse: self.showAlert(.emailAlreadyInUse)
-                default: self.showAlert(.firebaseError)
-                }
-                return
-            }
-            
-            guard let user = user else { return }
-            let userData: [String : Any] = ["provider" : credential.provider,
-                                            "username" : user.displayName as Any,
-                                            "mostManaGainedInOneTurn" : 0,
-                                            "mostVPGainedInOneTurn" : 0,
-                                            "gamesPlayed" : 0,
-                                            "gamesWon" : 0,
-                                            "gamesLost" : 0,
-                                            "mostVPGainedInOneGame" : 0]
-            GameHandler.instance.createFirebaseDBUser(uid: user.uid, userData: userData)
-            self.defaults.set(user.displayName, forKey: "username")
-            self.dismiss(animated: true, completion: nil)
-        })
+        firManager.loginWithFirebase(username: username, email: email, password: password)
     }
 }

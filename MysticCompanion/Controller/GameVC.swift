@@ -33,6 +33,9 @@ class GameVC: UIViewController {
     let wildTracker = TrackerView()
     var trackersArray = [TrackerView]()
 
+    // MARK: - Data Variables
+    let firManager = FirebaseManager()
+    
     //MARK: - Game Variables
     var isEndOfGameTurn = false
     var userHasQuitGame = false
@@ -83,6 +86,9 @@ class GameVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let gameData = [FIRKey.gameStarted.rawValue : true]
+//        GameHandler.instance.updateFirebaseDBGame(key: firManager.currentUserID!, gameData: gameData)
 
         setupGameAndObserve()
         layoutView()

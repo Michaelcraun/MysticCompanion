@@ -9,7 +9,7 @@
 import UIKit
 
 class GameLobbyCell: UITableViewCell {
-    var user = [String : AnyObject]()
+    var user = [String : Any]()
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -39,7 +39,7 @@ class GameLobbyCell: UITableViewCell {
 
     /// Configures the cell for the host to display a user that has joined the game
     /// - parameter user: A Dictionary value that represents a specific user
-    func layoutCellForHost(withUser user: [String : AnyObject]) {
+    func layoutCellForHost(withUser user: [String : Any]) {
         clearCell()
         self.user = user
         
@@ -97,10 +97,10 @@ class GameLobbyCell: UITableViewCell {
     func layoutCellForGuest(withGame game: [String : Any]) {
         clearCell()
         
-        guard let hostName = game["username"] as? String else { return }
-        guard let winCondition = game["winCondition"] as? String else { return }
-        guard let vpGoal = game["vpGoal"] as? Int else { return }
-        guard let playersArray = game["players"] as? [[String : AnyObject]] else { return }
+        guard let hostName =    game[FIRKey.username.rawValue] as? String,
+            let winCondition =  game[FIRKey.winCondition.rawValue] as? String,
+            let vpGoal =        game[FIRKey.vpGoal.rawValue] as? Int,
+            let playersArray =  game[FIRKey.players.rawValue] as? [[String : AnyObject]] else { return }
         
         let gameHostLabel = UILabel()
         gameHostLabel.font = UIFont(name: "\(fontFamily)-Bold", size: 15)

@@ -41,19 +41,8 @@ class HomeVC: UIViewController, NSFetchedResultsControllerDelegate {
     var userIsHostingGame = false
     var gameShouldAutoStart = false
     var coreDataHasBeenConverted = false
-    var nearbyGames = [[String : AnyObject]]() {
-        willSet {
-            gameLobbyTable.animate()
-        }
-    }
     
-    var players = [[String : AnyObject]]() {
-        willSet {
-            gameLobbyTable.animate()
-        }
-    }
-    
-    let firManager = FirebaseManager()
+    var firManager = FirebaseManager()
     let locationManager = LocationManager()
     let skManager = StoreKitManager()
     let defaults = UserDefaults.standard
@@ -63,8 +52,6 @@ class HomeVC: UIViewController, NSFetchedResultsControllerDelegate {
         
         PREMIUM_PURCHASED = skManager.checkForPremium()
         layoutView()
-        locationManager.manager.requestWhenInUseAuthorization()
-        locationManager.checkLocationAuthStatus()
         beginConnectionTest()
         autoStartGame(userIsHosting: userIsHostingGame)
         skManager.askForRating()
@@ -72,6 +59,7 @@ class HomeVC: UIViewController, NSFetchedResultsControllerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        firManager = FirebaseManager()
         firManager.delegate = self
         skManager.delegate = self
         
@@ -90,7 +78,6 @@ class HomeVC: UIViewController, NSFetchedResultsControllerDelegate {
         checkTheme()
         layoutMenuButton()
         layoutBannerAds()
-//        checkUsername(forKey: currentUserID)
         beginConnectionTest()
     }
     
@@ -132,7 +119,6 @@ class HomeVC: UIViewController, NSFetchedResultsControllerDelegate {
         if gameShouldAutoStart {
             if userIsHosting {
                 self.firManager.hostGame(withWinCondition: "standard", andVPGoal: 0)
-//                self.hostGameAndObserve(withWinCondition: "standard", andVPGoal: 0)
             } else {
                 self.joinGamePressed()
             }
@@ -375,7 +361,7 @@ extension HomeVC {
         standard.setButtonOfType(.standardVP)
         standard.handler = { item in
             self.firManager.hostGame(withWinCondition: "standard", andVPGoal: 0)
-//            self.hostGameAndObserve(withWinCondition: "standard", andVPGoal: 0)
+            self.layoutGameLobby()
             blurEffectView.fadeAlphaOut()
         }
         
@@ -431,7 +417,7 @@ extension HomeVC {
         done.handler = { item in
             let vpGoal = vpStepper.value
             self.firManager.hostGame(withWinCondition: "custom", andVPGoal: Int(vpGoal))
-//            self.hostGameAndObserve(withWinCondition: "custom", andVPGoal: Int(vpGoal))
+            self.layoutGameLobby()
             vpStepper.fadeAlphaOut()
             menuButton.fadeAlphaOut()
             for subview in self.view.subviews {
@@ -456,8 +442,8 @@ extension HomeVC {
             adBanner.removeFromSuperview()
         } else {
             //MARK: Initialize banner ads
-            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
-            //            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
+//            adBanner.adUnitID = "ca-app-pub-4384472824519738/9844119805"  //My ads
+            adBanner.adUnitID = "ca-app-pub-3940256099942544/6300978111"    //Test ads
             adBanner.backgroundColor = .white
             adBanner.rootViewController = self
             adBanner.load(GADRequest())
@@ -478,9 +464,8 @@ extension HomeVC {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.userIsHostingGame = false
             self.layoutGameLobby()
-            self.nearbyGames = []
+            self.firManager.nearbyGames = []
             self.firManager.observeGames()
-//            self.observeForNearbyGames()
         }
     }
     
@@ -530,42 +515,42 @@ extension HomeVC {
 extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if userIsHostingGame {
-            switch players.count {
-            case 1: return players.count + 1
-            case 2...3: return players.count + 2
-            case 4: return players.count + 1
+            switch firManager.players.count {
+            case 1: return firManager.players.count + 1
+            case 2...3: return firManager.players.count + 2
+            case 4: return firManager.players.count + 1
             default: return 0
             }
         } else {
-            return nearbyGames.count
+            return firManager.nearbyGames.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "gameLobbyCell", for: indexPath) as! GameLobbyCell
         if userIsHostingGame {
-            if players.count > 0 && players.count < 2 {
+            if firManager.players.count > 0 && firManager.players.count < 2 {
                 switch indexPath.row {
                 case 0: cell.layoutWaitingCell(withMessage: "Waiting for players...")
-                default: cell.layoutCellForHost(withUser: players[indexPath.row - 1])
+                default: cell.layoutCellForHost(withUser: firManager.players[indexPath.row - 1])
                 }
-            } else if players.count > 1 && players.count < 4 {
+            } else if firManager.players.count > 1 && firManager.players.count < 4 {
                 switch indexPath.row {
                 case 0: cell.layoutWaitingCell(withMessage: "Waiting for players...")
-                case players.count + 1: cell.layoutStartGameCell()
-                default: cell.layoutCellForHost(withUser: players[indexPath.row - 1])
+                case firManager.players.count + 1: cell.layoutStartGameCell()
+                default: cell.layoutCellForHost(withUser: firManager.players[indexPath.row - 1])
                 }
             } else {
                 switch indexPath.row {
                 case 4: cell.layoutStartGameCell()
-                default: cell.layoutCellForHost(withUser: players[indexPath.row])
+                default: cell.layoutCellForHost(withUser: firManager.players[indexPath.row])
                 }
             }
         } else {
-            if nearbyGames.count == 0 {
+            if firManager.nearbyGames.count == 0 {
                 cell.layoutWaitingCell(withMessage: "Waiting for games...")
             } else {
-                cell.layoutCellForGuest(withGame: nearbyGames[indexPath.row])
+                cell.layoutCellForGuest(withGame: firManager.nearbyGames[indexPath.row])
             }
         }
         return cell
@@ -574,13 +559,14 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if userIsHostingGame {
             var startGameIndex: Int {
-                switch players.count {
+                switch firManager.players.count {
                 case 2: return 3
                 case 3: return 4
                 case 4: return 4
                 default: return 0
                 }
             }
+            
             if indexPath.row == startGameIndex {
                 GameHandler.instance.updateFirebaseDBGame(key: firManager.currentUserID!, gameData: ["gameStarted" : true])
                 performSegue(withIdentifier: "startGame", sender: nil)
@@ -589,24 +575,20 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                 let user = cell.user
                 let username = user["username"] as? String ?? ""
                 self.firManager.observeUserStatisticsForUser(username)
-//                self.observeUserStatisticsForUser(username)
             }
         } else {
             guard let cell = tableView.cellForRow(at: indexPath) as? GameLobbyCell else { return }
             if let username = cell.user["username"] as? String {
                 self.firManager.observeUserStatisticsForUser(username)
-//                self.observeUserStatisticsForUser(username)
             } else {
-                let userData: [String : Any] = ["username" :                firManager.username,
-                                                      "deck" :              Player.instance.deck.rawValue,
-                                                      "finished" :          false,
-                                                      "victoryPoints" :     0,
-                                                      "userHasQuitGame" :   false,
-                                                      "boxVictory" :        0]
-                GameHandler.instance.game = nearbyGames[indexPath.row]
+                let userData: [String : Any] = ["username" :          firManager.username,
+                                                "deck" :              Player.instance.deck.rawValue,
+                                                "finished" :          false,
+                                                "victoryPoints" :     0,
+                                                "userHasQuitGame" :   false,
+                                                "boxVictory" :        0]
                 firManager.joinGame(withUserData: userData)
-//                updateGame(withUserData: userData)
-//                observeGameForStart()
+                GameHandler.instance.game = firManager.nearbyGames[indexPath.row]
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)

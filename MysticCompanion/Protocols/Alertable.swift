@@ -28,6 +28,7 @@ enum Alert {
     case firebaseLogout
     case gameIsFull
     case googleSignIn
+    case locationNotFound
     case mailError
     case noConnection
     case notYourTurn
@@ -62,6 +63,7 @@ enum Alert {
         case .iapDisabled: return "In-App Purchases Disabled"
         case .invalidCredential: return Alert.firebaseError.title
         case .invalidEmail: return Alert.firebaseError.title
+        case .locationNotFound: return "Location Error:"
         case .noConnection: return "No Connection"
         case .purchaseComplete: return "Purchase Complete"
         case .purchaseFailed: return "Purchase Failed"
@@ -96,6 +98,7 @@ enum Alert {
         case .invalidCredential: return "That credential is invalid. Please try again."
         case .invalidEmail: return "That is an invalid email. Please try again."
         case .invalidLogin: return "Please provide a username, valid email, and password!"
+        case .locationNotFound: return "Please ensure locaiton services are on for MysticCompanion and try again later."
         case .mailError: return "Your device is not able to send email."
         case .noConnection: return "MysticCompanion requires an internet connection to track your games. Please try again when you have a connection."
         case .notYourTurn: return "It is not your turn. Please wait for other players."
